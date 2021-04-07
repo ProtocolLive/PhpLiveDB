@@ -1,0 +1,231 @@
+<html>
+
+<head>
+  <title>PhpLivePdo::Update</title>
+  <link rel="stylesheet" href="global.css">
+</head>
+
+<body>
+  <table style="width:95%;margin-left: auto;margin-right: auto;">
+    <tr>
+      <td style="width:100%; background-color: #F2F2F2; padding: 20px;">
+        <div class="maintitle">PhpLivePdo::Update</div>
+        <p>
+          Run a update query afecting <strong>only</strong> the differents fields. This resource its good to safe space
+          in log.
+        </p>
+        <p>&nbsp;</p>
+
+        <div class="title">Sintaxe</div><br>
+        <div class="code">
+          <span class="const">public</span> <span class="func">PhpLivePdo::Update</span> (
+          <span class="type">array</span> <span class="var">$Options</span> [,
+          <span class="type">array</span> <span class="var">$Options2</span> = <span class="func">array</span>() ] ) :
+          <span class="type">int</span>;
+        </div>
+        <p>&nbsp;</p>
+
+        <div class="title">Parameters</div>
+        <p><strong><span class="var">$Options</span>:</strong></p>
+        <p>Table (<span class="type">string</span>) - The table afected;</p>
+        <p>Fields (<span class="type">array</span>) - The fields to be changed;</p>
+        <p>Where (<span class="type">array</span>) - The conditions;</p>
+        <p>Sintaxe of <strong>Fields</strong> option:</p>
+        <div class="code">
+          <span class="func">array</span>(TokenName, TokenData, TokenType)
+        </div>
+        <p>Sintaxe of <strong>Where</strong> option:</p>
+        <div class="code">
+          <span class="func">array</span>(TokenName, TokenData, TokenType, [ TokenComparation = '=', [ WhereCondition =
+          'and' ] ] )
+        </div>
+        <p>
+          TokenName (<span class="type">int</span> or <span class="type">string</span>) - A number or a string starting
+          with ':';
+        </p>
+        <p>TokenData (<span class="type">int</span> or <span class="type">string</span>) - The value to be replaced;</p>
+        <p>
+          TokenType (<span class="type">int</span>) - The constants of <span class="func">PhpLivePdo</span> (
+          <span class="const">PdoInt</span>, <span class="const">PdoStr</span>, <span class="const">PdoNull</span>,
+          <span class="const">PdoSql</span>) or the
+          <a href="https://www.php.net/manual/pt_BR/pdo.constants.php" target="_blank">constants of PDO</a>;
+        </p>
+        <p>
+          TokenComparation (<span class="type">string</span>)(Optional - Default: =) - The comparation operator (=, !=,
+          &lt;, >, is, is not);
+        </p>
+        <p>
+          WhereCondition (<span class="type">string</span>)(Optional - Default: and) - The condition of the current
+          where to the previous (and, or);
+        </p>
+        <p>&nbsp;</p>
+        <p>
+          <strong><span class="var">$Options2</span></strong> are the
+          <a href="pdo-run.htm#Options" class="var">$Options</a> in
+          the <a href="pdo-run.htm#Options" class="func">PhpLivePdo::Run</a> function
+        </p>
+        <p>&nbsp;</p>
+
+        <a name="PdoSql"></a>
+        <div class="title">The special type <span class="const">PdoSql</span></div>
+        <p>This special type put the value outside quotes to be executed by SQL.</p>
+        <div class="code">
+          <span class="func">$PDO->Update</span>([<br>
+          <span class="ident"><span class="string">'Table'</span> => <span class="string">'products'</span>,</span><br>
+          <span class="ident"><span class="string">'Fields'</span> => [</span><br>
+          <span class="ident">
+            <span class="ident">[<span class="string">'quantity'</span>, <span class="const">2</span>,
+              <span class="const">PdoInt</span>],
+            </span>
+          </span><br>
+          <span class="ident">
+            <span class="ident">
+              [<span class="string">'price'</span>, <span class="const">2.99</span>,
+              <span class="const">PdoInt</span>],
+            </span>
+          </span><br>
+          <span class="ident">
+            <span class="ident">
+              [<span class="string">'total'</span>, <span class="string">'quantity*price'</span>,
+              <span class="const">PdoSql</span>],
+            </span>
+          </span><br>
+          <span class="ident"><span class="string">'Where'</span> => [</span><br>
+          <span class="ident">
+            <span class="ident">
+              [<span class="string">'product'</span>, <span class="const">35</span>,
+              <span class="const">PdoInt</span>]
+            </span>
+          </span><br>
+          <span class="ident">]</span><br>
+          ]);<br>
+          <span class="comment">
+            //update products set quantity=2,price='2.99',total=quantity*price where
+            product=35
+          </span>
+        </div>
+        <p>&nbsp;</p>
+
+        <div class="title">Notes about type <span class="const">PdoInt</span></div>
+        <p>
+          - The <span class="func">PhpLivePdo</span> automatically changes the decimal comma to point, for numbers used
+          in regions such as in Brazil.<br>
+          For this reason, do not use points to separate the thousands.
+        </p>
+        <p>
+          Examples:<br>
+          3,14 (Brazil notation) -> 3.14 -> OK<br>
+          3.14 (US notation) -> 3.14 -> OK<br>
+          1.234,56 (Brazil notation) -> 1.234.56 -> Error<br>
+          1,234.56 (US notation) -> 1.234.56 -> Error
+        </p>
+        <p>
+          - The <span class="func">PhpLivePdo</span> automaticaly changes the <span class="const">PdoInt</span> with
+          decimals to <span class="const">PdoStr</span> because of a limitation of PDO.
+        </p>
+        <p>&nbsp;</p>
+
+        <div class="title">Return Values</div>
+        <p>Returns the number of rows affected.</p>
+        <p>&nbsp;</p>
+
+        <div class="title">
+          <strong>Advice</strong>
+        </div>
+        <p>
+          Because the <span class="func">PhpLivePdo</span> internaly uses named tokens, dont use
+          <span class="func">PhpLivePdo::Update</span> with the same field in <strong>set</strong> and
+          <strong>where</strong> parts.<br>
+          To do that, use the command <a href="pdo-run.htm" class="func">PdoLivePdo::Run</a>.
+        </p>
+        <p>&nbsp;</p>
+
+        <div class="title">
+          <strong>Errors</strong>
+        </div>
+        <p>
+          If an error happens, a log file is created in the same directory of the library.<br>
+          If the PHP ini configuration display_errors are defined as <span class="const">true</span>,
+          the error are dumped in the screen, with the
+          <a href="https://www.php.net/manual/en/function.debug-backtrace" target="_blank"
+            class="func">debug_backtrace</a>.<br>
+          Also you can get the code and description with the function <a href="pdo-errorget.htm"
+            class="func">PhpLivePdo::ErrorGet</a>.
+        </p>
+        <p>&nbsp;</p>
+
+        <div class="title">Examples</div><br>
+        <div class="code">
+          <span class="comment">// Original data: email=a@a.com,pwd=123,name='adm'</span><br>
+          <span class="func">$PDO->Update</span>([<br>
+          <span class="ident"><span class="string">'Table'</span> => <span class="string">'users'</span>,</span><br>
+          <span class="ident"><span class="string">'Fields'</span> => [</span><br>
+          <span class="ident">
+            <span class="ident">
+              [<span class="string">'email'</span>, <span class="string">'a@a.com'</span>, <span
+                class="const">PdoStr</span>],
+            </span>
+          </span><br>
+          <span class="ident">
+            <span class="ident">
+              [<span class="string">'pwd'</span>, <span class="string">'321'</span>,
+              <span class="const">PdoStr</span>],
+            </span>
+          </span><br>
+          <span class="ident">
+            <span class="ident">
+              [<span class="string">'name'</span>, <span class="string">'adm'</span>, <span class="const">PdoStr</span>]
+            </span>
+          </span><br>
+          <span class="ident">],</span><br>
+          <span class="ident"><span class="string">'Where'</span> => [</span><br>
+          <span class="ident">
+            <span class="ident">
+              [<span class="string">'user_id'</span>, <span class="const">1</span>,
+              <span class="const">PdoInt</span>]
+            </span>
+          </span><br>
+          <span class="ident">]</span><br>
+          ]);<br>
+          <span class="comment">// Run: update users set pwd='321' where user_id=1</span>
+        </div>
+        <p>&nbsp;</p>
+        <div class="code">
+          <span class="func">$PDO->Update</span>([<br>
+          <p class="ident"><span class="string">'Table'</span> => <span class="string">'users'</span>,</p>
+          <p class="ident"><span class="string">'Fields'</span> => [</p>
+          <p class="ident">
+            <span class="ident">
+              [<span class="string">'active'</span>, <span class="const">0</span>,
+              <span class="const">PdoInt</span>],
+            </span>
+          </p>
+          <p class="ident">],</p>
+          <span class="ident"><span class="string">'Where'</span> => [</span><br>
+          <p class="ident">
+            <span class="ident">
+              [<span class="string">'level'</span>, <span class="const">0</span>, <span class="const">PdoInt</span>,
+              <span class="string">'>'</span>]
+            </span>
+          </p>
+          <p class="ident">
+            <span class="ident">
+              [<span class="string">'lastlogin'</span>, <span class="string">'null'</span>, <span
+                class="const">PdoSql</span>, <span class="string">'is'</span>, <span class="string">'and'</span>]
+            </span>
+          </p>
+          <p class="ident">]</p>
+          ]);<br>
+          <span class="comment">// Run: update users set active=0 where level>0 and lastlogin is null</span>
+        </div>
+        <p>&nbsp;</p>
+
+      </td>
+      <td style="color: #ccc; font-size: 18px; vertical-align: top;">
+        <iframe src="menu-pdo.htm" class="menu2"></iframe>
+      </td>
+    </tr>
+  </table>
+</body>
+
+</html>

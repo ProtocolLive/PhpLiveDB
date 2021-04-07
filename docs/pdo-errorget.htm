@@ -1,0 +1,44 @@
+<html>
+
+<head>
+  <title>PhpLivePdo::ErrorGet</title>
+  <link rel="stylesheet" href="global.css">
+</head>
+
+<body>
+  <table style="width:95%;margin-left: auto;margin-right: auto;">
+    <tr>
+      <td style="width:100%; background-color: #F2F2F2; padding: 20px;">
+        <div class="maintitle">PhpLivePdo::ErrorGet</div>
+        <p>Returns the code and description of last error.</p>
+        <p>&nbsp;</p>
+
+        <div class="title">Sintaxe</div><br>
+        <div class="code">
+          <span class="const">public</span> <span class="func">PhpLivePdo::ErrorGet</span> ( <span
+            class="type">void</span> ) : <span class="type">array</span>;
+        </div>
+        <p>&nbsp;</p>
+
+        <div class="title">Return Values</div>
+        <p>An array with code and description of the error.</p>
+        <p>&nbsp;</p>
+
+        <div class="title">Examples</div>
+        <br>
+        <div class="code">
+          <span class="var">$error</span> = <span class="func">$PDO->ErrorGet</span>();<br>
+          <span class="func">printf</span>(<span class="string">'Error %s: %s'</span>, <span class="var">$error</span>[
+          <span class="const">0</span>], <span class="var">$error[<span class="const">1</span>]</span>);
+        </div>
+        <p>&nbsp;</p>
+
+      </td>
+      <td style="color: #ccc; font-size: 18px; vertical-align: top;">
+        <iframe src="menu-pdo.htm" class="menu2"></iframe>
+      </td>
+    </tr>
+  </table>
+</body>
+
+</html>
