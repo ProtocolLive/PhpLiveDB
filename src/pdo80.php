@@ -1,7 +1,7 @@
 <?php
 // Protocol Corporation Ltda.
 // https://github.com/ProtocolLive/PhpLive/
-// Version 2021.03.26.00
+// Version 2021.04.19.00
 
 define('PdoStr', PDO::PARAM_STR);
 define('PdoInt', PDO::PARAM_INT);
@@ -300,7 +300,7 @@ class PhpLivePdo{
     return $Field;
   }
 
-  public function ErrorSet(int $errno, string $errstr, ?string $errfile = null, ?int $errline = null, ?array $errcontext = null):bool{
+  public function ErrorSet(int|string $errno, string $errstr, ?string $errfile = null, ?int $errline = null, ?array $errcontext = null):bool{
     $this->Error = [$errno, $errstr];
     $folder = __DIR__ . '/errors-pdo/';
     if(is_dir($folder) === false):
