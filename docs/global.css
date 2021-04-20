@@ -4,12 +4,13 @@ html{
 }
 a{
   text-decoration:none;
+  color:#369
 }
 a:hover{
   text-decoration: underline;
 }
 a:visited{
-  color: #00f;
+  color: inherit;
 }
 
 .code{

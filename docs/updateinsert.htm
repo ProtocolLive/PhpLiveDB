@@ -16,14 +16,14 @@
         <div class="title">Sintaxe</div><br>
         <div class="code">
           <span class="const">public</span> <span class="func">PhpLivePdo::UpdateInsert</span> (
-          <span class="type">array</span> <span class="var">$Options</span> [,
-          <span class="type">array</span> <span class="var">$Options2</span> = <span class="func">array</span>() ] ) :
+          <span class="type">array</span> <span class="var"><a href="#Options">$Options</a></span> [,
+          <span class="type">array</span> <span class="var"><a href="#Options2">$Options2</a></span> = <span class="func">array</span>() ] ) :
           <span class="type">int</span>;
         </div>
         <p>&nbsp;</p>
 
         <div class="title">Parameters</div>
-        <p><strong><span class="var">$Options</span>:</strong></p>
+        <p><strong><a id="Options" class="var">$Options</a>:</strong></p>
         <p>Table (<span class="type">string</span>) - The table afected;</p>
         <p>Fields (<span class="type">array</span>) - The fields to be changed;</p>
         <p>Where (<span class="type">array</span>) - The conditions;</p>
@@ -33,33 +33,24 @@
         </div>
         <p>Sintaxe of <strong>Where</strong> option:</p>
         <div class="code">
-          <span class="func">array</span>(TokenName, TokenData, TokenType, [ TokenComparation = '=', [ WhereCondition =
-          'and' ] ] )
+          <span class="func">array</span>(TokenName, TokenData, TokenType [, TokenComparation = '=' [, WhereCondition = 'and' ] ] )
         </div>
         <p>
-          TokenName (<span class="type">int</span> or <span class="type">string</span>) - A number or a string starting
-          with ':';
+          TokenName (<span class="type">int</span> or <span class="type">string</span>) - A number or a string starting with ':';
         </p>
         <p>TokenData (<span class="type">int</span> or <span class="type">string</span>) - The value to be replaced;</p>
         <p>
-          TokenType (<span class="type">int</span>) - The constants of <span class="func">PhpLivePdo</span> (
-          <span class="const">PdoInt</span>, <span class="const">PdoStr</span>, <span class="const">PdoNull</span>,
-          <span class="const">PdoSql</span>) or the
-          <a href="https://www.php.net/manual/pt_BR/pdo.constants.php" target="_blank">constants of PDO</a>;
+          TokenType (<span class="type">int</span>) - The constants of <span class="func">PhpLivePdo</span> (<span class="const">PdoInt</span>, <span class="const">PdoStr</span>, <span class="const">PdoNull</span>, <span class="const">PdoSql</span>) or the <a href="https://www.php.net/manual/us/pdo.constants.php" target="_blank">constants of PDO</a>;
         </p>
         <p>
-          TokenComparation (<span class="type">string</span>)(Optional - Default: =) - The comparation operator (Ex.:
-          =, !=, <,>, is, is not);
+          TokenComparation (<span class="type">string</span>)(Optional - Default: =) - The comparation operator (Ex.: =, !=, &lt;,>, is, is not);
         </p>
         <p>
-          WhereCondition (<span class="type">string</span>)(Optional - Default: and) - The condition of the current
-          where to the previous (and, or);
+          WhereCondition (<span class="type">string</span>)(Optional - Default: and) - The condition of the current where to the previous (and, or);
         </p>
         <p>&nbsp;</p>
         <p>
-          <strong><span class="var">$Options2</span></strong> are the
-          <a href=run.htm#Options" class="var">$Options</a> in
-          the <a href=run.htm#Options" class="func">PhpLivePdo::Run</a> function
+          <strong><a id="Options2" class="var">$Options2</a></strong> are the <span class="var"><a href="run.htm#Options">$Options</a></span> in the <span class="func"><a href="run.htm">PhpLivePdo::Run</a></span> function
         </p>
         <p>&nbsp;</p>
 
@@ -101,8 +92,7 @@
 
         <div class="title">Notes about type <span class="const">PdoInt</span></div>
         <p>
-          - The <span class="func">PhpLivePdo</span> automatically changes the decimal comma to point, for numbers used
-          in regions such as in Brazil.<br>
+          - The <span class="func">PhpLivePdo</span> automatically changes the decimal comma to point, for numbers used in regions such as in Brazil.<br>
           For this reason, do not use points to separate the thousands.
         </p>
         <p>
@@ -113,8 +103,7 @@
           1,234.56 (US notation) -> 1.234.56 -> Error
         </p>
         <p>
-          - The <span class="func">PhpLivePdo</span> automaticaly changes the <span class="const">PdoInt</span> with
-          decimals to <span class="const">PdoStr</span> because of a limitation of PDO.
+          - The <span class="func">PhpLivePdo</span> automaticaly changes the <span class="const">PdoInt</span> with decimals to <span class="const">PdoStr</span> because of a limitation of PDO.
         </p>
         <p>&nbsp;</p>
 
@@ -127,25 +116,18 @@
         </div>
         <p>
           If an error happens, a log file is created in the same directory of the library.<br>
-          If the PHP ini configuration display_errors are defined as <span class="const">true</span>,
-          the error are dumped in the screen, with the <a href="https://www.php.net/manual/en/function.debug-backtrace"
-            target="_blank" class="func">debug_backtrace</a>.<br>
-          Also you can get the code and description with the function
-          <a href=errorget.htm" class="func">PhpLivePdo::ErrorGet</a>.
+          If the PHP ini configuration display_errors are defined as <span class="const">true</span>, the error are dumped in the screen, with the <a href="https://www.php.net/manual/en/function.debug-backtrace" target="_blank" class="func">debug_backtrace</a>.<br>
+          Also you can get the code and description with the function <a href="errorget.htm" class="func">PhpLivePdo::ErrorGet</a>.
         </p>
         <p>&nbsp;</p>
 
         <div class="title">Advices</div>
         <p>
-          - You have to specify the parameters as if you were going to use the function <a href=insert.htm"
-            class="func">Insert</a>, in case it have to run this function;
-          Use the null coalesce in the ID.
+          - You have to specify the parameters as if you were going to use the function <a href="insert.htm" class="func">Insert</a>, in case it have to run this function; Use the null coalesce in the ID.
         </p>
         <p>
-          - Because the <span class="func">PhpLivePdo</span> internaly uses named tokens, dont use
-          <span class="func">PhpLivePdo::Update</span> with the same field in <strong>set</strong> and
-          <strong>where</strong> parts.<br>
-          To do that, use the command <a href=run.htm" class="func">PdoLivePdo::Run</a>.
+          - Because the <span class="func">PhpLivePdo</span> internaly uses named tokens, dont use <span class="func">PhpLivePdo::Update</span> with the same field in <strong>set</strong> and <strong>where</strong> parts.<br>
+          To do that, use the command <a href="run.htm" class="func">PdoLivePdo::Run</a>.
         </p>
         <p>&nbsp;</p>
 
@@ -161,16 +143,13 @@
             <span class="string">'Fields'</span> => [
           </p>
           <p class="ident">
-            <span class="ident">[<span class="string">'email'</span>, <span class="string">'a@a.com'</span>, <span
-                class="const">PdoStr</span>],</span>
+            <span class="ident">[<span class="string">'email'</span>, <span class="string">'a@a.com'</span>, <span lass="const">PdoStr</span>],</span>
           </p>
           <p class="ident">
-            <span class="ident">[<span class="string">'pwd'</span>, <span class="string">'321'</span>, <span
-                class="const">PdoStr</span>],</span>
+            <span class="ident">[<span class="string">'pwd'</span>, <span class="string">'321'</span>, <span class="const">PdoStr</span>],</span>
           </p>
           <p class="ident">
-            <span class="ident">[<span class="string">'name'</span>, <span class="string">'adm'</span>, <span
-                class="const">PdoStr</span>]</span>
+            <span class="ident">[<span class="string">'name'</span>, <span class="string">'adm'</span>, <span class="const">PdoStr</span>]</span>
           </p>
           <p class="ident">
             ],
@@ -179,8 +158,7 @@
             <span class="string">'Where'</span> => [
           </p>
           <p class="ident">
-            <span class="ident">[<span class="string">'user_id'</span>, <span class="var">$_GET</span>[<span
-                class="string">'id'</span>]?? <span class="const">null</span>, <span class="const">PdoInt</span>]</span>
+            <span class="ident">[<span class="string">'user_id'</span>, <span class="var">$_GET</span>[<span class="string">'id'</span>] ?? <span class="const">null</span>, <span class="const">PdoInt</span>]</span>
           </p>
           <p class="ident">
             ]
@@ -200,16 +178,13 @@
             <span class="string">'Fields'</span> => [
           </p>
           <p class="ident">
-            <span class="ident">[<span class="string">'email'</span>, <span class="string">'b@a.com'</span>, <span
-                class="const">PdoStr</span>],</span>
+            <span class="ident">[<span class="string">'email'</span>, <span class="string">'b@a.com'</span>, <span class="const">PdoStr</span>],</span>
           </p>
           <p class="ident">
-            <span class="ident">[<span class="string">'pwd'</span>, <span class="string">'123'</span>, <span
-                class="const">PdoStr</span>],</span>
+            <span class="ident">[<span class="string">'pwd'</span>, <span class="string">'123'</span>, <span class="const">PdoStr</span>],</span>
           </p>
           <p class="ident">
-            <span class="ident">[<span class="string">'name'</span>, <span class="string">'John'</span>, <span
-                class="const">PdoStr</span>]</span>
+            <span class="ident">[<span class="string">'name'</span>, <span class="string">'John'</span>, <span class="const">PdoStr</span>]</span>
           </p>
           <p class="ident">
             ],
@@ -218,8 +193,7 @@
             <span class="string">'Where'</span> => [
           </p>
           <p class="ident">
-            <span class="ident">[<span class="string">'user_id'</span>, <span class="var">$_GET</span>[<span
-                class="string">'id'</span>]?? <span class="const">null</span>, <span class="const">PdoInt</span>]</span>
+            <span class="ident">[<span class="string">'user_id'</span>, <span class="var">$_GET</span>[<span class="string">'id'</span>] ?? <span class="const">null</span>, <span class="const">PdoInt</span>]</span>
           </p>
           <p class="ident">
             ]

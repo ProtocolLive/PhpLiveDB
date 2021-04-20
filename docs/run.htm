@@ -36,20 +36,15 @@
           with ":";</p>
         <p>TokenData (<span class="type">int</span> or <span class="type">string</span>) - The value to be replaced;</p>
         <p>
-          TokenType (<span class="type">int</span>) The constants of <span class="func">PhpLivePdo</span> (<span
-            class="const">PdoInt</span>, <span class="const">PdoStr</span>, <span class="const">PdoNull</span>, <span
-            class="const">PdoSql</span>) or the <a href="https://www.php.net/manual/pt_BR/pdo.constants.php"
-            target="_blank">constants of PDO</a>;
+          TokenType (<span class="type">int</span>) The constants of <span class="func">PhpLivePdo</span> (<span class="const">PdoInt</span>, <span class="const">PdoStr</span>, <span class="const">PdoNull</span>, <span class="const">PdoSql</span>) or the <a href="https://www.php.net/manual/us/pdo.constants.php" target="_blank">constants of PDO</a>;
         </p>
         <a name="Options"></a>
-        <p><strong><span class="var">$Options</span>:</strong></p>
+        <p><strong><a id="Options" class="var">$Options</a>:</strong></p>
         <p>
-          Safe (<span class="type">bool</span>)(Optional - Default: <span class="const">true</span>) - Dont run query
-          update or delete without where condition or the query truncate;
+          Safe (<span class="type">bool</span>)(Optional - Default: <span class="const">true</span>) - Dont run query update or delete without where condition or the query truncate;
         </p>
         <p>
-          Debug (<span class="type">bool</span>)(Optional - Default: <span class="const">false</span>) - Dump the query
-          after parsed;
+          Debug (<span class="type">bool</span>)(Optional - Default: <span class="const">false</span>) - Dump the query after parsed;
         </p>
         <p>Log (<span class="type">int</span>)(Optional) - The log description of the event;</p>
         <p>User (<span class="type">int</span>)(Optional - Mandatory with Log) - The user running the query;</p>
@@ -59,14 +54,13 @@
         <div class="title">The special type <span class="const">PdoSql</span></div>
         <p>
           This special type not make sense with command <span class="func">PhpLivePdo::Run</span>. See the command <a
-            href=insert.htm#PdoSql" class="func">PhpLivePdo::Insert</a>
+            href="insert.htm#PdoSql" class="func">PhpLivePdo::Insert</a>
         </p>
         <p>&nbsp;</p>
 
         <div class="title">Notes about type <span class="const">PdoInt</span></div>
         <p>
-          - The <span class="func">PhpLivePdo</span> automatically changes the decimal comma to point, for numbers used
-          in regions such as in Brazil.<br>
+          - The <span class="func">PhpLivePdo</span> automatically changes the decimal comma to point, for numbers used in regions such as in Brazil.<br>
           For this reason, do not use points to separate the thousands.
         </p>
         <p>
@@ -77,15 +71,13 @@
           1,234.56 (US notation) -> 1.234.56 -> Error
         </p>
         <p>
-          - The <span class="func">PhpLivePdo</span> automaticaly changes the <span class="const">PdoInt</span> with
-          decimals to <span class="const">PdoStr</span> because of a limitation of PDO.
+          - The <span class="func">PhpLivePdo</span> automaticaly changes the <span class="const">PdoInt</span> with decimals to <span class="const">PdoStr</span> because of a limitation of PDO.
         </p>
         <p>&nbsp;</p>
 
         <div class="title">Return Values</div>
         <p>
-          Return an integer in case of insert, update and delete, an array in case of select, or <span
-            class="const">false</span> in case of error;
+          Return an integer in case of insert, update and delete, an array in case of select, or <span class="const">false</span> in case of error;
         </p>
         <p><strong>Example of select return:</strong></p>
         <div class="code">
@@ -147,11 +139,8 @@
         </div>
         <p>
           If an error happens, a log file is created in the same directory of the library.<br>
-          If the PHP ini configuration display_errors are defined as <span class="const">true</span>,
-          the error are dumped in the screen, with the <a href="https://www.php.net/manual/en/function.debug-backtrace"
-            target="_blank" class="func">debug_backtrace</a>.<br>
-          Also you can get the code and description with the function <a href=errorget.htm"
-            class="func">PhpLivePdo::ErrorGet</a>.
+          If the PHP ini configuration display_errors are defined as <span class="const">true</span>, the error are dumped in the screen, with the <a href="https://www.php.net/manual/en/function.debug-backtrace" target="_blank" class="func">debug_backtrace</a>.<br>
+          Also you can get the code and description with the function <a href="errorget.htm" class="func">PhpLivePdo::ErrorGet</a>.
         </p>
         <p>&nbsp;</p>
 
@@ -178,12 +167,10 @@
             <span class="ident">and city=?</span>
           </p>", [<br>
           <p class="ident">
-            [<span class="const">1</span>, <span class="var">$_POST[<span class="string">'email'</span>]</span>, <span
-              class="const">PdoStr</span>],
+            [<span class="const">1</span>, <span class="var">$_POST[<span class="string">'email'</span>]</span>, <span class="const">PdoStr</span>],
           </p>
           <p class="ident">
-            [<span class="const">2</span>, <span class="var">$_POST[<span class="string">'city'</span>]</span>, <span
-              class="const">PdoInt</span>]
+            [<span class="const">2</span>, <span class="var">$_POST[<span class="string">'city'</span>]</span>, <span class="const">PdoInt</span>]
           </p>
           ]);
         </div>
@@ -258,12 +245,10 @@
           </p>
           ",[<br>
           <p class="ident">
-            [<span class="const">1</span>, <span class="var">$_POST</span>[<span class="string">'email'</span>], <span
-              class="const">PdoStr</span>],
+            [<span class="const">1</span>, <span class="var">$_POST</span>[<span class="string">'email'</span>], <span class="const">PdoStr</span>],
           </p>
           <p class="ident">
-            [<span class="const">2</span>, <span class="var">$_POST</span>[<span class="string">'city'</span>], <span
-              class="const">PdoInt</span>]
+            [<span class="const">2</span>, <span class="var">$_POST</span>[<span class="string">'city'</span>], <span class="const">PdoInt</span>]
           </p>
           ],[<br>
           <p class="ident">
@@ -274,11 +259,11 @@
         <p><strong>Dealing with nullable field:</strong></p>
         <div class="code">
           <span class="comment">//For PHP 7.4</span><br>
-          <span class="var">$_GET</span>[<span class="string">'id'</span>]??= '';<br>
+          <span class="var">$_GET</span>[<span class="string">'id'</span>] ??= '';<br>
           <br>
           <span class="comment">//For PHP 7.3</span><br>
           <span class="var">$_GET</span>[<span class="string">'id'</span>] = <span class="var">$_GET</span>[
-          <span class="string">'id'</span>]?? '';<br>
+          <span class="string">'id'</span>] ?? '';<br>
           <br>
           <span class="var">$result</span> = <span class="func">$PDO->Run</span>("
           <p class="string ident">
@@ -289,8 +274,7 @@
           </p>
           ",[
           <p class="ident">
-            [<span class="const">1</span>, <span class="var">$_GET</span>[<span class="string">'id'</span>], <span
-              class="var">$_GET</span>[<span class="string">'id'</span>] === ''? <span class="const">PdoNull</span>:
+            [<span class="const">1</span>, <span class="var">$_GET</span>[<span class="string">'id'</span>], <span class="var">$_GET</span>[<span class="string">'id'</span>] === ''? <span class="const">PdoNull</span>:
             <span class="const">PdoInt</span>]
           </p>
           ]);
