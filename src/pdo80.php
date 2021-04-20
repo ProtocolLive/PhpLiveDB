@@ -1,7 +1,7 @@
 <?php
 // Protocol Corporation Ltda.
 // https://github.com/ProtocolLive/PhpLive/
-// Version 2021.04.20.00
+// Version 2021.04.20.01
 
 define('PdoStr', PDO::PARAM_STR);
 define('PdoInt', PDO::PARAM_INT);
@@ -300,7 +300,7 @@ class PhpLivePdo{
    * @param string Field
    * @return string
    */
-  public function Reserved(string $Field):string{
+  public static function Reserved(string $Field):string{
     $names = ['order', 'default', 'group'];
     if(in_array($Field, $names)):
       $Field = '`' . $Field . '`';
@@ -333,23 +333,35 @@ class PhpLivePdo{
     return $return;
   }
 
-  public function BuildWhere(array $Wheres, int $Count = 1):array{
-    // 0 field, 1 value, 2 type, 3 operator, 4 condition
+  public static function BuildWhere(array $Wheres):array{
+    // 0 field, 1 value, 2 type, 3 operator, 4 condition, 5 parentesis
     $return = ['Query' => '', 'Tokens' => []];
     foreach($Wheres as $id => $where):
       $where[3] ??= '=';
       $where[4] ??= 'and';
+      $where[5] ??= 0;
+      if($where[1] === null):
+        $where[2] = PdoNull;
+      endif;
       if($where[2] === PdoNull):
-        $where[1] = 'null';
         $where[3] = 'is';
       endif;
       if($where[3] === 'is' or $where[3] === 'is not'):
         $where[3] = ' ' . $where[3] . ' ';
       endif;
-      if($id === 0):
-        $return['Query'] = $this->Reserved($where[0]) . $where[3] . ':' . $where[0];
+      if($id > 0):
+        $return['Query'] .= ' ' . $where[4] . ' ';
+      endif;
+      if($where[5] === 1):
+        $return['Query'] .= '(';
+      endif;
+      if($where[2] === PdoNull):
+        $return['Query'] .= self::Reserved($where[0]) . $where[3] . 'null';
       else:
-        $return['Query'] .= ' ' . $where[4] . ' ' . $where[0] . $where[3] . ':' . $where[0];
+        $return['Query'] .= self::Reserved($where[0]) . $where[3] . ':' . $where[0];
+      endif;
+      if($where[5] === 2):
+        $return['Query'] .= ')';
       endif;
       $return['Tokens'][] = [':' . $where[0], $where[1], $where[2]];
     endforeach;
