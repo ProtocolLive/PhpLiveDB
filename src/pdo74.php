@@ -1,7 +1,7 @@
 <?php
 // Protocol Corporation Ltda.
 // https://github.com/ProtocolLive/PhpLive/
-// Version 2021.04.19.01
+// Version 2021.04.20.00
 
 define('PdoStr', PDO::PARAM_STR);
 define('PdoInt', PDO::PARAM_INT);
@@ -45,6 +45,14 @@ class PhpLivePdo{
     if($error[0] !== '00000'):
       $this->ErrorSet($error[0], $error[2]);
     endif;
+  }
+
+  private function FileAppend(string $File, string $Content){
+    $dir = dirname($File);
+    if(is_dir($dir) === false):
+      mkdir($dir, 0755, true);
+    endif;
+    file_put_contents($File, $Content, is_file($File) ? FILE_APPEND : 0);
   }
 
   /**
@@ -298,13 +306,9 @@ class PhpLivePdo{
   /**
    * @param int|string @errno
    */
-  public function ErrorSet($errno, string $errstr, ?string $errfile = null, ?int $errline = null, ?array $errcontext = null):bool{
+  public function ErrorSet($errno, string $errstr):bool{
     $this->Error = [$errno, $errstr];
-    $folder = __DIR__ . '/errors-pdo/';
-    if(is_dir($folder) === false):
-      mkdir($folder, 0755);
-    endif;
-    file_put_contents($folder . date('Y-m-d_H-i-s') . '.txt', json_encode(debug_backtrace(), JSON_PRETTY_PRINT));
+    $this->FileAppend(__DIR__ . '/error.log', json_encode(debug_backtrace()));
     if(ini_get('display_errors')):
       print '<pre style="text-align:left">';
       debug_print_backtrace();
