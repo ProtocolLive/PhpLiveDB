@@ -1,7 +1,7 @@
 <?php
 // Protocol Corporation Ltda.
 // https://github.com/ProtocolLive/PhpLive/
-// Version 2021.04.19.00
+// Version 2021.04.19.01
 
 define('PdoStr', PDO::PARAM_STR);
 define('PdoInt', PDO::PARAM_INT);
@@ -329,12 +329,16 @@ class PhpLivePdo{
     return $return;
   }
 
-  private function BuildWhere(array $Wheres, int $Count = 1):array{
+  public function BuildWhere(array $Wheres, int $Count = 1):array{
     // 0 field, 1 value, 2 type, 3 operator, 4 condition
     $return = ['Query' => '', 'Tokens' => []];
     foreach($Wheres as $id => $where):
       $where[3] ??= '=';
       $where[4] ??= 'and';
+      if($where[2] === PdoNull):
+        $where[1] = 'null';
+        $where[3] = 'is';
+      endif;
       if($where[3] === 'is' or $where[3] === 'is not'):
         $where[3] = ' ' . $where[3] . ' ';
       endif;
