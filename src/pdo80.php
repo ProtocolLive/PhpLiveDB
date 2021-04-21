@@ -1,7 +1,7 @@
 <?php
 // Protocol Corporation Ltda.
 // https://github.com/ProtocolLive/PhpLive/
-// Version 2021.04.20.01
+// Version 2021.04.21.00
 
 define('PdoStr', PDO::PARAM_STR);
 define('PdoInt', PDO::PARAM_INT);
@@ -308,9 +308,9 @@ class PhpLivePdo{
     return $Field;
   }
 
-  public function ErrorSet(int|string $errno, string $errstr):bool{
+  public function ErrorSet(int|string $errno, ?string $errstr):bool{
     $this->Error = [$errno, $errstr];
-    $this->FileAppend(__DIR__ . '/error.log', json_encode(debug_backtrace()));
+    $this->FileAppend(__DIR__ . '/error.log', json_encode(debug_backtrace(), JSON_PRETTY_PRINT) . "\n");
     if(ini_get('display_errors')):
       print '<pre style="text-align:left">';
       debug_print_backtrace();
@@ -359,11 +359,11 @@ class PhpLivePdo{
         $return['Query'] .= self::Reserved($where[0]) . $where[3] . 'null';
       else:
         $return['Query'] .= self::Reserved($where[0]) . $where[3] . ':' . $where[0];
+        $return['Tokens'][] = [':' . $where[0], $where[1], $where[2]];
       endif;
       if($where[5] === 2):
         $return['Query'] .= ')';
       endif;
-      $return['Tokens'][] = [':' . $where[0], $where[1], $where[2]];
     endforeach;
     return $return;
   }
