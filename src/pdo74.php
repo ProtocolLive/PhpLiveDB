@@ -1,7 +1,7 @@
 <?php
 // Protocol Corporation Ltda.
 // https://github.com/ProtocolLive/PhpLive/
-// Version 2021.04.21.00
+// Version 2021.05.03.00
 
 define('PdoStr', PDO::PARAM_STR);
 define('PdoInt', PDO::PARAM_INT);
@@ -52,7 +52,7 @@ class PhpLivePdo{
     if(is_dir($dir) === false):
       mkdir($dir, 0755, true);
     endif;
-    file_put_contents($File, $Content, is_file($File) ? FILE_APPEND : 0);
+    file_put_contents($File, $Content, is_file($File) ? FILE_APPEND : null);
   }
 
   /**
@@ -344,7 +344,7 @@ class PhpLivePdo{
       if($where[2] === PdoNull):
         $where[3] = 'is';
       endif;
-      if($where[3] === 'is' or $where[3] === 'is not'):
+      if($where[3] === 'is' or $where[3] === 'is not' or $where[3] === 'like'):
         $where[3] = ' ' . $where[3] . ' ';
       endif;
       if($id > 0):
