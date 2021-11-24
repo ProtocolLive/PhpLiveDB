@@ -1,7 +1,7 @@
 <?php
-// Protocol Corporation Ltda.
-// https://github.com/ProtocolLive/PhpLive/
-// Version 2021.05.03.00
+//Protocol Corporation Ltda.
+//https://github.com/ProtocolLive/PhpLivePDO
+//Version 2021.05.03.00
 
 define('PdoStr', PDO::PARAM_STR);
 define('PdoInt', PDO::PARAM_INT);
@@ -63,6 +63,7 @@ class PhpLivePdo{
    * @param int Target ($Options)(Optional) User efected
    * @param bool Debug ($Options)(Optional) Dump the query for debug
    * @param bool Safe ($Options)(Optional) Only runs a safe query
+   * @param bool NoTag ($Options)(Optional) Scape HTML tags. Good against cross-site scripting (XSS)
    * @return array|int|bool
    */
   public function Run(string $Query, array $Params = [], array $Options = []){
@@ -74,6 +75,7 @@ class PhpLivePdo{
     $Options['Target'] ??= null;
     $Options['Safe'] ??= true;
     $Options['Debug'] ??= false;
+    $Options['NoTag'] ??= true;
 
     set_error_handler([$this, 'ErrorSet']);
     if($Options['Debug'] == true):
@@ -132,6 +134,8 @@ class PhpLivePdo{
             if(strpos($Param[1], '.') !== false):
               $Param[2] = PdoStr;
             endif;
+          elseif($Param[2] === PdoStr and $Options['NoTag']):
+            $Param[1] = str_replace('<', '&gt;', $Param[1]);
           endif;
           $result->bindValue($Param[0], $Param[1], $Param[2]);
         endif;
