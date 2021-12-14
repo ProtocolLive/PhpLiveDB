@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2021.11.24.03
+//Version 2021.11.13.00
 
 define('PdoStr', PDO::PARAM_STR);
 define('PdoInt', PDO::PARAM_INT);
@@ -135,7 +135,7 @@ class PhpLivePdo{
               $Param[2] = PdoStr;
             endif;
           elseif($Param[2] === PdoStr and $Options['NoTag']):
-            $Param[1] = htmlentities($Param[1]);
+            $Param[1] = htmlspecialchars($Param[1]);
           endif;
           $result->bindValue($Param[0], $Param[1], $Param[2]);
         endif;
