@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2021.11.13.00
+//Version 2021.12.14.00
 
 define('PdoStr', PDO::PARAM_STR);
 define('PdoInt', PDO::PARAM_INT);
@@ -76,6 +76,7 @@ class PhpLivePdo{
     $Options['Safe'] ??= true;
     $Options['Debug'] ??= false;
     $Options['NoTag'] ??= true;
+    $Options['MoneyAsInt'] ??= true;
 
     set_error_handler([$this, 'ErrorSet']);
     if($Options['Debug'] == true):
@@ -129,7 +130,7 @@ class PhpLivePdo{
         if(count($Param) < 3 and count($Param) > 5):
           $this->ErrorSet(1, 'Incorrect number of parameters when specifying a token');
         else:
-          if($Param[2] === PdoInt):
+          if($Options['MoneyAsInt'] === false and $Param[2] === PdoInt):
             $Param[1] = str_replace(',', '.', $Param[1]);
             if(strpos($Param[1], '.') !== false):
               $Param[2] = PdoStr;
