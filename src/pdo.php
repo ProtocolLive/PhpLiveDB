@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2021.12.20.00
+//Version 2021.12.20.01
 //For PHP >= 7.4
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -128,7 +128,7 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
     $this->Group = $Fields;
   }
 
-  public function Limit(int $First, int $Amount):void{
+  public function Limit(int $Amount, int $First = 0):void{
     $this->Limit = $First . ',' . $Amount;
   }
 
