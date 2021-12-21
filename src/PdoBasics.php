@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2021.12.17.00
+//Version 2021.12.20.00
 
 class PhpLivePdoBasics{
   public const TypeNull = PDO::PARAM_NULL;
@@ -21,6 +21,8 @@ class PhpLivePdoBasics{
   public const OperatorBiggerEqual = 4;
   public const OperatorIsNotNull = 5;
   public const OperatorLike = 6;
+  public const OperatorIn = 7;
+  public const OperatorNotIn = 8;
 }
 
 class PhpLivePdoJoin{

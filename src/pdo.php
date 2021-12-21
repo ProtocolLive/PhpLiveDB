@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2021.12.20.01
+//Version 2021.12.20.02
 //For PHP >= 7.4
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -348,6 +348,10 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
       endif;
       if($where->Operator === self::OperatorIsNotNull):
         $this->Query .= $where->Field . ' is not null';
+      elseif($where->Operator === self::OperatorIn):
+        $this->Query .= $where->Field . ' in ' . $where->Value;
+      elseif($where->Operator === self::OperatorNotIn):
+        $this->Query .= $where->Field . ' not in ' . $where->Value;
       elseif($where->Value === null or $where->Type === self::TypeNull):
         $this->Query .= $where->Field . ' is null';
       else:
