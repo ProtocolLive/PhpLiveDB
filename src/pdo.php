@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2021.12.20.02
+//Version 2021.12.22.00
 //For PHP >= 7.4
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -92,8 +92,8 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
    */
   public function WhereAdd(
     string $Field,
-    string $Value,
-    int $Type = 0,
+    ?string $Value,
+    ?int $Type,
     int $Operator = self::OperatorEqual,
     int $AndOr = 0,
     int $Parentesis = null,
