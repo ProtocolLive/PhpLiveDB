@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2021.12.22.00
+//Version 2021.12.22.01
 //For PHP >= 7.4
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -217,7 +217,9 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
       endif;
       if(ini_get('display_errors')):
         if(ini_get('html_errors')):
-          echo '<pre>' . str_replace("\n", '<br>', $log) . '</pre>';
+          echo '<pre>' . str_replace("\n", '<br>', $log);
+          $statement->debugDumpParams();
+          echo '</pre>';
         else:
           echo $log;
         endif;
