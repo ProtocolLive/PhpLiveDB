@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2021.12.31.01
+//Version 2021.12.31.02
 //For PHP >= 8
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -265,13 +265,15 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
     $statement = $this->Conn->prepare($this->Query);
 
     if($this->Cmd !== self::CmdSelect and $FieldsCount > 0):
-      foreach($this->Fields2 as $field):
-        if($Options['HtmlSafe']):
-          $value = htmlspecialchars($field->Value);
-        else:
-          $value = $field->Value;
+      foreach($this->Fields as $field):
+        if($field->Type !== PhpLivePdoBasics::TypeSql):
+          if($Options['HtmlSafe']):
+            $value = htmlspecialchars($field->Value);
+          else:
+            $value = $field->Value;
+          endif;
+          $statement->bindValue(':' . $field->Field, $value, $field->Type);
         endif;
-        $statement->bindValue(':' . $field->Name, $value, $field->Type);
       endforeach;
     endif;
     if($this->Cmd !== self::CmdInsert and $WheresCount > 0):
