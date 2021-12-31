@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2021.12.31.00
+//Version 2021.12.31.01
 //For PHP >= 8
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -118,7 +118,11 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
     if($BlankIsNull and $Value === ''):
       $Type = PhpLivePdoBasics::TypeNull;
     endif;
-    $this->Fields2[] = new class($Field){
+    $this->Fields[] = new class(
+      $Field,
+      $Value,
+      $Type
+    ){
       public string $Field;
       public ?string $Value;
       public int $Type;
