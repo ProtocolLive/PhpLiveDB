@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2021.12.31.02
+//Version 2021.12.31.03
 //For PHP >= 8
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -417,12 +417,12 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
   }
 
   private function UpdateFields():void{
-    foreach($this->Fields2 as $id => $field):
+    foreach($this->Fields as $id => $field):
       if($field->Type === self::TypeSql):
-        $this->Query .= $field->Name . '=' . $field->Value . ',';
+        $this->Query .= $field->Field . '=' . $field->Value . ',';
         unset($this->Fields2[$id]);
       else:
-        $this->Query .= $field->Name . '=:' . $field->Name . ',';
+        $this->Query .= $field->Field . '=:' . $field->Field . ',';
       endif;
     endforeach;
     $this->Query = substr($this->Query, 0, -1);
