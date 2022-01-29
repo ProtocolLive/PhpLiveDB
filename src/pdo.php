@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2021.12.31.03
+//Version 2022.01.29.00
 //For PHP >= 8
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -22,6 +22,7 @@ class PhpLivePdo{
     );
     $this->Conn->setAttribute(PDO::ATTR_TIMEOUT, $Options['TimeOut']);
     $this->Conn->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
+    $this->Conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     //Enabling profiling to get duration
     $statement = $this->Conn->prepare('set profiling_history_size=1;set profiling=1;');
     $statement->execute();
