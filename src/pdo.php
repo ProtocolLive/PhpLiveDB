@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.01.29.01
+//Version 2022.01.29.02
 //For PHP >= 8
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -58,6 +58,14 @@ class PhpLivePdo{
     endif;
     restore_error_handler();
     return $return;
+  }
+
+  public static function Reserved(string $Field):string{
+    $names = ['order', 'default', 'group'];
+    if(in_array($Field, $names)):
+      $Field = '`' . $Field . '`';
+    endif;
+    return $Field;
   }
 
   public function Error(object $Obj):void{
