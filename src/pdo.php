@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.01.29.05
+//Version 2022.01.29.06
 //For PHP >= 8
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -225,7 +225,7 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
     $this->Limit = $First . ',' . $Amount;
   }
 
-  public function Run(array $Options = []){
+  public function Run(array $Options = []):array|int{
     $Options['OnlyFieldsName'] ??= true;
     $Options['Debug'] ??= false;
     $Options['HtmlSafe'] ??= true;
