@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.01.29.04
+//Version 2022.01.29.05
 //For PHP >= 8
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -229,6 +229,8 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
     $Options['OnlyFieldsName'] ??= true;
     $Options['Debug'] ??= false;
     $Options['HtmlSafe'] ??= true;
+    $Options['Log'] ??= false;
+    $Options['LogUser'] ??= null;
     $FieldsCount = count($this->Fields ?? []);
     $WheresCount = count($this->Wheres);
 
@@ -319,16 +321,27 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
       $return = $statement->rowCount();
     endif;
 
+    //Log and Debug
+
+    ob_start();
+    $statement->debugDumpParams();
+    $Dump = ob_get_contents();
+    ob_end_clean();
+
     if($Options['Debug'] == true):
       if(ini_get('html_errors') == true):
         print '<pre style="text-align:left">';
       endif;
-      $statement->debugDumpParams();
+      echo $Dump;
       if(ini_get('html_errors') == true):
         print '</pre>';
       endif;
     endif;
-    restore_error_handler();
+
+    if($Options['Log']):
+      $this->LogSet($Options['LogUser'], $Dump);
+    endif;
+
     return $return;
   }
 
@@ -472,5 +485,23 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
         endif;
       endforeach;
     endif;
+  }
+
+  private function LogSet(?int $User, string $Query):void{
+    $Query = substr($Query, strpos($Query, 'Sent SQL: ['));
+    $Query = substr($Query, strpos($Query, '] ') + 2);
+    $Query = substr($Query, 0, strpos($Query, 'Params: '));
+    $Query = trim($Query);
+
+    $statement = $this->Conn->prepare('
+      insert into sys_logs(dia,user_id,uagent,ip,query)
+      values(:dia,:user,:uagent,:ip,:query)
+    ');
+    $statement->bindValue('dia', time(), PDO::PARAM_INT);
+    $statement->bindValue('user', $User, PDO::PARAM_INT);
+    $statement->bindValue('uagent', $_SERVER['HTTP_USER_AGENT'], PDO::PARAM_STR);
+    $statement->bindValue('ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
+    $statement->bindValue('query', $Query, PDO::PARAM_STR);
+    $statement->execute();
   }
 }
