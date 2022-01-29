@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.01.29.02
+//Version 2022.01.29.03
 //For PHP >= 8
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -71,12 +71,8 @@ class PhpLivePdo{
   public function Error(object $Obj):void{
     $log = date('Y-m-d H:i:s') . "\n";
     $log .= $Obj->getCode() . ' - ' . $Obj->getMessage() . "\n";
-    $log .= $Obj->getTraceAsString() . "\n\n";
-    if(is_file(__DIR__ . '/error.log')):
-      file_put_contents(__DIR__ . '/error.log', $log, FILE_APPEND);
-    else:
-      file_put_contents(__DIR__ . '/error.log', $log,);
-    endif;
+    $log .= $Obj->getTraceAsString();
+    error_log($log);
     if(ini_get('display_errors')):
       if(ini_get('html_errors')):
         echo '<pre>' . str_replace("\n", '<br>', $log) . '</pre>';
@@ -335,12 +331,8 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
     $log = date('Y-m-d H:i:s') . "\n";
     $log .= $Obj->getCode() . ' - ' . $Obj->getMessage() . "\n";
     $log .= $this->Query . "\n";
-    $log .= $Obj->getTraceAsString() . "\n\n";
-    if(is_file(__DIR__ . '/error.log')):
-      file_put_contents(__DIR__ . '/error.log', $log, FILE_APPEND);
-    else:
-      file_put_contents(__DIR__ . '/error.log', $log,);
-    endif;
+    $log .= $Obj->getTraceAsString();
+    error_log($log);
     if(ini_get('display_errors')):
       if(ini_get('html_errors')):
         echo '<pre>' . str_replace("\n", '<br>', $log) . '</pre>';
