@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.01.29.08
+//Version 2022.01.29.09
 //For PHP >= 8
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -229,6 +229,7 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
     $Options['OnlyFieldsName'] ??= true;
     $Options['Debug'] ??= false;
     $Options['HtmlSafe'] ??= true;
+    $Options['TrimValues'] ??= true;
     $Options['Log'] ??= false;
     $Options['LogUser'] ??= null;
     $FieldsCount = count($this->Fields ?? []);
@@ -500,6 +501,9 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
   private function ValueFunctions(string $Value, array $Options):string{
     if($Options['HtmlSafe']):
       $Value = htmlspecialchars($Value);
+    endif;
+    if($Options['TrimValues']):
+      $Value = trim($Value);
     endif;
     return $Value;
   }
