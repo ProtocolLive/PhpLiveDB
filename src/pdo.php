@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.01.29.07
+//Version 2022.01.29.08
 //For PHP >= 8
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -274,11 +274,7 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
     if($this->Cmd !== self::CmdSelect and $FieldsCount > 0):
       foreach($this->Fields as $field):
         if($field->Type !== PhpLivePdoBasics::TypeSql):
-          if($Options['HtmlSafe']):
-            $value = htmlspecialchars($field->Value);
-          else:
-            $value = $field->Value;
-          endif;
+          $value = $this->ValueFunctions($field->Value, $Options);
           $statement->bindValue(':' . $field->Field, $value, $field->Type);
         endif;
       endforeach;
@@ -288,11 +284,7 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
         if($where->Type !== self::TypeNull
         and $where->Operator !== self::OperatorIsNotNull
         and $where->NoBind === false):
-          if($Options['HtmlSafe']):
-            $value = htmlspecialchars($where->Value);
-          else:
-            $value = $field->Value;
-          endif;
+          $value = $this->ValueFunctions($where->Value, $Options);
           $statement->bindValue($where->CustomPlaceholder ?? $where->Field, $value, $where->Type);
         endif;
       endforeach;
@@ -503,5 +495,12 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
     $statement->bindValue('ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
     $statement->bindValue('query', $Query, PDO::PARAM_STR);
     $statement->execute();
+  }
+
+  private function ValueFunctions(string $Value, array $Options):string{
+    if($Options['HtmlSafe']):
+      $Value = htmlspecialchars($Value);
+    endif;
+    return $Value;
   }
 }
