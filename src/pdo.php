@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.01.29.03
+//Version 2022.01.29.04
 //For PHP >= 8
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -93,6 +93,7 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
   private ?string $Order = null;
   private ?string $Group = null;
   private ?string $Limit = null;
+  public ?PDOException $Error = null;
 
   public function __construct(
     private PDO $Conn,
@@ -225,7 +226,6 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
   }
 
   public function Run(array $Options = []){
-    set_exception_handler([$this, 'Error']);
     $Options['OnlyFieldsName'] ??= true;
     $Options['Debug'] ??= false;
     $Options['HtmlSafe'] ??= true;
@@ -295,8 +295,13 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
         endif;
       endforeach;
     endif;
-
-    $statement->execute();
+    
+    try{
+      $this->Error = null;
+      $statement->execute();
+    }catch(PDOException $e){
+      $this->ErrorSet($e);
+    }
 
     if($this->Cmd === self::CmdSelect):
       if($Options['OnlyFieldsName']):
@@ -327,7 +332,7 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
     return $return;
   }
 
-  public function Error(object $Obj):void{
+  public function ErrorSet(PDOException $Obj):void{
     $log = date('Y-m-d H:i:s') . "\n";
     $log .= $Obj->getCode() . ' - ' . $Obj->getMessage() . "\n";
     $log .= $this->Query . "\n";
@@ -339,8 +344,8 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
       else:
         echo $log;
       endif;
-      die();
     endif;
+    $this->Error = $Obj;
   }
 
   private function Operator(int $Operator):string{
