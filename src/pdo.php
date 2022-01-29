@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.01.29.09
+//Version 2022.01.29.10
 //For PHP >= 8
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -242,6 +242,8 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
       $this->InsertHead();
     elseif($this->Cmd === self::CmdUpdate):
       $this->UpdateHead();
+    elseif($this->Cmd === self::CmdDelete):
+      $this->Query = 'delete from ' . $this->Table;
     endif;
 
     /**
