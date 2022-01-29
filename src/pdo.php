@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.01.29.00
+//Version 2022.01.29.01
 //For PHP >= 8
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -32,7 +32,7 @@ class PhpLivePdo{
     return new PhpLivePdoCmd($this->Conn, $Cmd, $Table, $Prefix !== '' ? $Prefix : $this->Prefix);
   }
 
-  public function RunCustomSelect(string $Query, array $Options = []):array{
+  public function RunCustom(string $Query, array $Options = []):array{
     set_exception_handler([$this, 'Error']);
     $Options['OnlyFieldsName'] ??= true;
     $Options['Debug'] ??= false;
