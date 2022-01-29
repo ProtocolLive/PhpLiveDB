@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.01.29.11
+//Version 2022.01.29.12
 //For PHP >= 8
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -32,22 +32,24 @@ class PhpLivePdo{
     return new PhpLivePdoCmd($this->Conn, $Cmd, $Table, $Prefix !== '' ? $Prefix : $this->Prefix);
   }
 
-  public function RunCustom(string $Query, array $Options = []):array{
+  public function RunCustom(
+    string $Query,
+    bool $OnlyFieldsName = true,
+    bool $Debug = false
+  ):array{
     set_exception_handler([$this, 'Error']);
-    $Options['OnlyFieldsName'] ??= true;
-    $Options['Debug'] ??= false;
 
     $statement = $this->Conn->prepare($Query);
     $statement->execute();
 
-    if($Options['OnlyFieldsName']):
+    if($OnlyFieldsName):
       $temp = PDO::FETCH_ASSOC;
     else:
       $temp = PDO::FETCH_DEFAULT;
     endif;
     $return = $statement->fetchAll($temp);
 
-    if($Options['Debug'] == true):
+    if($Debug):
       if(ini_get('html_errors') == true):
         print '<pre style="text-align:left">';
       endif;
@@ -225,13 +227,14 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
     $this->Limit = $First . ',' . $Amount;
   }
 
-  public function Run(array $Options = []):array|int{
-    $Options['OnlyFieldsName'] ??= true;
-    $Options['Debug'] ??= false;
-    $Options['HtmlSafe'] ??= true;
-    $Options['TrimValues'] ??= true;
-    $Options['Log'] ??= false;
-    $Options['LogUser'] ??= null;
+  public function Run(
+    bool $OnlyFieldsName = true,
+    bool $Debug = false,
+    bool $HtmlSafe = true,
+    bool $TrimValues = true,
+    bool $Log = false,
+    int $LogUser = null
+  ):array|int{
     $FieldsCount = count($this->Fields ?? []);
     $WheresCount = count($this->Wheres);
 
@@ -277,7 +280,7 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
     if($this->Cmd !== self::CmdSelect and $FieldsCount > 0):
       foreach($this->Fields as $field):
         if($field->Type !== PhpLivePdoBasics::TypeSql):
-          $value = $this->ValueFunctions($field->Value, $Options);
+          $value = $this->ValueFunctions($field->Value, $HtmlSafe, $TrimValues);
           $statement->bindValue(':' . $field->Field, $value, $field->Type);
         endif;
       endforeach;
@@ -287,7 +290,7 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
         if($where->Type !== self::TypeNull
         and $where->Operator !== self::OperatorIsNotNull
         and $where->NoBind === false):
-          $value = $this->ValueFunctions($where->Value, $Options);
+          $value = $this->ValueFunctions($where->Value, $HtmlSafe, $TrimValues);
           $statement->bindValue($where->CustomPlaceholder ?? $where->Field, $value, $where->Type);
         endif;
       endforeach;
@@ -301,7 +304,7 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
     }
 
     if($this->Cmd === self::CmdSelect):
-      if($Options['OnlyFieldsName']):
+      if($OnlyFieldsName):
         $temp = PDO::FETCH_ASSOC;
       else:
         $temp = PDO::FETCH_DEFAULT;
@@ -323,7 +326,7 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
     $Dump = ob_get_contents();
     ob_end_clean();
 
-    if($Options['Debug'] == true):
+    if($Debug):
       if(ini_get('html_errors') == true):
         print '<pre style="text-align:left">';
       endif;
@@ -333,8 +336,8 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
       endif;
     endif;
 
-    if($Options['Log']):
-      $this->LogSet($Options['LogUser'], $Dump);
+    if($Log):
+      $this->LogSet($LogUser, $Dump);
     endif;
 
     return $return;
@@ -500,11 +503,15 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
     $statement->execute();
   }
 
-  private function ValueFunctions(string $Value, array $Options):string{
-    if($Options['HtmlSafe']):
+  private function ValueFunctions(
+    string $Value,
+    bool $HtmlSafe,
+    bool $TrimValues
+  ):string{
+    if($HtmlSafe):
       $Value = htmlspecialchars($Value);
     endif;
-    if($Options['TrimValues']):
+    if($TrimValues):
       $Value = trim($Value);
     endif;
     return $Value;
