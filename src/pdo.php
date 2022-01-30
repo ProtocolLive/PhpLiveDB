@@ -1,26 +1,30 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.01.29.12
+//Version 2022.01.30.00
 //For PHP >= 8
 
 require_once(__DIR__ . '/PdoBasics.php');
 
 class PhpLivePdo{
   private PDO $Conn;
-  private string $Prefix;
 
-  public function __construct(array $Options){
-    $Options['Drive'] ??= 'mysql';
-    $Options['Charset'] ??= 'utf8mb4';
-    $Options['TimeOut'] ??= 5;
-    $this->Prefix = $Options['Prefix'] ?? '';
+  public function __construct(
+    string $Ip,
+    string $User,
+    string $Pwd,
+    string $Db,
+    string $Drive = 'mysql',
+    string $Charset = 'utf8mb4',
+    int $TimeOut = 5,
+    private string $Prefix = ''
+  ){
     $this->Conn = new PDO(
-      $Options['Drive'] . ':host=' . $Options['Ip'] . ';dbname=' . $Options['Db'] . ';charset=' . $Options['Charset'],
-      $Options['User'],
-      $Options['Pwd']
+      $Drive . ':host=' . $Ip . ';dbname=' . $Db . ';charset=' . $Charset,
+      $User,
+      $Pwd
     );
-    $this->Conn->setAttribute(PDO::ATTR_TIMEOUT, $Options['TimeOut']);
+    $this->Conn->setAttribute(PDO::ATTR_TIMEOUT, $TimeOut);
     $this->Conn->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
     $this->Conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     //Enabling profiling to get duration
