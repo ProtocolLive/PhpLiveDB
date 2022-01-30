@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.01.30.01
+//Version 2022.01.30.02
 //For PHP >= 8
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -94,12 +94,12 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
   private string $Query;
   private array $Join = [];
   private string $Fields1 = '*';
-  private ?array $Fields2;
+  private array|null $Fields2;
   private array $Wheres = [];
-  private ?string $Order = null;
-  private ?string $Group = null;
-  private ?string $Limit = null;
-  public ?PDOException $Error = null;
+  private string|null $Order = null;
+  private string|null $Group = null;
+  private string|null $Limit = null;
+  public PDOException|null $Error = null;
 
   public function __construct(
     private PDO $Conn,
@@ -123,7 +123,7 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
 
   public function FieldAdd(
     string $Field,
-    ?string $Value,
+    string|null $Value,
     int $Type,
     bool $BlankIsNull = true
   ){
@@ -136,10 +136,10 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
       $Type
     ){
       public string $Field;
-      public ?string $Value;
+      public string|null $Value;
       public int $Type;
 
-      public function __construct(string $Field, ?string $Value, int $Type){
+      public function __construct(string $Field, string|null $Value, int $Type){
         $this->Field = $Field;
         $this->Value = $Value;
         $this->Type = $Type;
@@ -161,8 +161,8 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
    */
   public function WhereAdd(
     string $Field,
-    ?string $Value = null,
-    ?int $Type = null,
+    string|null $Value = null,
+    int|null $Type = null,
     int $Operator = self::OperatorEqual,
     int $AndOr = 0,
     int $Parenthesis = null,
@@ -186,12 +186,12 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
       $NoBind
     ){
       public string $Field;
-      public ?string $Value;
-      public ?int $Type;
+      public string|null $Value;
+      public int|null $Type;
       public int $Operator = PhpLivePdoBasics::OperatorEqual;
       public int $AndOr = 0;
-      public ?int $Parenthesis = null;
-      public ?string $CustomPlaceholder = null;
+      public int|null $Parenthesis = null;
+      public string|null $CustomPlaceholder = null;
       public bool $NoField = false;
       public bool $NoBind = false;
 
@@ -489,7 +489,7 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
     endif;
   }
 
-  private function LogSet(?int $User, string $Query):void{
+  private function LogSet(int|null $User, string $Query):void{
     $Query = substr($Query, strpos($Query, 'Sent SQL: ['));
     $Query = substr($Query, strpos($Query, '] ') + 2);
     $Query = substr($Query, 0, strpos($Query, 'Params: '));
