@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.01.30.00
+//Version 2022.01.30.01
 //For PHP >= 8
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -32,8 +32,8 @@ class PhpLivePdo{
     $statement->execute();
   }
 
-  public function NewCmd(int $Cmd, string $Table, string $Prefix = ''):PhpLivePdoCmd{
-    return new PhpLivePdoCmd($this->Conn, $Cmd, $Table, $Prefix !== '' ? $Prefix : $this->Prefix);
+  public function NewCmd(int $Cmd, string $Table):PhpLivePdoCmd{
+    return new PhpLivePdoCmd($this->Conn, $Cmd, $Table);
   }
 
   public function RunCustom(
