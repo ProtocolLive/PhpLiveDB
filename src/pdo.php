@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.02.05.00
+//Version 2022.02.05.01
 //For PHP >= 8
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -295,7 +295,8 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
     endif;
     if($this->Cmd !== self::CmdInsert and $WheresCount > 0):
       foreach($this->Wheres as $where):
-        if($where->Type !== self::TypeNull
+        if($where->Value !== null
+        and $where->Type !== self::TypeNull
         and $where->Operator !== self::OperatorIsNotNull
         and $where->NoBind === false):
           $value = $this->ValueFunctions($where->Value, $HtmlSafe, $TrimValues);
