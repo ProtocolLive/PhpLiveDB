@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.02.05.01
+//Version 2022.02.05.02
 //For PHP >= 8
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -371,6 +371,8 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
   private function Operator(int $Operator):string{
     if($Operator === self::OperatorEqual):
       return '=';
+    elseif($Operator === self::OperatorDifferent):
+      return '<>';
     elseif($Operator === self::OperatorSmaller):
       return '<';
     elseif($Operator === self::OperatorBigger):

@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2021.12.31.00
+//Version 2022.02.05.00
 
 abstract class PhpLivePdoBasics{
   public const TypeNull = PDO::PARAM_NULL;
@@ -15,14 +15,15 @@ abstract class PhpLivePdoBasics{
   public const CmdDelete = 3;
 
   public const OperatorEqual = 0;
-  public const OperatorSmaller = 1;
-  public const OperatorBigger = 2;
-  public const OperatorSmallerEqual = 3;
-  public const OperatorBiggerEqual = 4;
-  public const OperatorIsNotNull = 5;
-  public const OperatorLike = 6;
-  public const OperatorIn = 7;
-  public const OperatorNotIn = 8;
+  public const OperatorDifferent = 1;
+  public const OperatorSmaller = 2;
+  public const OperatorBigger = 3;
+  public const OperatorSmallerEqual = 4;
+  public const OperatorBiggerEqual = 5;
+  public const OperatorIsNotNull = 6;
+  public const OperatorLike = 7;
+  public const OperatorIn = 8;
+  public const OperatorNotIn = 9;
 }
 
 class PhpLivePdoJoin{
@@ -34,7 +35,7 @@ class PhpLivePdoJoin{
   public function __construct(
     public string $Table,
     public int $Type,
-    public ?string $Using = null,
-    public ?string $On = null
+    public string|null $Using = null,
+    public string|null $On = null
   ){}
 }
