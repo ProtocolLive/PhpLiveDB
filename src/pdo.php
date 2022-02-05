@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.02.05.00
+//Version 2022.01.30.02
 //For PHP >= 8
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -123,7 +123,7 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
 
   public function FieldAdd(
     string $Field,
-    string|null $Value = null,
+    string|null $Value,
     int $Type,
     bool $BlankIsNull = true
   ){
