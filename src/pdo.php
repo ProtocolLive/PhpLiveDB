@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.02.06.00
+//Version 2022.02.06.01
 //For PHP >= 8
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -17,7 +17,7 @@ class PhpLivePdo extends PhpLivePdoBasics{
     string $Drive = 'mysql',
     string $Charset = 'utf8mb4',
     int $TimeOut = 5,
-    private string $Prefix = ''
+    string $Prefix = ''
   ){
     $this->Conn = new PDO(
       $Drive . ':host=' . $Ip . ';dbname=' . $Db . ';charset=' . $Charset,
