@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.02.05.02
+//Version 2022.02.05.03
 //For PHP >= 8
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -110,11 +110,23 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
 
   public function JoinAdd(
     string $Table,
-    string $Using = null,
-    string $On = null,
-    int $Type = PhpLivePdoJoin::TypeLeft
+    string|null $Using = null,
+    string|null $On = null,
+    int $Type = PhpLivePdoBasics::JoinLeft
   ):void{
-    $this->Join[] = new PhpLivePdoJoin($Table, $Type, $Using, $On);
+    $this->Join[] = new class($Table, $Type, $Using, $On){
+      public string $Table;
+      public int $Type;
+      public string|null $Using;
+      public string|null $On;
+
+      public function __construct($Table, $Type, $Using, $On){
+        $this->Table = $Table;
+        $this->Type = $Type;
+        $this->Using = $Using;
+        $this->On = $On;
+      }
+    };
   }
 
   public function Fields(string $Fields):void{
@@ -396,18 +408,18 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
 
   private function JoinBuild():void{
     foreach($this->Join as $join):
-      if($join->Type === PhpLivePdoJoin::TypeInner):
+      if($join->Type === PhpLivePdoBasics::JoinInner):
         $this->Query .= ' inner';
-      elseif($join->Type === PhpLivePdoJoin::TypeLeft):
+      elseif($join->Type === PhpLivePdoBasics::JoinLeft):
         $this->Query .= ' left';
-      elseif($join->Type === PhpLivePdoJoin::TypeRight):
+      elseif($join->Type === PhpLivePdoBasics::JoinRight):
         $this->Query .= ' right';
       endif;
       $this->Query .= ' join ' . $join->Table;
-      if($join->Using === null):
-        $this->Query .= ' on(' . $join->On . ')';
-      else:
+      if($join->On === null):
         $this->Query .= ' using(' . $join->Using . ')';
+      else:
+        $this->Query .= ' on(' . $join->On . ')';
       endif;
     endforeach;
   }
