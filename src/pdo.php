@@ -30,18 +30,47 @@ class PhpLivePdo extends PhpLivePdoBasics{
     //Enabling profiling to get duration
     $statement = $this->Conn->prepare('set profiling_history_size=1;set profiling=1;');
     $statement->execute();
+    $this->Prefix = $Prefix;
   }
 
-  public function NewCmd(int $Cmd, string $Table):PhpLivePdoCmd{
-    return new PhpLivePdoCmd($this->Conn, $Cmd, $Table);
+  public function Select(string $Table){
+    return new PhpLivePdoSelect(
+      $this->Conn,
+      $Table,
+      $this->Prefix
+    );
+  }
+
+  public function Insert(string $Table){
+    return new PhpLivePdoInsert(
+      $this->Conn,
+      $Table,
+      $this->Prefix
+    );
+  }
+
+  public function Update(string $Table){
+    return new PhpLivePdoUpdate(
+      $this->Conn,
+      $Table,
+      $this->Prefix
+    );
+  }
+
+  public function Delete(string $Table){
+    return new PhpLivePdoDelete(
+      $this->Conn,
+      $Table,
+      $this->Prefix
+    );
   }
 
   public function RunCustom(
     string $Query,
     bool $OnlyFieldsName = true,
     bool $Debug = false
-  ):array{
-    set_exception_handler([$this, 'Error']);
+  ):array|int|null{
+    set_exception_handler([$this, 'ErrorSet']);
 
     $statement = $this->Conn->prepare($Query);
     $statement->execute();
@@ -62,51 +91,64 @@ class PhpLivePdo extends PhpLivePdoBasics{
         print '</pre>';
       endif;
     endif;
+
     restore_error_handler();
-    return $return;
-  }
-
-  public static function Reserved(string $Field):string{
-    $names = ['order', 'default', 'group'];
-    if(in_array($Field, $names)):
-      $Field = '`' . $Field . '`';
-    endif;
-    return $Field;
-  }
-
-  public function Error(object $Obj):void{
-    $log = date('Y-m-d H:i:s') . "\n";
-    $log .= $Obj->getCode() . ' - ' . $Obj->getMessage() . "\n";
-    $log .= $Obj->getTraceAsString();
-    error_log($log);
-    if(ini_get('display_errors')):
-      if(ini_get('html_errors')):
-        echo '<pre>' . str_replace("\n", '<br>', $log) . '</pre>';
-      else:
-        echo $log;
-      endif;
-      die();
+    if($this->Error === null):
+      return $return;
+    else:
+      return null;
     endif;
   }
 }
 
-class PhpLivePdoCmd extends PhpLivePdoBasics{
-  private string $Query;
+class PhpLivePdoSelect extends PhpLivePdoBasics{
+  private PDO $Conn;
+  private string $Fields = '*';
   private array $Join = [];
-  private string $Fields1 = '*';
-  private array|null $Fields2;
   private array $Wheres = [];
   private string|null $Order = null;
   private string|null $Group = null;
   private string|null $Limit = null;
-  public PDOException|null $Error = null;
+
+  private function SelectHead():void{
+    $this->Query = 'select ' . $this->Fields . ' from ';
+    if($this->Prefix !== ''):
+      $this->Query .= $this->Prefix . '_';
+    endif;
+    $this->Query .= $this->Table;
+  }
+
+  private function JoinBuild():void{
+    foreach($this->Join as $join):
+      if($join->Type === PhpLivePdoBasics::JoinInner):
+        $this->Query .= ' inner';
+      elseif($join->Type === PhpLivePdoBasics::JoinLeft):
+        $this->Query .= ' left';
+      elseif($join->Type === PhpLivePdoBasics::JoinRight):
+        $this->Query .= ' right';
+      endif;
+      $this->Query .= ' join ' . $join->Table;
+      if($join->On === null):
+        $this->Query .= ' using(' . $join->Using . ')';
+      else:
+        $this->Query .= ' on(' . $join->On . ')';
+      endif;
+    endforeach;
+  }
 
   public function __construct(
-    private PDO $Conn,
-    private int $Cmd,
-    private string $Table,
-    private string $Prefix = ''
-  ){}
+    PDO &$Conn,
+    string $Table,
+    string $Prefix
+  ){
+    $this->Conn = $Conn;
+    $this->Table = $Table;
+    $this->Prefix = $Prefix;
+  }
+
+  public function Fields(string $Fields):void{
+    $this->Fields = $Fields;
+  }
 
   public function JoinAdd(
     string $Table,
@@ -129,8 +171,332 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
     };
   }
 
-  public function Fields(string $Fields):void{
-    $this->Fields1 = $Fields;
+  /**
+   * @param string $Field Field name
+   * @param string $Value Field value. Can be null in case of OperatorNull
+   * @param int $Type Field type. Can be null in case of OperatorIsNull
+   * @param int $Operator Comparison operator
+   * @param int $AndOr Relation with the prev field
+   * @param int $Parenthesis Open (0) or close (1) parenthesis
+   * @param bool $SqlInField The field have a SQL function?
+   * @param bool $BlankIsNull Convert '' to null
+   * @param bool $NoField Bind values with fields declared in Fields function
+   * @param bool $NoBind Don't bind values who are already binded
+   */
+  public function WhereAdd(
+    string $Field,
+    string|null $Value = null,
+    int|null $Type = null,
+    int $Operator = self::OperatorEqual,
+    int $AndOr = 0,
+    int $Parenthesis = null,
+    string $CustomPlaceholder = null,
+    bool $BlankIsNull = true,
+    bool $NoField = false,
+    bool $NoBind = false
+  ){
+    if($BlankIsNull and $Value === ''):
+      $Type = self::TypeNull;
+    endif;
+    $this->Wheres[] = new class(
+      $Field,
+      $Value,
+      $Type,
+      $Operator,
+      $AndOr,
+      $Parenthesis,
+      $CustomPlaceholder,
+      $NoField,
+      $NoBind
+    ){
+      public string $Field;
+      public string|null $Value;
+      public int|null $Type;
+      public int $Operator = PhpLivePdoBasics::OperatorEqual;
+      public int $AndOr = 0;
+      public int|null $Parenthesis = null;
+      public string|null $CustomPlaceholder = null;
+      public bool $NoField = false;
+      public bool $NoBind = false;
+
+      public function __construct(
+        $Field,
+        $Value,
+        $Type,
+        $Operator,
+        $AndOr,
+        $Parenthesis,
+        $CustomPlaceholder,
+        $NoField,
+        $NoBind
+      ){
+        $this->Field = $Field;
+        $this->Value = $Value;
+        $this->Type = $Type;
+        $this->Operator = $Operator;
+        $this->AndOr = $AndOr;
+        $this->Parenthesis = $Parenthesis;
+        $this->CustomPlaceholder = $CustomPlaceholder;
+        $this->NoField = $NoField;
+        $this->NoBind = $NoBind;
+      }
+    };
+  }
+
+  public function Order(string $Fields):void{
+    $this->Order = $Fields;
+  }
+
+  public function Group(string $Fields):void{
+    $this->Group = $Fields;
+  }
+
+  public function Limit(int $Amount, int $First = 0):void{
+    $this->Limit = $First . ',' . $Amount;
+  }
+
+  public function Run(
+    bool $OnlyFieldsName = true,
+    bool $Debug = false,
+    bool $HtmlSafe = true,
+    bool $TrimValues = true,
+    bool $Log = false,
+    int $LogUser = null
+  ):array|false{
+    $WheresCount = count($this->Wheres);
+
+    $this->SelectHead();
+    $this->JoinBuild();
+    if($WheresCount > 0):
+      $this->Wheres($this->Wheres);
+    endif;
+    if($this->Group !== null):
+      $this->Query .= ' group by ' . $this->Group;
+    endif;
+    if($this->Order !== null):
+      $this->Query .= ' order by ' . $this->Order;
+    endif;
+    if($this->Limit !== null):
+      $this->Query .= ' limit ' . $this->Limit;
+    endif;
+
+    $statement = $this->Conn->prepare($this->Query);
+
+    if($WheresCount > 0):
+      foreach($this->Wheres as $where):
+        if($where->Value !== null
+        and $where->Type !== self::TypeNull
+        and $where->Operator !== self::OperatorIsNotNull
+        and $where->NoBind === false):
+          $value = $this->ValueFunctions($where->Value, $HtmlSafe, $TrimValues);
+          $statement->bindValue($where->CustomPlaceholder ?? $where->Field, $value, $where->Type);
+        endif;
+      endforeach;
+    endif;
+    
+    try{
+      $this->Error = null;
+      $statement->execute();
+    }catch(PDOException $e){
+      $this->ErrorSet($e);
+      return false;
+    }
+
+    if($OnlyFieldsName):
+      $temp = PDO::FETCH_ASSOC;
+    else:
+      $temp = PDO::FETCH_DEFAULT;
+    endif;
+    $return = $statement->fetchAll($temp);
+
+    //Log and Debug
+    ob_start();
+    $statement->debugDumpParams();
+    $Dump = ob_get_contents();
+    ob_end_clean();
+
+    if($Debug):
+      if(ini_get('html_errors') == true):
+        print '<pre style="text-align:left">';
+      endif;
+      echo $Dump;
+      if(ini_get('html_errors') == true):
+        print '</pre>';
+      endif;
+    endif;
+
+    if($Log):
+      $this->LogSet($this->Conn, $LogUser, $Dump);
+    endif;
+
+    return $return;
+  }
+}
+
+class PhpLivePdoInsert extends PhpLivePdoBasics{
+  private PDO $Conn;
+  private array $Fields = [];
+
+  private function InsertHead():void{
+    $this->Query = 'insert into ';
+    if($this->Prefix !== ''):
+      $this->Query .= $this->Prefix . '_';
+    endif;
+    $this->Query .= $this->Table . '(';
+  }
+
+  private function InsertFields():void{
+    foreach($this->Fields as $field):
+      $this->Query .= $field->Field . ',';
+    endforeach;
+    $this->Query = substr($this->Query, 0, -1) . ') values(';
+    foreach($this->Fields as $id => $field):
+      if($field->Type === self::TypeSql):
+        $this->Query .= $field->Value . ',';
+        unset($this->Fields[$id]);
+      else:
+        $this->Query .= ':' . $field->Field . ',';
+      endif;
+    endforeach;
+    $this->Query = substr($this->Query, 0, -1) . ')';
+  }
+
+  public function __construct(
+    PDO &$Conn,
+    string $Table,
+    string $Prefix
+  ){
+    $this->Conn = $Conn;
+    $this->Table = $Table;
+    $this->Prefix = $Prefix;
+  }
+
+  public function FieldAdd(
+    string $Field,
+    string|null $Value,
+    int $Type,
+    bool $BlankIsNull = true
+  ){
+    if($BlankIsNull and $Value === ''):
+      $Type = PhpLivePdoBasics::TypeNull;
+    endif;
+    $this->Fields[] = new class(
+      $Field,
+      $Value,
+      $Type
+    ){
+      public string $Field;
+      public string|null $Value;
+      public int $Type;
+
+      public function __construct(string $Field, string|null $Value, int $Type){
+        $this->Field = $Field;
+        $this->Value = $Value;
+        $this->Type = $Type;
+      }
+    };
+  }
+
+  public function Run(
+    bool $Debug = false,
+    bool $HtmlSafe = true,
+    bool $TrimValues = true,
+    bool $Log = false,
+    int $LogUser = null
+  ):int|false{
+    $FieldsCount = count($this->Fields ?? []);
+    $WheresCount = count($this->Wheres);
+
+    $this->InsertHead();
+    if($FieldsCount > 0):
+      $this->InsertFields();
+    endif;
+    if($WheresCount > 0):
+      $this->Wheres($this->Wheres);
+    endif;
+
+    $statement = $this->Conn->prepare($this->Query);
+
+    if($FieldsCount > 0):
+      foreach($this->Fields as $field):
+        if($field->Type !== PhpLivePdoBasics::TypeSql):
+          if($field->Value === null):
+            $statement->bindValue(':' . $field->Field, null, PDO::PARAM_NULL);
+          else:
+            $value = $this->ValueFunctions($field->Value, $HtmlSafe, $TrimValues);
+            $statement->bindValue(':' . $field->Field, $value, $field->Type);
+          endif;
+        endif;
+      endforeach;
+    endif;
+    
+    try{
+      $this->Error = null;
+      $statement->execute();
+    }catch(PDOException $e){
+      $this->ErrorSet($e);
+      return false;
+    }
+
+    $return = $this->Conn->lastInsertId();
+
+    //Log and Debug
+    ob_start();
+    $statement->debugDumpParams();
+    $Dump = ob_get_contents();
+    ob_end_clean();
+
+    if($Debug):
+      if(ini_get('html_errors') == true):
+        print '<pre style="text-align:left">';
+      endif;
+      echo $Dump;
+      if(ini_get('html_errors') == true):
+        print '</pre>';
+      endif;
+    endif;
+
+    if($Log):
+      $this->LogSet($this->Conn, $LogUser, $Dump);
+    endif;
+
+    return $return;
+  }
+}
+
+class PhpLivePdoUpdate extends PhpLivePdoBasics{
+  private PDO $Conn;
+  private array $Fields = [];
+  private array $Wheres = [];
+
+  private function UpdateHead():void{
+    $this->Query = 'update ';
+    if($this->Prefix !== ''):
+      $this->Query .= $this->Prefix . '_';
+    endif;
+    $this->Query .= $this->Table . ' set ';
+  }
+
+  private function UpdateFields():void{
+    foreach($this->Fields as $id => $field):
+      if($field->Type === self::TypeSql):
+        $this->Query .= $field->Field . '=' . $field->Value . ',';
+        unset($this->Fields2[$id]);
+      else:
+        $this->Query .= $field->Field . '=:' . $field->Field . ',';
+      endif;
+    endforeach;
+    $this->Query = substr($this->Query, 0, -1);
+  }
+
+  public function __construct(
+    PDO &$Conn,
+    string $Table,
+    string $Prefix
+  ){
+    $this->Conn = $Conn;
+    $this->Table = $Table;
+    $this->Prefix = $Prefix;
   }
 
   public function FieldAdd(
@@ -231,18 +597,6 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
     };
   }
 
-  public function Order(string $Fields):void{
-    $this->Order = $Fields;
-  }
-
-  public function Group(string $Fields):void{
-    $this->Group = $Fields;
-  }
-
-  public function Limit(int $Amount, int $First = 0):void{
-    $this->Limit = $First . ',' . $Amount;
-  }
-
   public function Run(
     bool $OnlyFieldsName = true,
     bool $Debug = false,
@@ -250,98 +604,49 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
     bool $TrimValues = true,
     bool $Log = false,
     int $LogUser = null
-  ):array|int{
+  ):int|false{
     $FieldsCount = count($this->Fields ?? []);
     $WheresCount = count($this->Wheres);
 
-    if($this->Cmd === self::CmdSelect):
-      $this->SelectHead();
-      $this->JoinBuild();
-    elseif($this->Cmd === self::CmdInsert):
-      $this->InsertHead();
-    elseif($this->Cmd === self::CmdUpdate):
-      $this->UpdateHead();
-    elseif($this->Cmd === self::CmdDelete):
-      $this->Query = 'delete from ' . $this->Table;
-    endif;
-
-    /**
-     * @var $field PhpLivePdoField
-     * @var $where PhpLivePdoWhere
-     */
-    if($this->Cmd === self::CmdInsert and $FieldsCount > 0):
-      $this->InsertFields();
-    elseif($this->Cmd === self::CmdUpdate and $FieldsCount > 0):
-      $this->UpdateFields();
-    endif;
-
-    if($this->Cmd !== self::CmdInsert and $WheresCount > 0):
-      $this->Wheres();
-    endif;
-
-    if($this->Cmd === self::CmdSelect):
-      if($this->Group !== null):
-        $this->Query .= ' group by ' . $this->Group;
-      endif;
-      if($this->Order !== null):
-        $this->Query .= ' order by ' . $this->Order;
-      endif;
-      if($this->Limit !== null):
-        $this->Query .= ' limit ' . $this->Limit;
-      endif;
+    $this->UpdateHead();
+    $this->UpdateFields();
+    if($WheresCount > 0):
+      $this->Wheres($this->Wheres);
     endif;
 
     $statement = $this->Conn->prepare($this->Query);
 
-    if($this->Cmd !== self::CmdSelect and $FieldsCount > 0):
-      foreach($this->Fields as $field):
-        if($field->Type !== PhpLivePdoBasics::TypeSql):
-          if($field->Value === null):
-            $statement->bindValue(':' . $field->Field, null, PDO::PARAM_NULL);
-          else:
-            $value = $this->ValueFunctions($field->Value, $HtmlSafe, $TrimValues);
-            $statement->bindValue(':' . $field->Field, $value, $field->Type);
-          endif;
+    foreach($this->Fields as $field):
+      if($field->Type !== PhpLivePdoBasics::TypeSql):
+        if($field->Value === null):
+          $statement->bindValue(':' . $field->Field, null, PDO::PARAM_NULL);
+        else:
+          $value = $this->ValueFunctions($field->Value, $HtmlSafe, $TrimValues);
+          $statement->bindValue(':' . $field->Field, $value, $field->Type);
         endif;
-      endforeach;
-    endif;
-    if($this->Cmd !== self::CmdInsert and $WheresCount > 0):
-      foreach($this->Wheres as $where):
-        if($where->Value !== null
-        and $where->Type !== self::TypeNull
-        and $where->Operator !== self::OperatorIsNotNull
-        and $where->NoBind === false):
-          $value = $this->ValueFunctions($where->Value, $HtmlSafe, $TrimValues);
-          $statement->bindValue($where->CustomPlaceholder ?? $where->Field, $value, $where->Type);
-        endif;
-      endforeach;
-    endif;
+      endif;
+    endforeach;
+    foreach($this->Wheres as $where):
+      if($where->Value !== null
+      and $where->Type !== self::TypeNull
+      and $where->Operator !== self::OperatorIsNotNull
+      and $where->NoBind === false):
+        $value = $this->ValueFunctions($where->Value, $HtmlSafe, $TrimValues);
+        $statement->bindValue($where->CustomPlaceholder ?? $where->Field, $value, $where->Type);
+      endif;
+    endforeach;
     
     try{
       $this->Error = null;
       $statement->execute();
     }catch(PDOException $e){
       $this->ErrorSet($e);
+      return false;
     }
 
-    if($this->Cmd === self::CmdSelect):
-      if($OnlyFieldsName):
-        $temp = PDO::FETCH_ASSOC;
-      else:
-        $temp = PDO::FETCH_DEFAULT;
-      endif;
-      $return = $statement->fetchAll($temp);
-    elseif($this->Cmd === self::CmdInsert):
-      $return = $this->Conn->lastInsertId();
-      if($return == 0):
-        $return = false;
-      endif;
-    elseif($this->Cmd === self::CmdUpdate or $this->Cmd === self::CmdDelete):
-      $return = $statement->rowCount();
-    endif;
+    $return = $statement->rowCount();
 
     //Log and Debug
-
     ob_start();
     $statement->debugDumpParams();
     $Dump = ob_get_contents();
@@ -358,185 +663,162 @@ class PhpLivePdoCmd extends PhpLivePdoBasics{
     endif;
 
     if($Log):
-      $this->LogSet($LogUser, $Dump);
+      $this->LogSet($this->Conn, $LogUser, $Dump);
     endif;
 
     return $return;
   }
+}
 
-  public function ErrorSet(PDOException $Obj):void{
-    $log = date('Y-m-d H:i:s') . "\n";
-    $log .= $Obj->getCode() . ' - ' . $Obj->getMessage() . "\n";
-    $log .= $this->Query . "\n";
-    $log .= $Obj->getTraceAsString();
-    error_log($log);
-    if(ini_get('display_errors')):
-      if(ini_get('html_errors')):
-        echo '<pre>' . str_replace("\n", '<br>', $log) . '</pre>';
-      else:
-        echo $log;
-      endif;
-    endif;
-    $this->Error = $Obj;
+class PhpLivePdoDelete extends PhpLivePdoBasics{
+  private PDO $Conn;
+  private array $Wheres = [];
+
+  public function __construct(
+    PDO &$Conn,
+    string $Table,
+    string $Prefix
+  ){
+    $this->Conn = $Conn;
+    $this->Table = $Table;
+    $this->Prefix = $Prefix;
   }
 
-  private function Operator(int $Operator):string{
-    if($Operator === self::OperatorEqual):
-      return '=';
-    elseif($Operator === self::OperatorDifferent):
-      return '<>';
-    elseif($Operator === self::OperatorSmaller):
-      return '<';
-    elseif($Operator === self::OperatorBigger):
-      return '>';
-    elseif($Operator === self::OperatorSmallerEqual):
-      return '<=';
-    elseif($Operator === self::OperatorBiggerEqual):
-      return '>=';
-    elseif($Operator === self::OperatorLike):
-      return ' like ';
+  /**
+   * @param string $Field Field name
+   * @param string $Value Field value. Can be null in case of OperatorNull
+   * @param int $Type Field type. Can be null in case of OperatorIsNull
+   * @param int $Operator Comparison operator
+   * @param int $AndOr Relation with the prev field
+   * @param int $Parenthesis Open (0) or close (1) parenthesis
+   * @param bool $SqlInField The field have a SQL function?
+   * @param bool $BlankIsNull Convert '' to null
+   * @param bool $NoField Bind values with fields declared in Fields function
+   * @param bool $NoBind Don't bind values who are already binded
+   */
+  public function WhereAdd(
+    string $Field,
+    string|null $Value = null,
+    int|null $Type = null,
+    int $Operator = self::OperatorEqual,
+    int $AndOr = 0,
+    int $Parenthesis = null,
+    string $CustomPlaceholder = null,
+    bool $BlankIsNull = true,
+    bool $NoField = false,
+    bool $NoBind = false
+  ){
+    if($BlankIsNull and $Value === ''):
+      $Type = self::TypeNull;
     endif;
+    $this->Wheres[] = new class(
+      $Field,
+      $Value,
+      $Type,
+      $Operator,
+      $AndOr,
+      $Parenthesis,
+      $CustomPlaceholder,
+      $NoField,
+      $NoBind
+    ){
+      public string $Field;
+      public string|null $Value;
+      public int|null $Type;
+      public int $Operator = PhpLivePdoBasics::OperatorEqual;
+      public int $AndOr = 0;
+      public int|null $Parenthesis = null;
+      public string|null $CustomPlaceholder = null;
+      public bool $NoField = false;
+      public bool $NoBind = false;
+
+      public function __construct(
+        $Field,
+        $Value,
+        $Type,
+        $Operator,
+        $AndOr,
+        $Parenthesis,
+        $CustomPlaceholder,
+        $NoField,
+        $NoBind
+      ){
+        $this->Field = $Field;
+        $this->Value = $Value;
+        $this->Type = $Type;
+        $this->Operator = $Operator;
+        $this->AndOr = $AndOr;
+        $this->Parenthesis = $Parenthesis;
+        $this->CustomPlaceholder = $CustomPlaceholder;
+        $this->NoField = $NoField;
+        $this->NoBind = $NoBind;
+      }
+    };
   }
 
-  private function SelectHead():void{
-    $this->Query = 'select ' . $this->Fields1 . ' from ';
+  public function Run(
+    bool $Debug = false,
+    bool $HtmlSafe = true,
+    bool $TrimValues = true,
+    bool $Log = false,
+    int $LogUser = null
+  ):int|false{
+    $WheresCount = count($this->Wheres);
+
+    $this->Query = 'delete from ';
     if($this->Prefix !== ''):
       $this->Query .= $this->Prefix . '_';
     endif;
     $this->Query .= $this->Table;
-  }
 
-  private function JoinBuild():void{
-    foreach($this->Join as $join):
-      if($join->Type === PhpLivePdoBasics::JoinInner):
-        $this->Query .= ' inner';
-      elseif($join->Type === PhpLivePdoBasics::JoinLeft):
-        $this->Query .= ' left';
-      elseif($join->Type === PhpLivePdoBasics::JoinRight):
-        $this->Query .= ' right';
-      endif;
-      $this->Query .= ' join ' . $join->Table;
-      if($join->On === null):
-        $this->Query .= ' using(' . $join->Using . ')';
-      else:
-        $this->Query .= ' on(' . $join->On . ')';
-      endif;
-    endforeach;
-  }
-
-  private function InsertHead():void{
-    $this->Query = 'insert into ';
-    if($this->Prefix !== ''):
-      $this->Query .= $this->Prefix . '_';
+    if($WheresCount > 0):
+      $this->Wheres($this->Wheres);
     endif;
-    $this->Query .= $this->Table . '(';
-  }
 
-  private function InsertFields():void{
-    foreach($this->Fields as $field):
-      $this->Query .= $field->Field . ',';
-    endforeach;
-    $this->Query = substr($this->Query, 0, -1) . ') values(';
-    foreach($this->Fields as $id => $field):
-      if($field->Type === self::TypeSql):
-        $this->Query .= $field->Value . ',';
-        unset($this->Fields[$id]);
-      else:
-        $this->Query .= ':' . $field->Field . ',';
-      endif;
-    endforeach;
-    $this->Query = substr($this->Query, 0, -1) . ')';
-  }
+    $statement = $this->Conn->prepare($this->Query);
 
-  private function UpdateHead():void{
-    $this->Query = 'update ';
-    if($this->Prefix !== ''):
-      $this->Query .= $this->Prefix . '_';
-    endif;
-    $this->Query .= $this->Table . ' set ';
-  }
-
-  private function UpdateFields():void{
-    foreach($this->Fields as $id => $field):
-      if($field->Type === self::TypeSql):
-        $this->Query .= $field->Field . '=' . $field->Value . ',';
-        unset($this->Fields2[$id]);
-      else:
-        $this->Query .= $field->Field . '=:' . $field->Field . ',';
-      endif;
-    endforeach;
-    $this->Query = substr($this->Query, 0, -1);
-  }
-
-  private function Wheres():void{
-    $WheresTemp = $this->Wheres;
-    foreach($WheresTemp as $id => $where):
-      if($where->NoField === true):
-        unset($WheresTemp[$id]);
-      endif;
-    endforeach;
-    $WheresTemp = array_values($WheresTemp);
-    if(count($WheresTemp) > 0):
-      $this->Query .= ' where ';
-      foreach($WheresTemp as $id => $where):
-        if($id > 0):
-          if($where->AndOr === 0):
-            $this->Query .= ' and ';
-          endif;
-          if($where->AndOr === 1):
-            $this->Query .= ' or ';
-          endif;
-        endif;
-        if($where->Parenthesis === 0):
-          $this->Query .= '(';
-        endif;
-        if($where->Operator === self::OperatorIsNotNull):
-          $this->Query .= $where->Field . ' is not null';
-        elseif($where->Operator === self::OperatorIn):
-          $this->Query .= $where->Field . ' in(' . $where->Value . ')';
-        elseif($where->Operator === self::OperatorNotIn):
-          $this->Query .= $where->Field . ' not in(' . $where->Value . ')';
-        elseif($where->Value === null or $where->Type === self::TypeNull):
-          $this->Query .= $where->Field . ' is null';
-        else:
-          $this->Query .= $where->Field . $this->Operator($where->Operator) . ':' . ($where->CustomPlaceholder ?? $where->Field);
-        endif;
-        if($where->Parenthesis === 1):
-          $this->Query .= ')';
+    if($WheresCount > 0):
+      foreach($this->Wheres as $where):
+        if($where->Value !== null
+        and $where->Type !== self::TypeNull
+        and $where->Operator !== self::OperatorIsNotNull
+        and $where->NoBind === false):
+          $value = $this->ValueFunctions($where->Value, $HtmlSafe, $TrimValues);
+          $statement->bindValue($where->CustomPlaceholder ?? $where->Field, $value, $where->Type);
         endif;
       endforeach;
     endif;
-  }
+    
+    try{
+      $this->Error = null;
+      $statement->execute();
+    }catch(PDOException $e){
+      $this->ErrorSet($e);
+      return false;
+    }
 
-  private function LogSet(int|null $User, string $Query):void{
-    $Query = substr($Query, strpos($Query, 'Sent SQL: ['));
-    $Query = substr($Query, strpos($Query, '] ') + 2);
-    $Query = substr($Query, 0, strpos($Query, 'Params: '));
-    $Query = trim($Query);
+    $return = $statement->rowCount();
 
-    $statement = $this->Conn->prepare('
-      insert into sys_logs(dia,user_id,uagent,ip,query)
-      values(:dia,:user,:uagent,:ip,:query)
-    ');
-    $statement->bindValue('dia', time(), PDO::PARAM_INT);
-    $statement->bindValue('user', $User, PDO::PARAM_INT);
-    $statement->bindValue('uagent', $_SERVER['HTTP_USER_AGENT'], PDO::PARAM_STR);
-    $statement->bindValue('ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
-    $statement->bindValue('query', $Query, PDO::PARAM_STR);
-    $statement->execute();
-  }
+    //Log and Debug
+    ob_start();
+    $statement->debugDumpParams();
+    $Dump = ob_get_contents();
+    ob_end_clean();
 
-  private function ValueFunctions(
-    string $Value,
-    bool $HtmlSafe,
-    bool $TrimValues
-  ):string{
-    if($HtmlSafe):
-      $Value = htmlspecialchars($Value);
+    if($Debug):
+      if(ini_get('html_errors') == true):
+        print '<pre style="text-align:left">';
+      endif;
+      echo $Dump;
+      if(ini_get('html_errors') == true):
+        print '</pre>';
+      endif;
     endif;
-    if($TrimValues):
-      $Value = trim($Value);
+
+    if($Log):
+      $this->LogSet($this->Conn, $LogUser, $Dump);
     endif;
-    return $Value;
+
+    return $return;
   }
 }
