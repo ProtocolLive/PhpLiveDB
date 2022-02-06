@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.02.06.01
+//Version 2022.02.06.02
 //For PHP >= 8
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -405,14 +405,10 @@ class PhpLivePdoInsert extends PhpLivePdoBasics{
     int $LogUser = null
   ):int|false{
     $FieldsCount = count($this->Fields ?? []);
-    $WheresCount = count($this->Wheres);
 
     $this->InsertHead();
     if($FieldsCount > 0):
       $this->InsertFields();
-    endif;
-    if($WheresCount > 0):
-      $this->Wheres($this->Wheres);
     endif;
 
     $statement = $this->Conn->prepare($this->Query);
