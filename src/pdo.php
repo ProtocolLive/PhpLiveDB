@@ -1,12 +1,12 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.02.05.03
+//Version 2022.02.06.00
 //For PHP >= 8
 
 require_once(__DIR__ . '/PdoBasics.php');
 
-class PhpLivePdo{
+class PhpLivePdo extends PhpLivePdoBasics{
   private PDO $Conn;
 
   public function __construct(
