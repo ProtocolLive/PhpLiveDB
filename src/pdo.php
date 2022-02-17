@@ -1,8 +1,8 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.02.06.02
-//For PHP >= 8
+//Version 2022.02.17.03
+//For PHP >= 8.1
 
 require_once(__DIR__ . '/PdoBasics.php');
 
@@ -120,11 +120,11 @@ class PhpLivePdoSelect extends PhpLivePdoBasics{
 
   private function JoinBuild():void{
     foreach($this->Join as $join):
-      if($join->Type === PhpLivePdoBasics::JoinInner):
+      if($join->Type === PhpLivePdoJoins::Inner):
         $this->Query .= ' inner';
-      elseif($join->Type === PhpLivePdoBasics::JoinLeft):
+      elseif($join->Type === PhpLivePdoJoins::Left):
         $this->Query .= ' left';
-      elseif($join->Type === PhpLivePdoBasics::JoinRight):
+      elseif($join->Type === PhpLivePdoJoins::Right):
         $this->Query .= ' right';
       endif;
       $this->Query .= ' join ' . $join->Table;
@@ -154,15 +154,20 @@ class PhpLivePdoSelect extends PhpLivePdoBasics{
     string $Table,
     string|null $Using = null,
     string|null $On = null,
-    int $Type = PhpLivePdoBasics::JoinLeft
+    PhpLivePdoJoins $Type = PhpLivePdoJoins::Left
   ):void{
     $this->Join[] = new class($Table, $Type, $Using, $On){
       public string $Table;
-      public int $Type;
+      public PhpLivePdoJoins $Type;
       public string|null $Using;
       public string|null $On;
 
-      public function __construct($Table, $Type, $Using, $On){
+      public function __construct(
+        string $Table,
+        PhpLivePdoJoins $Type,
+        string|null $Using,
+        string|null $On
+      ){
         $this->Table = $Table;
         $this->Type = $Type;
         $this->Using = $Using;
@@ -186,8 +191,8 @@ class PhpLivePdoSelect extends PhpLivePdoBasics{
   public function WhereAdd(
     string $Field,
     string|null $Value = null,
-    int|null $Type = null,
-    int $Operator = self::OperatorEqual,
+    PhpLivePdoTypes|null $Type = null,
+    PhpLivePdoOperators $Operator = PhpLivePdoOperators::Equal,
     int $AndOr = 0,
     int $Parenthesis = null,
     string $CustomPlaceholder = null,
@@ -196,7 +201,7 @@ class PhpLivePdoSelect extends PhpLivePdoBasics{
     bool $NoBind = false
   ){
     if($BlankIsNull and $Value === ''):
-      $Type = self::TypeNull;
+      $Type = PhpLivePdoTypes::Null;
     endif;
     $this->Wheres[] = new class(
       $Field,
@@ -211,8 +216,8 @@ class PhpLivePdoSelect extends PhpLivePdoBasics{
     ){
       public string $Field;
       public string|null $Value;
-      public int|null $Type;
-      public int $Operator = PhpLivePdoBasics::OperatorEqual;
+      public PhpLivePdoTypes|null $Type;
+      public PhpLivePdoOperators $Operator = PhpLivePdoOperators::Equal;
       public int $AndOr = 0;
       public int|null $Parenthesis = null;
       public string|null $CustomPlaceholder = null;
@@ -285,11 +290,12 @@ class PhpLivePdoSelect extends PhpLivePdoBasics{
     if($WheresCount > 0):
       foreach($this->Wheres as $where):
         if($where->Value !== null
-        and $where->Type !== self::TypeNull
-        and $where->Operator !== self::OperatorIsNotNull
+        and $where->Type !== PhpLivePdoTypes::Null
+        and $where->Operator !== PhpLivePdoOperators::IsNotNull
+        and $where->Operator !== PhpLivePdoOperators::NotIn
         and $where->NoBind === false):
           $value = $this->ValueFunctions($where->Value, $HtmlSafe, $TrimValues);
-          $statement->bindValue($where->CustomPlaceholder ?? $where->Field, $value, $where->Type);
+          $statement->bindValue($where->CustomPlaceholder ?? $where->Field, $value, $where->Type->value);
         endif;
       endforeach;
     endif;
@@ -351,7 +357,7 @@ class PhpLivePdoInsert extends PhpLivePdoBasics{
     endforeach;
     $this->Query = substr($this->Query, 0, -1) . ') values(';
     foreach($this->Fields as $id => $field):
-      if($field->Type === self::TypeSql):
+      if($field->Type === PhpLivePdoTypes::Sql):
         $this->Query .= $field->Value . ',';
         unset($this->Fields[$id]);
       else:
@@ -374,11 +380,11 @@ class PhpLivePdoInsert extends PhpLivePdoBasics{
   public function FieldAdd(
     string $Field,
     string|null $Value,
-    int $Type,
+    PhpLivePdoTypes $Type,
     bool $BlankIsNull = true
   ){
     if($BlankIsNull and $Value === ''):
-      $Type = PhpLivePdoBasics::TypeNull;
+      $Type = PhpLivePdoTypes::Null;
     endif;
     $this->Fields[] = new class(
       $Field,
@@ -415,7 +421,7 @@ class PhpLivePdoInsert extends PhpLivePdoBasics{
 
     if($FieldsCount > 0):
       foreach($this->Fields as $field):
-        if($field->Type !== PhpLivePdoBasics::TypeSql):
+        if($field->Type !== PhpLivePdoTypes::Sql):
           if($field->Value === null):
             $statement->bindValue(':' . $field->Field, null, PDO::PARAM_NULL);
           else:
@@ -475,7 +481,7 @@ class PhpLivePdoUpdate extends PhpLivePdoBasics{
 
   private function UpdateFields():void{
     foreach($this->Fields as $id => $field):
-      if($field->Type === self::TypeSql):
+      if($field->Type === PhpLivePdoTypes::Sql):
         $this->Query .= $field->Field . '=' . $field->Value . ',';
         unset($this->Fields2[$id]);
       else:
@@ -498,11 +504,11 @@ class PhpLivePdoUpdate extends PhpLivePdoBasics{
   public function FieldAdd(
     string $Field,
     string|null $Value,
-    int $Type,
+    PhpLivePdoTypes $Type,
     bool $BlankIsNull = true
   ){
     if($BlankIsNull and $Value === ''):
-      $Type = PhpLivePdoBasics::TypeNull;
+      $Type = PhpLivePdoTypes::Null;
     endif;
     $this->Fields[] = new class(
       $Field,
@@ -511,9 +517,13 @@ class PhpLivePdoUpdate extends PhpLivePdoBasics{
     ){
       public string $Field;
       public string|null $Value;
-      public int $Type;
+      public PhpLivePdoTypes $Type;
 
-      public function __construct(string $Field, string|null $Value, int $Type){
+      public function __construct(
+        string $Field,
+        string|null $Value,
+        PhpLivePdoTypes $Type
+      ){
         $this->Field = $Field;
         $this->Value = $Value;
         $this->Type = $Type;
@@ -530,23 +540,21 @@ class PhpLivePdoUpdate extends PhpLivePdoBasics{
    * @param int $Parenthesis Open (0) or close (1) parenthesis
    * @param bool $SqlInField The field have a SQL function?
    * @param bool $BlankIsNull Convert '' to null
-   * @param bool $NoField Bind values with fields declared in Fields function
    * @param bool $NoBind Don't bind values who are already binded
    */
   public function WhereAdd(
     string $Field,
     string|null $Value = null,
-    int|null $Type = null,
-    int $Operator = self::OperatorEqual,
+    PhpLivePdoTypes|null $Type = null,
+    PhpLivePdoOperators $Operator = PhpLivePdoOperators::Equal,
     int $AndOr = 0,
     int $Parenthesis = null,
     string $CustomPlaceholder = null,
     bool $BlankIsNull = true,
-    bool $NoField = false,
     bool $NoBind = false
   ){
     if($BlankIsNull and $Value === ''):
-      $Type = self::TypeNull;
+      $Type = PhpLivePdoTypes::Null;
     endif;
     $this->Wheres[] = new class(
       $Field,
@@ -556,13 +564,13 @@ class PhpLivePdoUpdate extends PhpLivePdoBasics{
       $AndOr,
       $Parenthesis,
       $CustomPlaceholder,
-      $NoField,
+      false,
       $NoBind
     ){
       public string $Field;
       public string|null $Value;
-      public int|null $Type;
-      public int $Operator = PhpLivePdoBasics::OperatorEqual;
+      public PhpLivePdoTypes|null $Type;
+      public PhpLivePdoOperators $Operator = PhpLivePdoOperators::Equal;
       public int $AndOr = 0;
       public int|null $Parenthesis = null;
       public string|null $CustomPlaceholder = null;
@@ -613,22 +621,22 @@ class PhpLivePdoUpdate extends PhpLivePdoBasics{
     $statement = $this->Conn->prepare($this->Query);
 
     foreach($this->Fields as $field):
-      if($field->Type !== PhpLivePdoBasics::TypeSql):
+      if($field->Type !== PhpLivePdoTypes::Sql):
         if($field->Value === null):
           $statement->bindValue(':' . $field->Field, null, PDO::PARAM_NULL);
         else:
           $value = $this->ValueFunctions($field->Value, $HtmlSafe, $TrimValues);
-          $statement->bindValue(':' . $field->Field, $value, $field->Type);
+          $statement->bindValue(':' . $field->Field, $value, $field->Type->value);
         endif;
       endif;
     endforeach;
     foreach($this->Wheres as $where):
       if($where->Value !== null
-      and $where->Type !== self::TypeNull
-      and $where->Operator !== self::OperatorIsNotNull
+      and $where->Type !== PhpLivePdoTypes::Null
+      and $where->Operator !== PhpLivePdoOperators::IsNotNull
       and $where->NoBind === false):
         $value = $this->ValueFunctions($where->Value, $HtmlSafe, $TrimValues);
-        $statement->bindValue($where->CustomPlaceholder ?? $where->Field, $value, $where->Type);
+        $statement->bindValue($where->CustomPlaceholder ?? $where->Field, $value, $where->Type->value);
       endif;
     endforeach;
     
@@ -695,8 +703,8 @@ class PhpLivePdoDelete extends PhpLivePdoBasics{
   public function WhereAdd(
     string $Field,
     string|null $Value = null,
-    int|null $Type = null,
-    int $Operator = self::OperatorEqual,
+    PhpLivePdoTypes|null $Type = null,
+    PhpLivePdoOperators $Operator = PhpLivePdoOperators::Equal,
     int $AndOr = 0,
     int $Parenthesis = null,
     string $CustomPlaceholder = null,
@@ -705,7 +713,7 @@ class PhpLivePdoDelete extends PhpLivePdoBasics{
     bool $NoBind = false
   ){
     if($BlankIsNull and $Value === ''):
-      $Type = self::TypeNull;
+      $Type = PhpLivePdoTypes::Null;
     endif;
     $this->Wheres[] = new class(
       $Field,
@@ -721,7 +729,7 @@ class PhpLivePdoDelete extends PhpLivePdoBasics{
       public string $Field;
       public string|null $Value;
       public int|null $Type;
-      public int $Operator = PhpLivePdoBasics::OperatorEqual;
+      public PhpLivePdoOperators $Operator = PhpLivePdoOperators::Equal;
       public int $AndOr = 0;
       public int|null $Parenthesis = null;
       public string|null $CustomPlaceholder = null;
@@ -776,8 +784,8 @@ class PhpLivePdoDelete extends PhpLivePdoBasics{
     if($WheresCount > 0):
       foreach($this->Wheres as $where):
         if($where->Value !== null
-        and $where->Type !== self::TypeNull
-        and $where->Operator !== self::OperatorIsNotNull
+        and $where->Type !== PhpLivePdoTypes::Null
+        and $where->Operator !== PhpLivePdoOperators::IsNotNull
         and $where->NoBind === false):
           $value = $this->ValueFunctions($where->Value, $HtmlSafe, $TrimValues);
           $statement->bindValue($where->CustomPlaceholder ?? $where->Field, $value, $where->Type);

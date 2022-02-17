@@ -1,30 +1,37 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.02.06.00
+//Version 2022.02.17.00
+//For PHP >= 8.1
+
+enum PhpLivePdoTypes:int{
+  case Null = 0;
+  case Int = 1;
+  case Str = 2;
+  case Sql = 6;
+}
+
+enum PhpLivePdoOperators{
+  case Equal;
+  case Different;
+  case Smaller;
+  case Bigger;
+  case SmallerEqual;
+  case BiggerEqual;
+  case IsNotNull;
+  case Like;
+  case In;
+  case NotIn;
+}
+
+enum PhpLivePdoJoins{
+  case Default;
+  case Left;
+  case Right;
+  case Inner;
+}
 
 abstract class PhpLivePdoBasics{
-  public const TypeNull = PDO::PARAM_NULL;
-  public const TypeInt = PDO::PARAM_INT;
-  public const TypeStr = PDO::PARAM_STR;
-  public const TypeSql = 6;
-
-  public const OperatorEqual = 0;
-  public const OperatorDifferent = 1;
-  public const OperatorSmaller = 2;
-  public const OperatorBigger = 3;
-  public const OperatorSmallerEqual = 4;
-  public const OperatorBiggerEqual = 5;
-  public const OperatorIsNotNull = 6;
-  public const OperatorLike = 7;
-  public const OperatorIn = 8;
-  public const OperatorNotIn = 9;
-
-  public const JoinDefault = 0;
-  public const JoinLeft = 1;
-  public const JoinRight = 2;
-  public const JoinInner = 3;
-
   private string $Table;
   private string $Prefix;
 
@@ -64,20 +71,20 @@ abstract class PhpLivePdoBasics{
     $statement->execute();
   }
 
-  protected function Operator(int $Operator):string{
-    if($Operator === self::OperatorEqual):
+  protected function Operator(PhpLivePdoOperators $Operator):string{
+    if($Operator === PhpLivePdoOperators::Equal):
       return '=';
-    elseif($Operator === self::OperatorDifferent):
+    elseif($Operator === PhpLivePdoOperators::Different):
       return '<>';
-    elseif($Operator === self::OperatorSmaller):
+    elseif($Operator === PhpLivePdoOperators::Smaller):
       return '<';
-    elseif($Operator === self::OperatorBigger):
+    elseif($Operator === PhpLivePdoOperators::Bigger):
       return '>';
-    elseif($Operator === self::OperatorSmallerEqual):
+    elseif($Operator === PhpLivePdoOperators::SmallerEqual):
       return '<=';
-    elseif($Operator === self::OperatorBiggerEqual):
+    elseif($Operator === PhpLivePdoOperators::BiggerEqual):
       return '>=';
-    elseif($Operator === self::OperatorLike):
+    elseif($Operator === PhpLivePdoOperators::Like):
       return ' like ';
     endif;
   }
@@ -104,13 +111,13 @@ abstract class PhpLivePdoBasics{
         if($where->Parenthesis === 0):
           $this->Query .= '(';
         endif;
-        if($where->Operator === self::OperatorIsNotNull):
+        if($where->Operator === PhpLivePdoOperators::IsNotNull):
           $this->Query .= $where->Field . ' is not null';
-        elseif($where->Operator === self::OperatorIn):
+        elseif($where->Operator === PhpLivePdoOperators::In):
           $this->Query .= $where->Field . ' in(' . $where->Value . ')';
-        elseif($where->Operator === self::OperatorNotIn):
+        elseif($where->Operator === PhpLivePdoOperators::NotIn):
           $this->Query .= $where->Field . ' not in(' . $where->Value . ')';
-        elseif($where->Value === null or $where->Type === self::TypeNull):
+        elseif($where->Value === null or $where->Type === PhpLivePdoTypes::Null):
           $this->Query .= $where->Field . ' is null';
         else:
           $this->Query .= $where->Field . $this->Operator($where->Operator) . ':' . ($where->CustomPlaceholder ?? $where->Field);
