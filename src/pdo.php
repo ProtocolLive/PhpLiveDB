@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.02.28.04
+//Version 2022.02.28.05
 //For PHP >= 8.1
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -80,11 +80,7 @@ class PhpLivePdoSelect extends PhpLivePdoBasics{
   private string|null $Limit = null;
 
   private function SelectHead():void{
-    $this->Query = 'select ' . $this->Fields . ' from ';
-    if($this->Prefix !== ''):
-      $this->Query .= $this->Prefix . '_';
-    endif;
-    $this->Query .= $this->Table;
+    $this->Query = 'select ' . $this->Fields . ' from ' . $this->Table;
   }
 
   private function JoinBuild():void{
@@ -258,6 +254,7 @@ class PhpLivePdoSelect extends PhpLivePdoBasics{
       $this->Query .= ' limit ' . $this->Limit;
     endif;
 
+    $this->Query = str_replace('##', $this->Prefix . '_', $this->Query);
     $statement = $this->Conn->prepare($this->Query);
 
     if($WheresCount > 0):
@@ -318,11 +315,7 @@ class PhpLivePdoInsert extends PhpLivePdoBasics{
   private array $Fields = [];
 
   private function InsertHead():void{
-    $this->Query = 'insert into ';
-    if($this->Prefix !== ''):
-      $this->Query .= $this->Prefix . '_';
-    endif;
-    $this->Query .= $this->Table . '(';
+    $this->Query = 'insert into ' . $this->Table . '(';
   }
 
   private function InsertFields():void{
@@ -392,6 +385,7 @@ class PhpLivePdoInsert extends PhpLivePdoBasics{
       $this->InsertFields();
     endif;
 
+    $this->Query = str_replace('##', $this->Prefix . '_', $this->Query);
     $statement = $this->Conn->prepare($this->Query);
 
     if($FieldsCount > 0):
@@ -447,11 +441,7 @@ class PhpLivePdoUpdate extends PhpLivePdoBasics{
   private array $Wheres = [];
 
   private function UpdateHead():void{
-    $this->Query = 'update ';
-    if($this->Prefix !== ''):
-      $this->Query .= $this->Prefix . '_';
-    endif;
-    $this->Query .= $this->Table . ' set ';
+    $this->Query = 'update ' . $this->Table . ' set ';
   }
 
   private function UpdateFields():void{
@@ -597,6 +587,7 @@ class PhpLivePdoUpdate extends PhpLivePdoBasics{
       $this->Wheres($this->Wheres);
     endif;
 
+    $this->Query = str_replace('##', $this->Prefix . '_', $this->Query);
     $statement = $this->Conn->prepare($this->Query);
 
     foreach($this->Fields as $field):
@@ -752,16 +743,13 @@ class PhpLivePdoDelete extends PhpLivePdoBasics{
   ):int|false{
     $WheresCount = count($this->Wheres);
 
-    $this->Query = 'delete from ';
-    if($this->Prefix !== ''):
-      $this->Query .= $this->Prefix . '_';
-    endif;
-    $this->Query .= $this->Table;
+    $this->Query = 'delete from ' . $this->Table;
 
     if($WheresCount > 0):
       $this->Wheres($this->Wheres);
     endif;
 
+    $this->Query = str_replace('##', $this->Prefix . '_', $this->Query);
     $statement = $this->Conn->prepare($this->Query);
 
     if($WheresCount > 0):
