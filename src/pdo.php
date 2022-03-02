@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.02.28.11
+//Version 2022.02.28.12
 //For PHP >= 8.1
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -401,7 +401,7 @@ class PhpLivePdoInsert extends PhpLivePdoBasics{
             $statement->bindValue(':' . $field->Field, null, PDO::PARAM_NULL);
           else:
             $value = $this->ValueFunctions($field->Value, $HtmlSafe, $TrimValues);
-            $statement->bindValue(':' . $field->Field, $value, $field->Type);
+            $statement->bindValue(':' . $field->Field, $value, $field->Type->value);
           endif;
         endif;
       endforeach;
@@ -768,7 +768,7 @@ class PhpLivePdoDelete extends PhpLivePdoBasics{
         and $where->Operator !== PhpLivePdoOperators::IsNotNull
         and $where->NoBind === false):
           $value = $this->ValueFunctions($where->Value, $HtmlSafe, $TrimValues);
-          $statement->bindValue($where->CustomPlaceholder ?? $where->Field, $value, $where->Type);
+          $statement->bindValue($where->CustomPlaceholder ?? $where->Field, $value, $where->Type->value);
         endif;
       endforeach;
     endif;
