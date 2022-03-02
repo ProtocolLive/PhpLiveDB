@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.02.28.09
+//Version 2022.02.28.10
 //For PHP >= 8.1
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -362,7 +362,7 @@ class PhpLivePdoInsert extends PhpLivePdoBasics{
     ){
       public string $Field;
       public string|null $Value;
-      public int $Type;
+      public PhpLivePdoTypes $Type;
 
       public function __construct(string $Field, string|null $Value, int $Type){
         $this->Field = $Field;
@@ -702,8 +702,8 @@ class PhpLivePdoDelete extends PhpLivePdoBasics{
       $NoBind
     ){
       public string $Field;
-      public int|null $Type;
       public string|null $Value = null;
+      public PhpLivePdoTypes|null $Type = null;
       public PhpLivePdoOperators $Operator = PhpLivePdoOperators::Equal;
       public PhpLivePdoAndOr $AndOr = PhpLivePdoAndOr::And;
       public PhpLivePdoParenthesis $Parenthesis = PhpLivePdoParenthesis::None;
