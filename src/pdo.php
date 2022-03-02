@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.02.28.13
+//Version 2022.02.28.14
 //For PHP >= 8.1
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -143,7 +143,7 @@ class PhpLivePdoSelect extends PhpLivePdoBasics{
 
   /**
    * @param string $Field Field name
-   * @param string $Value Field value. Can be null in case of OperatorNull
+   * @param string $Value Field value. Can be null in case of OperatorNull or to use another field custom placeholder
    * @param int $Type Field type. Can be null in case of OperatorIsNull
    * @param int $Operator Comparison operator
    * @param PhpLivePdoAndOr $AndOr Relation with the prev field
