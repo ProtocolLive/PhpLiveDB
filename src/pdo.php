@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.03.02.00
+//Version 2022.03.02.01
 //For PHP >= 8.1
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -288,13 +288,17 @@ class PhpLivePdoInsert extends PhpLivePdoBasics{
     $this->Query = 'insert into ' . $this->Table . '(';
   }
 
-  private function InsertFields():void{
+  private function InsertFields(
+    bool $BlankIsNull = true
+  ):void{
     foreach($this->Fields as $field):
       $this->Query .= $field->Field . ',';
     endforeach;
     $this->Query = substr($this->Query, 0, -1) . ') values(';
     foreach($this->Fields as $id => $field):
-      if($field->Type === PhpLivePdoTypes::Sql):
+      if($BlankIsNull and $field->Value === ''):
+        $this->Query .= 'null,';
+      elseif($field->Type === PhpLivePdoTypes::Sql):
         $this->Query .= $field->Value . ',';
         unset($this->Fields[$id]);
       else:
@@ -418,11 +422,16 @@ class PhpLivePdoUpdate extends PhpLivePdoBasics{
     $this->Query = 'update ' . $this->Table . ' set ';
   }
 
-  private function UpdateFields():void{
+  private function UpdateFields(
+    bool $BlankIsNull = true
+  ):void{
     foreach($this->Fields as $id => $field):
-      if($field->Type === PhpLivePdoTypes::Sql):
+      if($BlankIsNull and $field->Value === ''):
+        $this->Query .= $field->Field . '=null,';
+        unset($this->Fields[$id]);
+      elseif($field->Type === PhpLivePdoTypes::Sql):
         $this->Query .= $field->Field . '=' . $field->Value . ',';
-        unset($this->Fields2[$id]);
+        unset($this->Fields[$id]);
       else:
         $this->Query .= $field->Field . '=:' . $field->Field . ',';
       endif;
