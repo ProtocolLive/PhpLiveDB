@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.02.28.07
+//Version 2022.02.28.08
 //For PHP >= 8.1
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -189,6 +189,7 @@ class PhpLivePdoSelect extends PhpLivePdoBasics{
       public PhpLivePdoAndOr $AndOr = PhpLivePdoAndOr::And;
       public PhpLivePdoParenthesis $Parenthesis = PhpLivePdoParenthesis::None;
       public string|null $CustomPlaceholder = null;
+      public bool $BlankIsNull = true;
       public bool $NoField = false;
       public bool $NoBind = false;
 
