@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.02.28.02
+//Version 2022.02.28.03
 //For PHP >= 8.1
 
 enum PhpLivePdoTypes:int{
@@ -148,6 +148,15 @@ abstract class PhpLivePdoBasics{
           $this->Query .= ')';
         endif;
       endforeach;
+    endif;
+  }
+
+  protected function FieldNeedCustomPlaceholder(string $Field):void{
+    if(strpos($Field, '.') !== false
+    or strpos($Field, '(') !== false):
+      $this->ErrorSet(new PDOException(
+        'The field ' . $Field . ' need a custom placeholder',
+      ));
     endif;
   }
 

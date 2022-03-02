@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.02.28.02
+//Version 2022.02.28.03
 //For PHP >= 8.1
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -200,6 +200,9 @@ class PhpLivePdoSelect extends PhpLivePdoBasics{
     bool $NoField = false,
     bool $NoBind = false
   ){
+    if($CustomPlaceholder === null):
+      $this->FieldNeedCustomPlaceholder($Field);
+    endif;
     if($BlankIsNull and $Value === ''):
       $Type = PhpLivePdoTypes::Null;
     endif;
@@ -556,6 +559,9 @@ class PhpLivePdoUpdate extends PhpLivePdoBasics{
     bool $BlankIsNull = true,
     bool $NoBind = false
   ){
+    if($CustomPlaceholder === null):
+      $this->FieldNeedCustomPlaceholder(($Field));
+    endif;
     if($BlankIsNull and $Value === ''):
       $Type = PhpLivePdoTypes::Null;
     endif;
@@ -716,6 +722,9 @@ class PhpLivePdoDelete extends PhpLivePdoBasics{
     bool $NoField = false,
     bool $NoBind = false
   ){
+    if($CustomPlaceholder === null):
+      $this->FieldNeedCustomPlaceholder(($Field));
+    endif;
     if($BlankIsNull and $Value === ''):
       $Type = PhpLivePdoTypes::Null;
     endif;
