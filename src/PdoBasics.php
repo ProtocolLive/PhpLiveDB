@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.02.17.00
+//Version 2022.02.28.00
 //For PHP >= 8.1
 
 enum PhpLivePdoTypes:int{
@@ -29,6 +29,17 @@ enum PhpLivePdoJoins{
   case Left;
   case Right;
   case Inner;
+}
+
+enum PhpLivePdoParenthesis{
+  case None;
+  case Open;
+  case Close;
+}
+
+enum PhpLivePdoAndOr{
+  case And;
+  case Or;
 }
 
 abstract class PhpLivePdoBasics{
@@ -101,14 +112,14 @@ abstract class PhpLivePdoBasics{
       $this->Query .= ' where ';
       foreach($Wheres as $id => $where):
         if($id > 0):
-          if($where->AndOr === 0):
+          if($where->AndOr === PhpLivePdoAndOr::And):
             $this->Query .= ' and ';
           endif;
-          if($where->AndOr === 1):
+          if($where->AndOr === PhpLivePdoAndOr::Or):
             $this->Query .= ' or ';
           endif;
         endif;
-        if($where->Parenthesis === 0):
+        if($where->Parenthesis === PhpLivePdoParenthesis::Open):
           $this->Query .= '(';
         endif;
         if($where->Operator === PhpLivePdoOperators::IsNotNull):
@@ -122,7 +133,7 @@ abstract class PhpLivePdoBasics{
         else:
           $this->Query .= $where->Field . $this->Operator($where->Operator) . ':' . ($where->CustomPlaceholder ?? $where->Field);
         endif;
-        if($where->Parenthesis === 1):
+        if($where->Parenthesis === PhpLivePdoParenthesis::Close):
           $this->Query .= ')';
         endif;
       endforeach;

@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.02.17.03
+//Version 2022.02.28.00
 //For PHP >= 8.1
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -181,8 +181,8 @@ class PhpLivePdoSelect extends PhpLivePdoBasics{
    * @param string $Value Field value. Can be null in case of OperatorNull
    * @param int $Type Field type. Can be null in case of OperatorIsNull
    * @param int $Operator Comparison operator
-   * @param int $AndOr Relation with the prev field
-   * @param int $Parenthesis Open (0) or close (1) parenthesis
+   * @param PhpLivePdoAndOr $AndOr Relation with the prev field
+   * @param PhpLivePdoParenthesis $Parenthesis Open or close parenthesis
    * @param bool $SqlInField The field have a SQL function?
    * @param bool $BlankIsNull Convert '' to null
    * @param bool $NoField Bind values with fields declared in Fields function
@@ -193,8 +193,8 @@ class PhpLivePdoSelect extends PhpLivePdoBasics{
     string|null $Value = null,
     PhpLivePdoTypes|null $Type = null,
     PhpLivePdoOperators $Operator = PhpLivePdoOperators::Equal,
-    int $AndOr = 0,
-    int $Parenthesis = null,
+    PhpLivePdoAndOr $AndOr = PhpLivePdoAndOr::And,
+    PhpLivePdoParenthesis $Parenthesis = PhpLivePdoParenthesis::None,
     string $CustomPlaceholder = null,
     bool $BlankIsNull = true,
     bool $NoField = false,
@@ -218,8 +218,8 @@ class PhpLivePdoSelect extends PhpLivePdoBasics{
       public string|null $Value;
       public PhpLivePdoTypes|null $Type;
       public PhpLivePdoOperators $Operator = PhpLivePdoOperators::Equal;
-      public int $AndOr = 0;
-      public int|null $Parenthesis = null;
+      public PhpLivePdoAndOr $AndOr = PhpLivePdoAndOr::And;
+      public PhpLivePdoParenthesis $Parenthesis = PhpLivePdoParenthesis::None;
       public string|null $CustomPlaceholder = null;
       public bool $NoField = false;
       public bool $NoBind = false;
@@ -536,8 +536,8 @@ class PhpLivePdoUpdate extends PhpLivePdoBasics{
    * @param string $Value Field value. Can be null in case of OperatorNull
    * @param int $Type Field type. Can be null in case of OperatorIsNull
    * @param int $Operator Comparison operator
-   * @param int $AndOr Relation with the prev field
-   * @param int $Parenthesis Open (0) or close (1) parenthesis
+   * @param PhpLivePdoAndOr $AndOr Relation with the prev field
+   * @param PhpLivePdoParenthesis $Parenthesis
    * @param bool $SqlInField The field have a SQL function?
    * @param bool $BlankIsNull Convert '' to null
    * @param bool $NoBind Don't bind values who are already binded
@@ -547,8 +547,8 @@ class PhpLivePdoUpdate extends PhpLivePdoBasics{
     string|null $Value = null,
     PhpLivePdoTypes|null $Type = null,
     PhpLivePdoOperators $Operator = PhpLivePdoOperators::Equal,
-    int $AndOr = 0,
-    int $Parenthesis = null,
+    PhpLivePdoAndOr $AndOr = PhpLivePdoAndOr::And,
+    PhpLivePdoParenthesis $Parenthesis = PhpLivePdoParenthesis::None,
     string $CustomPlaceholder = null,
     bool $BlankIsNull = true,
     bool $NoBind = false
@@ -571,8 +571,8 @@ class PhpLivePdoUpdate extends PhpLivePdoBasics{
       public string|null $Value;
       public PhpLivePdoTypes|null $Type;
       public PhpLivePdoOperators $Operator = PhpLivePdoOperators::Equal;
-      public int $AndOr = 0;
-      public int|null $Parenthesis = null;
+      public PhpLivePdoAndOr $AndOr = PhpLivePdoAndOr::And;
+      public PhpLivePdoParenthesis $Parenthesis = PhpLivePdoParenthesis::None;
       public string|null $CustomPlaceholder = null;
       public bool $NoField = false;
       public bool $NoBind = false;
@@ -693,8 +693,8 @@ class PhpLivePdoDelete extends PhpLivePdoBasics{
    * @param string $Value Field value. Can be null in case of OperatorNull
    * @param int $Type Field type. Can be null in case of OperatorIsNull
    * @param int $Operator Comparison operator
-   * @param int $AndOr Relation with the prev field
-   * @param int $Parenthesis Open (0) or close (1) parenthesis
+   * @param PhpLivePdoAndOr $AndOr Relation with the prev field
+   * @param PhpLivePdoParenthesis $Parenthesis
    * @param bool $SqlInField The field have a SQL function?
    * @param bool $BlankIsNull Convert '' to null
    * @param bool $NoField Bind values with fields declared in Fields function
@@ -705,8 +705,8 @@ class PhpLivePdoDelete extends PhpLivePdoBasics{
     string|null $Value = null,
     PhpLivePdoTypes|null $Type = null,
     PhpLivePdoOperators $Operator = PhpLivePdoOperators::Equal,
-    int $AndOr = 0,
-    int $Parenthesis = null,
+    PhpLivePdoAndOr $AndOr = PhpLivePdoAndOr::And,
+    PhpLivePdoParenthesis $Parenthesis = PhpLivePdoParenthesis::None,
     string $CustomPlaceholder = null,
     bool $BlankIsNull = true,
     bool $NoField = false,
@@ -730,8 +730,8 @@ class PhpLivePdoDelete extends PhpLivePdoBasics{
       public string|null $Value;
       public int|null $Type;
       public PhpLivePdoOperators $Operator = PhpLivePdoOperators::Equal;
-      public int $AndOr = 0;
-      public int|null $Parenthesis = null;
+      public PhpLivePdoAndOr $AndOr = PhpLivePdoAndOr::And;
+      public PhpLivePdoParenthesis $Parenthesis = PhpLivePdoParenthesis::None;
       public string|null $CustomPlaceholder = null;
       public bool $NoField = false;
       public bool $NoBind = false;
