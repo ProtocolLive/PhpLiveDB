@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.02.28.00
+//Version 2022.02.28.01
 //For PHP >= 8.1
 
 enum PhpLivePdoTypes:int{
@@ -64,19 +64,25 @@ abstract class PhpLivePdoBasics{
     return $Value;
   }
 
-  protected function LogSet(PDO $Conn, int|null $User, string $Query):void{
+  protected function LogSet(
+    PDO $Conn,
+    int $LogEvent,
+    int|null $User,
+    string $Query
+  ):void{
     $Query = substr($Query, strpos($Query, 'Sent SQL: ['));
     $Query = substr($Query, strpos($Query, '] ') + 2);
     $Query = substr($Query, 0, strpos($Query, 'Params: '));
     $Query = trim($Query);
 
     $statement = $Conn->prepare('
-      insert into sys_logs(dia,user_id,uagent,ip,query)
-      values(:dia,:user,:uagent,:ip,:query)
+      insert into sys_logs(time,log,user_id,agent,ip,query)
+      values(:time,:log,:user,:agent,:ip,:query)
     ');
-    $statement->bindValue('dia', time(), PDO::PARAM_INT);
+    $statement->bindValue('time', time(), PDO::PARAM_INT);
+    $statement->bindValue('log', $LogEvent, PDO::PARAM_INT);
     $statement->bindValue('user', $User, PDO::PARAM_INT);
-    $statement->bindValue('uagent', $_SERVER['HTTP_USER_AGENT'], PDO::PARAM_STR);
+    $statement->bindValue('agent', $_SERVER['HTTP_USER_AGENT'], PDO::PARAM_STR);
     $statement->bindValue('ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
     $statement->bindValue('query', $Query, PDO::PARAM_STR);
     $statement->execute();

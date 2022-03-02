@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.02.28.00
+//Version 2022.02.28.01
 //For PHP >= 8.1
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -266,6 +266,7 @@ class PhpLivePdoSelect extends PhpLivePdoBasics{
     bool $HtmlSafe = true,
     bool $TrimValues = true,
     bool $Log = false,
+    int $LogEvent = null,
     int $LogUser = null
   ):array|false{
     $WheresCount = count($this->Wheres);
@@ -332,7 +333,7 @@ class PhpLivePdoSelect extends PhpLivePdoBasics{
     endif;
 
     if($Log):
-      $this->LogSet($this->Conn, $LogUser, $Dump);
+      $this->LogSet($this->Conn, $LogEvent, $LogUser, $Dump);
     endif;
 
     return $return;
@@ -408,6 +409,7 @@ class PhpLivePdoInsert extends PhpLivePdoBasics{
     bool $HtmlSafe = true,
     bool $TrimValues = true,
     bool $Log = false,
+    int $LogEvent = null,
     int $LogUser = null
   ):int|false{
     $FieldsCount = count($this->Fields ?? []);
@@ -459,7 +461,7 @@ class PhpLivePdoInsert extends PhpLivePdoBasics{
     endif;
 
     if($Log):
-      $this->LogSet($this->Conn, $LogUser, $Dump);
+      $this->LogSet($this->Conn, $LogEvent, $LogUser, $Dump);
     endif;
 
     return $return;
@@ -607,6 +609,7 @@ class PhpLivePdoUpdate extends PhpLivePdoBasics{
     bool $HtmlSafe = true,
     bool $TrimValues = true,
     bool $Log = false,
+    int $LogEvent = null,
     int $LogUser = null
   ):int|false{
     $FieldsCount = count($this->Fields ?? []);
@@ -667,7 +670,7 @@ class PhpLivePdoUpdate extends PhpLivePdoBasics{
     endif;
 
     if($Log):
-      $this->LogSet($this->Conn, $LogUser, $Dump);
+      $this->LogSet($this->Conn, $LogEvent, $LogUser, $Dump);
     endif;
 
     return $return;
@@ -765,6 +768,7 @@ class PhpLivePdoDelete extends PhpLivePdoBasics{
     bool $HtmlSafe = true,
     bool $TrimValues = true,
     bool $Log = false,
+    int $LogEvent = null,
     int $LogUser = null
   ):int|false{
     $WheresCount = count($this->Wheres);
@@ -820,7 +824,7 @@ class PhpLivePdoDelete extends PhpLivePdoBasics{
     endif;
 
     if($Log):
-      $this->LogSet($this->Conn, $LogUser, $Dump);
+      $this->LogSet($this->Conn, $LogEvent, $LogUser, $Dump);
     endif;
 
     return $return;
