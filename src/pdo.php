@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.02.28.01
+//Version 2022.02.28.02
 //For PHP >= 8.1
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -292,6 +292,7 @@ class PhpLivePdoSelect extends PhpLivePdoBasics{
       foreach($this->Wheres as $where):
         if($where->Value !== null
         and $where->Type !== PhpLivePdoTypes::Null
+        and $where->Type !== PhpLivePdoTypes::Sql
         and $where->Operator !== PhpLivePdoOperators::IsNotNull
         and $where->Operator !== PhpLivePdoOperators::NotIn
         and $where->NoBind === false):
