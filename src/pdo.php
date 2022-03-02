@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.02.28.05
+//Version 2022.02.28.06
 //For PHP >= 8.1
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -155,8 +155,8 @@ class PhpLivePdoSelect extends PhpLivePdoBasics{
    */
   public function WhereAdd(
     string $Field,
-    string|null $Value = null,
-    PhpLivePdoTypes|null $Type = null,
+    string $Value = null,
+    PhpLivePdoTypes $Type = null,
     PhpLivePdoOperators $Operator = PhpLivePdoOperators::Equal,
     PhpLivePdoAndOr $AndOr = PhpLivePdoAndOr::And,
     PhpLivePdoParenthesis $Parenthesis = PhpLivePdoParenthesis::None,
@@ -509,8 +509,8 @@ class PhpLivePdoUpdate extends PhpLivePdoBasics{
    */
   public function WhereAdd(
     string $Field,
-    string|null $Value = null,
-    PhpLivePdoTypes|null $Type = null,
+    string $Value = null,
+    PhpLivePdoTypes $Type = null,
     PhpLivePdoOperators $Operator = PhpLivePdoOperators::Equal,
     PhpLivePdoAndOr $AndOr = PhpLivePdoAndOr::And,
     PhpLivePdoParenthesis $Parenthesis = PhpLivePdoParenthesis::None,
@@ -672,8 +672,8 @@ class PhpLivePdoDelete extends PhpLivePdoBasics{
    */
   public function WhereAdd(
     string $Field,
-    string|null $Value = null,
-    PhpLivePdoTypes|null $Type = null,
+    string $Value = null,
+    PhpLivePdoTypes $Type = null,
     PhpLivePdoOperators $Operator = PhpLivePdoOperators::Equal,
     PhpLivePdoAndOr $AndOr = PhpLivePdoAndOr::And,
     PhpLivePdoParenthesis $Parenthesis = PhpLivePdoParenthesis::None,
