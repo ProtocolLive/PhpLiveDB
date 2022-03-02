@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.02.28.03
+//Version 2022.02.28.04
 //For PHP >= 8.1
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -65,39 +65,8 @@ class PhpLivePdo extends PhpLivePdoBasics{
     );
   }
 
-  public function RunCustom(
-    string $Query,
-    bool $OnlyFieldsName = true,
-    bool $Debug = false
-  ):array|int|null{
-    set_exception_handler([$this, 'ErrorSet']);
-
-    $statement = $this->Conn->prepare($Query);
-    $statement->execute();
-
-    if($OnlyFieldsName):
-      $temp = PDO::FETCH_ASSOC;
-    else:
-      $temp = PDO::FETCH_DEFAULT;
-    endif;
-    $return = $statement->fetchAll($temp);
-
-    if($Debug):
-      if(ini_get('html_errors') == true):
-        print '<pre style="text-align:left">';
-      endif;
-      $statement->debugDumpParams();
-      if(ini_get('html_errors') == true):
-        print '</pre>';
-      endif;
-    endif;
-
-    restore_error_handler();
-    if($this->Error === null):
-      return $return;
-    else:
-      return null;
-    endif;
+  public function GetCustom():PDO{
+    return $this->Conn;
   }
 }
 
