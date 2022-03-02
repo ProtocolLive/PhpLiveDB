@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.02.28.12
+//Version 2022.02.28.13
 //For PHP >= 8.1
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -576,7 +576,6 @@ class PhpLivePdoUpdate extends PhpLivePdoBasics{
   }
 
   public function Run(
-    bool $OnlyFieldsName = true,
     bool $Debug = false,
     bool $HtmlSafe = true,
     bool $TrimValues = true,
@@ -584,7 +583,6 @@ class PhpLivePdoUpdate extends PhpLivePdoBasics{
     int $LogEvent = null,
     int $LogUser = null
   ):int|false{
-    $FieldsCount = count($this->Fields ?? []);
     $WheresCount = count($this->Wheres);
 
     $this->UpdateHead();
