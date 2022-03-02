@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.02.28.03
+//Version 2022.03.02.00
 //For PHP >= 8.1
 
 enum PhpLivePdoTypes:int{
@@ -183,4 +183,19 @@ abstract class PhpLivePdoBasics{
     endif;
     return $Field;
   }
+}
+
+class PhpLivePdoWhere{
+  public function __construct(
+    public string $Field,
+    public string|null $Value = null,
+    public PhpLivePdoTypes|null $Type = null,
+    public PhpLivePdoOperators $Operator = PhpLivePdoOperators::Equal,
+    public PhpLivePdoAndOr $AndOr = PhpLivePdoAndOr::And,
+    public PhpLivePdoParenthesis $Parenthesis = PhpLivePdoParenthesis::None,
+    public string|null $CustomPlaceholder = null,
+    public bool $BlankIsNull = true,
+    public bool $NoField = false,
+    public bool $NoBind = false
+  ){}
 }

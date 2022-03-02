@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.02.28.14
+//Version 2022.03.02.00
 //For PHP >= 8.1
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -171,7 +171,7 @@ class PhpLivePdoSelect extends PhpLivePdoBasics{
     if($BlankIsNull and $Value === ''):
       $Type = PhpLivePdoTypes::Null;
     endif;
-    $this->Wheres[] = new class(
+    $this->Wheres[] = new PhpLivePdoWhere(
       $Field,
       $Value,
       $Type,
@@ -179,42 +179,10 @@ class PhpLivePdoSelect extends PhpLivePdoBasics{
       $AndOr,
       $Parenthesis,
       $CustomPlaceholder,
+      $BlankIsNull,
       $NoField,
       $NoBind
-    ){
-      public string $Field;
-      public string|null $Value = null;
-      public PhpLivePdoTypes|null $Type = null;
-      public PhpLivePdoOperators $Operator = PhpLivePdoOperators::Equal;
-      public PhpLivePdoAndOr $AndOr = PhpLivePdoAndOr::And;
-      public PhpLivePdoParenthesis $Parenthesis = PhpLivePdoParenthesis::None;
-      public string|null $CustomPlaceholder = null;
-      public bool $BlankIsNull = true;
-      public bool $NoField = false;
-      public bool $NoBind = false;
-
-      public function __construct(
-        $Field,
-        $Value,
-        $Type,
-        $Operator,
-        $AndOr,
-        $Parenthesis,
-        $CustomPlaceholder,
-        $NoField,
-        $NoBind
-      ){
-        $this->Field = $Field;
-        $this->Value = $Value;
-        $this->Type = $Type;
-        $this->Operator = $Operator;
-        $this->AndOr = $AndOr;
-        $this->Parenthesis = $Parenthesis;
-        $this->CustomPlaceholder = $CustomPlaceholder;
-        $this->NoField = $NoField;
-        $this->NoBind = $NoBind;
-      }
-    };
+    );
   }
 
   public function Order(string $Fields):void{
@@ -530,7 +498,7 @@ class PhpLivePdoUpdate extends PhpLivePdoBasics{
     if($BlankIsNull and $Value === ''):
       $Type = PhpLivePdoTypes::Null;
     endif;
-    $this->Wheres[] = new class(
+    $this->Wheres[] = new PhpLivePdoWhere(
       $Field,
       $Value,
       $Type,
@@ -539,40 +507,9 @@ class PhpLivePdoUpdate extends PhpLivePdoBasics{
       $Parenthesis,
       $CustomPlaceholder,
       $BlankIsNull,
+      false,
       $NoBind
-    ){
-      public string $Field;
-      public string|null $Value = null;
-      public PhpLivePdoTypes|null $Type = null;
-      public PhpLivePdoOperators $Operator = PhpLivePdoOperators::Equal;
-      public PhpLivePdoAndOr $AndOr = PhpLivePdoAndOr::And;
-      public PhpLivePdoParenthesis $Parenthesis = PhpLivePdoParenthesis::None;
-      public string|null $CustomPlaceholder = null;
-      public bool $BlankIsNull = true;
-      public bool $NoBind = false;
-
-      public function __construct(
-        $Field,
-        $Value,
-        $Type,
-        $Operator,
-        $AndOr,
-        $Parenthesis,
-        $CustomPlaceholder,
-        $BlankIsNull,
-        $NoBind
-      ){
-        $this->Field = $Field;
-        $this->Value = $Value;
-        $this->Type = $Type;
-        $this->Operator = $Operator;
-        $this->AndOr = $AndOr;
-        $this->Parenthesis = $Parenthesis;
-        $this->CustomPlaceholder = $CustomPlaceholder;
-        $this->BlankIsNull = $BlankIsNull;
-        $this->NoBind = $NoBind;
-      }
-    };
+    );
   }
 
   public function Run(
@@ -692,7 +629,7 @@ class PhpLivePdoDelete extends PhpLivePdoBasics{
     if($BlankIsNull and $Value === ''):
       $Type = PhpLivePdoTypes::Null;
     endif;
-    $this->Wheres[] = new class(
+    $this->Wheres[] = new PhpLivePdoWhere(
       $Field,
       $Value,
       $Type,
@@ -700,44 +637,10 @@ class PhpLivePdoDelete extends PhpLivePdoBasics{
       $AndOr,
       $Parenthesis,
       $CustomPlaceholder,
+      $BlankIsNull,
       $NoField,
       $NoBind
-    ){
-      public string $Field;
-      public string|null $Value = null;
-      public PhpLivePdoTypes|null $Type = null;
-      public PhpLivePdoOperators $Operator = PhpLivePdoOperators::Equal;
-      public PhpLivePdoAndOr $AndOr = PhpLivePdoAndOr::And;
-      public PhpLivePdoParenthesis $Parenthesis = PhpLivePdoParenthesis::None;
-      public string|null $CustomPlaceholder = null;
-      public bool $BlankIsNull = true;
-      public bool $NoField = false;
-      public bool $NoBind = false;
-
-      public function __construct(
-        $Field,
-        $Value,
-        $Type,
-        $Operator,
-        $AndOr,
-        $Parenthesis,
-        $CustomPlaceholder,
-        $BlankIsNull,
-        $NoField,
-        $NoBind
-      ){
-        $this->Field = $Field;
-        $this->Value = $Value;
-        $this->Type = $Type;
-        $this->Operator = $Operator;
-        $this->AndOr = $AndOr;
-        $this->Parenthesis = $Parenthesis;
-        $this->CustomPlaceholder = $CustomPlaceholder;
-        $this->BlankIsNull = $BlankIsNull;
-        $this->NoField = $NoField;
-        $this->NoBind = $NoBind;
-      }
-    };
+    );
   }
 
   public function Run(
