@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.02.28.06
+//Version 2022.02.28.07
 //For PHP >= 8.1
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -183,8 +183,8 @@ class PhpLivePdoSelect extends PhpLivePdoBasics{
       $NoBind
     ){
       public string $Field;
-      public string|null $Value;
-      public PhpLivePdoTypes|null $Type;
+      public string|null $Value = null;
+      public PhpLivePdoTypes|null $Type = null;
       public PhpLivePdoOperators $Operator = PhpLivePdoOperators::Equal;
       public PhpLivePdoAndOr $AndOr = PhpLivePdoAndOr::And;
       public PhpLivePdoParenthesis $Parenthesis = PhpLivePdoParenthesis::None;
@@ -532,17 +532,17 @@ class PhpLivePdoUpdate extends PhpLivePdoBasics{
       $AndOr,
       $Parenthesis,
       $CustomPlaceholder,
-      false,
+      $BlankIsNull,
       $NoBind
     ){
       public string $Field;
-      public string|null $Value;
-      public PhpLivePdoTypes|null $Type;
+      public string|null $Value = null;
+      public PhpLivePdoTypes|null $Type = null;
       public PhpLivePdoOperators $Operator = PhpLivePdoOperators::Equal;
       public PhpLivePdoAndOr $AndOr = PhpLivePdoAndOr::And;
       public PhpLivePdoParenthesis $Parenthesis = PhpLivePdoParenthesis::None;
       public string|null $CustomPlaceholder = null;
-      public bool $NoField = false;
+      public bool $BlankIsNull = true;
       public bool $NoBind = false;
 
       public function __construct(
@@ -553,7 +553,7 @@ class PhpLivePdoUpdate extends PhpLivePdoBasics{
         $AndOr,
         $Parenthesis,
         $CustomPlaceholder,
-        $NoField,
+        $BlankIsNull,
         $NoBind
       ){
         $this->Field = $Field;
@@ -563,7 +563,7 @@ class PhpLivePdoUpdate extends PhpLivePdoBasics{
         $this->AndOr = $AndOr;
         $this->Parenthesis = $Parenthesis;
         $this->CustomPlaceholder = $CustomPlaceholder;
-        $this->NoField = $NoField;
+        $this->BlankIsNull = $BlankIsNull;
         $this->NoBind = $NoBind;
       }
     };
@@ -700,12 +700,13 @@ class PhpLivePdoDelete extends PhpLivePdoBasics{
       $NoBind
     ){
       public string $Field;
-      public string|null $Value;
       public int|null $Type;
+      public string|null $Value = null;
       public PhpLivePdoOperators $Operator = PhpLivePdoOperators::Equal;
       public PhpLivePdoAndOr $AndOr = PhpLivePdoAndOr::And;
       public PhpLivePdoParenthesis $Parenthesis = PhpLivePdoParenthesis::None;
       public string|null $CustomPlaceholder = null;
+      public bool $BlankIsNull = true;
       public bool $NoField = false;
       public bool $NoBind = false;
 
@@ -717,6 +718,7 @@ class PhpLivePdoDelete extends PhpLivePdoBasics{
         $AndOr,
         $Parenthesis,
         $CustomPlaceholder,
+        $BlankIsNull,
         $NoField,
         $NoBind
       ){
@@ -727,6 +729,7 @@ class PhpLivePdoDelete extends PhpLivePdoBasics{
         $this->AndOr = $AndOr;
         $this->Parenthesis = $Parenthesis;
         $this->CustomPlaceholder = $CustomPlaceholder;
+        $this->BlankIsNull = $BlankIsNull;
         $this->NoField = $NoField;
         $this->NoBind = $NoBind;
       }
