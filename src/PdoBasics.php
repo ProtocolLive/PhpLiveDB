@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.03.02.00
+//Version 2022.03.03.00
 //For PHP >= 8.1
 
 enum PhpLivePdoTypes:int{
@@ -106,22 +106,23 @@ abstract class PhpLivePdoBasics{
     endif;
   }
 
-  protected function Wheres(array $Wheres):void{
+  protected function BuildWhere(array $Wheres):void{
+    //Wipe the NoField to not create problem with index 0
     $WheresTemp = $Wheres;
     foreach($WheresTemp as $id => $where):
-      if($where->NoField === true):
+      if($where->NoField):
         unset($WheresTemp[$id]);
       endif;
     endforeach;
     $Wheres = array_values($WheresTemp);
+
     if(count($Wheres) > 0):
       $this->Query .= ' where ';
       foreach($Wheres as $id => $where):
         if($id > 0):
           if($where->AndOr === PhpLivePdoAndOr::And):
             $this->Query .= ' and ';
-          endif;
-          if($where->AndOr === PhpLivePdoAndOr::Or):
+          elseif($where->AndOr === PhpLivePdoAndOr::Or):
             $this->Query .= ' or ';
           endif;
         endif;
@@ -149,6 +150,26 @@ abstract class PhpLivePdoBasics{
         endif;
       endforeach;
     endif;
+  }
+
+  protected function Bind(
+    PDOStatement &$Statement,
+    array $Wheres,
+    bool $HtmlSafe = true,
+    bool $TrimValues = true
+  ):void{
+    foreach($Wheres as $where):
+      if($where->Value !== null
+      and $where->Type !== PhpLivePdoTypes::Null
+      and $where->Type !== PhpLivePdoTypes::Sql
+      and $where->NoBind === false):
+        $Statement->bindValue(
+          $where->CustomPlaceholder ?? $where->Field,
+          $this->ValueFunctions($where->Value, $HtmlSafe, $TrimValues),
+          $where->Type->value
+        );
+      endif;
+    endforeach;
   }
 
   protected function FieldNeedCustomPlaceholder(string $Field):void{
