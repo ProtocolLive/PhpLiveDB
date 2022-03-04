@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.03.03.00
+//Version 2022.03.03.01
 //For PHP >= 8.1
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -400,11 +400,9 @@ class PhpLivePdoUpdate extends PhpLivePdoBasics{
   private array $Fields = [];
   private array $Wheres = [];
 
-  private function UpdateFields(
-    bool $BlankIsNull = true
-  ):void{
+  private function UpdateFields():void{
     foreach($this->Fields as $id => $field):
-      if($BlankIsNull and $field->Value === ''):
+      if($field->Type === PhpLivePdoTypes::Null):
         $this->Query .= $field->Field . '=null,';
         unset($this->Fields[$id]);
       elseif($field->Type === PhpLivePdoTypes::Sql):
@@ -434,6 +432,7 @@ class PhpLivePdoUpdate extends PhpLivePdoBasics{
     bool $BlankIsNull = true
   ){
     if($BlankIsNull and $Value === ''):
+      $Value = null;
       $Type = PhpLivePdoTypes::Null;
     endif;
     $this->Fields[] = new class(
@@ -520,7 +519,8 @@ class PhpLivePdoUpdate extends PhpLivePdoBasics{
     $statement = $this->Conn->prepare($this->Query);
 
     foreach($this->Fields as $field):
-      if($field->Type !== PhpLivePdoTypes::Sql):
+      if($field->Type !== PhpLivePdoTypes::Null
+      and $field->Type !== PhpLivePdoTypes::Sql):
         $value = $this->ValueFunctions($field->Value, $HtmlSafe, $TrimValues);
         $statement->bindValue(
           $field->CustomPlaceholder ?? $field->Field,
