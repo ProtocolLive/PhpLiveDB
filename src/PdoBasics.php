@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.03.03.00
+//Version 2022.03.07.00
 //For PHP >= 8.1
 
 enum PhpLivePdoTypes:int{
@@ -45,6 +45,7 @@ enum PhpLivePdoAndOr{
 abstract class PhpLivePdoBasics{
   private string $Table;
   private string $Prefix;
+  protected array $Binds = [];
 
   protected string|null $Query = null;
   
@@ -160,14 +161,21 @@ abstract class PhpLivePdoBasics{
   ):void{
     foreach($Wheres as $where):
       if($where->Value !== null
+      and $where->Type !== null
       and $where->Type !== PhpLivePdoTypes::Null
       and $where->Type !== PhpLivePdoTypes::Sql
       and $where->NoBind === false):
+        $value = $this->ValueFunctions($where->Value, $HtmlSafe, $TrimValues);
         $Statement->bindValue(
           $where->CustomPlaceholder ?? $where->Field,
-          $this->ValueFunctions($where->Value, $HtmlSafe, $TrimValues),
+          $value,
           $where->Type->value
         );
+        $this->Binds[] = [
+          $where->CustomPlaceholder ?? $where->Field,
+          $value,
+          $where->Type
+        ];
       endif;
     endforeach;
   }
@@ -185,7 +193,10 @@ abstract class PhpLivePdoBasics{
     $this->Error = $Obj;
     $log = date('Y-m-d H:i:s') . "\n";
     $log .= $Obj->getCode() . ' - ' . $Obj->getMessage() . "\n";
-    $log .= 'Query: ' . $this->Query . "\n";
+    $log .= "Query:\n";
+    $log .= $this->Query . "\n";
+    $log .= "Binds:\n";
+    $log .= var_export($this->Binds, true) . "\n";
     $log .= $Obj->getTraceAsString();
     error_log($log);
     if(ini_get('display_errors')):
