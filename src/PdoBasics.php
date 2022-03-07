@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.03.07.00
+//Version 2022.03.07.01
 //For PHP >= 8.1
 
 enum PhpLivePdoTypes:int{
@@ -136,7 +136,11 @@ abstract class PhpLivePdoBasics{
           $this->Query .= $where->Field . ' in(' . $where->Value . ')';
         elseif($where->Operator === PhpLivePdoOperators::NotIn):
           $this->Query .= $where->Field . ' not in(' . $where->Value . ')';
-        elseif($where->Value === null or $where->Type === PhpLivePdoTypes::Null):
+        elseif($where->NoBind === false
+        and(
+          $where->Value === null
+          or $where->Type === PhpLivePdoTypes::Null
+        )):
           $this->Query .= $where->Field . ' is null';
         else:
           $this->Query .= $where->Field . $this->Operator($where->Operator);
