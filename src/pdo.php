@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.03.03.01
+//Version 2022.03.06.00
 //For PHP >= 8.1
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -163,7 +163,8 @@ class PhpLivePdoSelect extends PhpLivePdoBasics{
     string $CustomPlaceholder = null,
     bool $BlankIsNull = true,
     bool $NoField = false,
-    bool $NoBind = false
+    bool $NoBind = false,
+    bool $Debug = false
   ){
     if($CustomPlaceholder === null):
       $this->FieldNeedCustomPlaceholder($Field);
@@ -184,6 +185,9 @@ class PhpLivePdoSelect extends PhpLivePdoBasics{
       $NoField,
       $NoBind
     );
+    if($Debug):
+      var_dump($this->Wheres);
+    endif;
   }
 
   public function Order(string $Fields):void{
