@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.03.06.00
+//Version 2022.04.18.00
 //For PHP >= 8.1
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -250,25 +250,7 @@ class PhpLivePdoSelect extends PhpLivePdoBasics{
     endif;
     $return = $statement->fetchAll($temp);
 
-    //Log and Debug
-    ob_start();
-    $statement->debugDumpParams();
-    $Dump = ob_get_contents();
-    ob_end_clean();
-
-    if($Debug):
-      if(ini_get('html_errors') == true):
-        print '<pre style="text-align:left">';
-      endif;
-      echo $Dump;
-      if(ini_get('html_errors') == true):
-        print '</pre>';
-      endif;
-    endif;
-
-    if($Log):
-      $this->LogSet($this->Conn, $LogEvent, $LogUser, $Dump);
-    endif;
+    $this->LogAndDebug($statement, $Debug, $Log, $LogEvent, $LogUser);
 
     return $return;
   }
@@ -375,25 +357,7 @@ class PhpLivePdoInsert extends PhpLivePdoBasics{
 
     $return = $this->Conn->lastInsertId();
 
-    //Log and Debug
-    ob_start();
-    $statement->debugDumpParams();
-    $Dump = ob_get_contents();
-    ob_end_clean();
-
-    if($Debug):
-      if(ini_get('html_errors') == true):
-        print '<pre style="text-align:left">';
-      endif;
-      echo $Dump;
-      if(ini_get('html_errors') == true):
-        print '</pre>';
-      endif;
-    endif;
-
-    if($Log):
-      $this->LogSet($this->Conn, $LogEvent, $LogUser, $Dump);
-    endif;
+    $this->LogAndDebug($statement, $Debug, $Log, $LogEvent, $LogUser);
 
     return $return;
   }
@@ -547,25 +511,7 @@ class PhpLivePdoUpdate extends PhpLivePdoBasics{
 
     $return = $statement->rowCount();
 
-    //Log and Debug
-    ob_start();
-    $statement->debugDumpParams();
-    $Dump = ob_get_contents();
-    ob_end_clean();
-
-    if($Debug):
-      if(ini_get('html_errors') == true):
-        print '<pre style="text-align:left">';
-      endif;
-      echo $Dump;
-      if(ini_get('html_errors') == true):
-        print '</pre>';
-      endif;
-    endif;
-
-    if($Log):
-      $this->LogSet($this->Conn, $LogEvent, $LogUser, $Dump);
-    endif;
+    $this->LogAndDebug($statement, $Debug, $Log, $LogEvent, $LogUser);
 
     return $return;
   }
@@ -662,25 +608,7 @@ class PhpLivePdoDelete extends PhpLivePdoBasics{
 
     $return = $statement->rowCount();
 
-    //Log and Debug
-    ob_start();
-    $statement->debugDumpParams();
-    $Dump = ob_get_contents();
-    ob_end_clean();
-
-    if($Debug):
-      if(ini_get('html_errors') == true):
-        print '<pre style="text-align:left">';
-      endif;
-      echo $Dump;
-      if(ini_get('html_errors') == true):
-        print '</pre>';
-      endif;
-    endif;
-
-    if($Log):
-      $this->LogSet($this->Conn, $LogEvent, $LogUser, $Dump);
-    endif;
+    $this->LogAndDebug($statement, $Debug, $Log, $LogEvent, $LogUser);
 
     return $return;
   }

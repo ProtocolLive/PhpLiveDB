@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.03.07.01
+//Version 2022.04.18.01
 //For PHP >= 8.1
 
 enum PhpLivePdoTypes:int{
@@ -193,7 +193,7 @@ abstract class PhpLivePdoBasics{
     endif;
   }
 
-  public function ErrorSet(PDOException $Obj):void{
+  protected function ErrorSet(PDOException $Obj):void{
     $this->Error = $Obj;
     $log = date('Y-m-d H:i:s') . "\n";
     $log .= $Obj->getCode() . ' - ' . $Obj->getMessage() . "\n";
@@ -209,6 +209,33 @@ abstract class PhpLivePdoBasics{
       else:
         echo $log;
       endif;
+    endif;
+  }
+
+  protected function LogAndDebug(
+    PDOStatement &$Statement,
+    bool $Debug = false,
+    bool $Log = false,
+    int $LogEvent = null,
+    int $LogUser = null
+  ):void{
+    ob_start();
+    $Statement->debugDumpParams();
+    $Dump = ob_get_contents();
+    ob_end_clean();
+
+    if($Debug):
+      if(ini_get('html_errors') == true):
+        print '<pre style="text-align:left">';
+      endif;
+      echo htmlspecialchars($Dump);
+      if(ini_get('html_errors') == true):
+        print '</pre>';
+      endif;
+    endif;
+
+    if($Log):
+      $this->LogSet($this->Conn, $LogEvent, $LogUser, $Dump);
     endif;
   }
 
