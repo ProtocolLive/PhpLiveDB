@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.04.18.00
+//Version 2022.04.18.01
 //For PHP >= 8.1
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -250,7 +250,7 @@ class PhpLivePdoSelect extends PhpLivePdoBasics{
     endif;
     $return = $statement->fetchAll($temp);
 
-    $this->LogAndDebug($statement, $Debug, $Log, $LogEvent, $LogUser);
+    $this->LogAndDebug($this->Conn, $statement, $Debug, $Log, $LogEvent, $LogUser);
 
     return $return;
   }
@@ -357,7 +357,7 @@ class PhpLivePdoInsert extends PhpLivePdoBasics{
 
     $return = $this->Conn->lastInsertId();
 
-    $this->LogAndDebug($statement, $Debug, $Log, $LogEvent, $LogUser);
+    $this->LogAndDebug($this->Conn, $statement, $Debug, $Log, $LogEvent, $LogUser);
 
     return $return;
   }
@@ -511,7 +511,7 @@ class PhpLivePdoUpdate extends PhpLivePdoBasics{
 
     $return = $statement->rowCount();
 
-    $this->LogAndDebug($statement, $Debug, $Log, $LogEvent, $LogUser);
+    $this->LogAndDebug($this->Conn, $statement, $Debug, $Log, $LogEvent, $LogUser);
 
     return $return;
   }
@@ -608,7 +608,7 @@ class PhpLivePdoDelete extends PhpLivePdoBasics{
 
     $return = $statement->rowCount();
 
-    $this->LogAndDebug($statement, $Debug, $Log, $LogEvent, $LogUser);
+    $this->LogAndDebug($this->Conn, $statement, $Debug, $Log, $LogEvent, $LogUser);
 
     return $return;
   }

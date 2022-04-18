@@ -213,6 +213,7 @@ abstract class PhpLivePdoBasics{
   }
 
   protected function LogAndDebug(
+    PDO &$Conn,
     PDOStatement &$Statement,
     bool $Debug = false,
     bool $Log = false,
@@ -235,7 +236,7 @@ abstract class PhpLivePdoBasics{
     endif;
 
     if($Log):
-      $this->LogSet($this->Conn, $LogEvent, $LogUser, $Dump);
+      $this->LogSet($Conn, $LogEvent, $LogUser, $Dump);
     endif;
   }
 
