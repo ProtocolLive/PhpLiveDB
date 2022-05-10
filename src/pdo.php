@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.04.18.01
+//Version 2022.05.09.00
 //For PHP >= 8.1
 
 require_once(__DIR__ . '/PdoBasics.php');
@@ -299,7 +299,7 @@ class PhpLivePdoInsert extends PhpLivePdoBasics{
       $Value = null;
       $Type = PhpLivePdoTypes::Null;
     endif;
-    $this->Fields[] = new class(
+    $this->Fields[$Field] = new class(
       $Field,
       $Value,
       $Type
@@ -403,7 +403,7 @@ class PhpLivePdoUpdate extends PhpLivePdoBasics{
       $Value = null;
       $Type = PhpLivePdoTypes::Null;
     endif;
-    $this->Fields[] = new class(
+    $this->Fields[$Field] = new class(
       $Field,
       $Value,
       $Type
