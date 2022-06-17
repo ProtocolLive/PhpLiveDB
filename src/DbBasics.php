@@ -1,17 +1,17 @@
 <?php
 //Protocol Corporation Ltda.
-//https://github.com/ProtocolLive/PhpLivePDO
-//Version 2022.04.18.01
+//https://github.com/ProtocolLive/PhpLiveDb
+//Version 2022.06.17.00
 //For PHP >= 8.1
 
-enum PhpLivePdoTypes:int{
+enum PhpLiveDbTypes:int{
   case Null = 0;
   case Int = 1;
   case Str = 2;
   case Sql = 6;
 }
 
-enum PhpLivePdoOperators{
+enum PhpLiveDbOperators{
   case Equal;
   case Different;
   case Smaller;
@@ -24,25 +24,25 @@ enum PhpLivePdoOperators{
   case NotIn;
 }
 
-enum PhpLivePdoJoins{
+enum PhpLiveDbJoins{
   case Default;
   case Left;
   case Right;
   case Inner;
 }
 
-enum PhpLivePdoParenthesis{
+enum PhpLiveDbParenthesis{
   case None;
   case Open;
   case Close;
 }
 
-enum PhpLivePdoAndOr{
+enum PhpLiveDbAndOr{
   case And;
   case Or;
 }
 
-abstract class PhpLivePdoBasics{
+abstract class PhpLiveDbBasics{
   private string $Table;
   private string $Prefix;
   protected array $Binds = [];
@@ -89,20 +89,20 @@ abstract class PhpLivePdoBasics{
     $statement->execute();
   }
 
-  protected function Operator(PhpLivePdoOperators $Operator):string{
-    if($Operator === PhpLivePdoOperators::Equal):
+  protected function Operator(PhpLiveDbOperators $Operator):string{
+    if($Operator === PhpLiveDbOperators::Equal):
       return '=';
-    elseif($Operator === PhpLivePdoOperators::Different):
+    elseif($Operator === PhpLiveDbOperators::Different):
       return '<>';
-    elseif($Operator === PhpLivePdoOperators::Smaller):
+    elseif($Operator === PhpLiveDbOperators::Smaller):
       return '<';
-    elseif($Operator === PhpLivePdoOperators::Bigger):
+    elseif($Operator === PhpLiveDbOperators::Bigger):
       return '>';
-    elseif($Operator === PhpLivePdoOperators::SmallerEqual):
+    elseif($Operator === PhpLiveDbOperators::SmallerEqual):
       return '<=';
-    elseif($Operator === PhpLivePdoOperators::BiggerEqual):
+    elseif($Operator === PhpLiveDbOperators::BiggerEqual):
       return '>=';
-    elseif($Operator === PhpLivePdoOperators::Like):
+    elseif($Operator === PhpLiveDbOperators::Like):
       return ' like ';
     endif;
   }
@@ -121,36 +121,36 @@ abstract class PhpLivePdoBasics{
       $this->Query .= ' where ';
       foreach($Wheres as $id => $where):
         if($id > 0):
-          if($where->AndOr === PhpLivePdoAndOr::And):
+          if($where->AndOr === PhpLiveDbAndOr::And):
             $this->Query .= ' and ';
-          elseif($where->AndOr === PhpLivePdoAndOr::Or):
+          elseif($where->AndOr === PhpLiveDbAndOr::Or):
             $this->Query .= ' or ';
           endif;
         endif;
-        if($where->Parenthesis === PhpLivePdoParenthesis::Open):
+        if($where->Parenthesis === PhpLiveDbParenthesis::Open):
           $this->Query .= '(';
         endif;
-        if($where->Operator === PhpLivePdoOperators::IsNotNull):
+        if($where->Operator === PhpLiveDbOperators::IsNotNull):
           $this->Query .= $where->Field . ' is not null';
-        elseif($where->Operator === PhpLivePdoOperators::In):
+        elseif($where->Operator === PhpLiveDbOperators::In):
           $this->Query .= $where->Field . ' in(' . $where->Value . ')';
-        elseif($where->Operator === PhpLivePdoOperators::NotIn):
+        elseif($where->Operator === PhpLiveDbOperators::NotIn):
           $this->Query .= $where->Field . ' not in(' . $where->Value . ')';
         elseif($where->NoBind === false
         and(
           $where->Value === null
-          or $where->Type === PhpLivePdoTypes::Null
+          or $where->Type === PhpLiveDbTypes::Null
         )):
           $this->Query .= $where->Field . ' is null';
         else:
           $this->Query .= $where->Field . $this->Operator($where->Operator);
-          if($where->Type === PhpLivePdoTypes::Sql):
+          if($where->Type === PhpLiveDbTypes::Sql):
             $this->Query .= $where->Value;
           else:
             $this->Query .= ':' . ($where->CustomPlaceholder ?? $where->Field);
           endif;
         endif;
-        if($where->Parenthesis === PhpLivePdoParenthesis::Close):
+        if($where->Parenthesis === PhpLiveDbParenthesis::Close):
           $this->Query .= ')';
         endif;
       endforeach;
@@ -166,8 +166,8 @@ abstract class PhpLivePdoBasics{
     foreach($Wheres as $where):
       if($where->Value !== null
       and $where->Type !== null
-      and $where->Type !== PhpLivePdoTypes::Null
-      and $where->Type !== PhpLivePdoTypes::Sql
+      and $where->Type !== PhpLiveDbTypes::Null
+      and $where->Type !== PhpLiveDbTypes::Sql
       and $where->NoBind === false):
         $value = $this->ValueFunctions($where->Value, $HtmlSafe, $TrimValues);
         $Statement->bindValue(
@@ -195,17 +195,17 @@ abstract class PhpLivePdoBasics{
 
   protected function ErrorSet(PDOException $Obj):void{
     $this->Error = $Obj;
-    $log = date('Y-m-d H:i:s') . "\n";
-    $log .= $Obj->getCode() . ' - ' . $Obj->getMessage() . "\n";
-    $log .= "Query:\n";
-    $log .= $this->Query . "\n";
-    $log .= "Binds:\n";
-    $log .= var_export($this->Binds, true) . "\n";
+    $log = date('Y-m-d H:i:s') . PHP_EOL;
+    $log .= $Obj->getCode() . ' - ' . $Obj->getMessage() . PHP_EOL;
+    $log .= 'Query:' . PHP_EOL;
+    $log .= $this->Query . PHP_EOL;
+    $log .= 'Binds:' . PHP_EOL;
+    $log .= var_export($this->Binds, true) . PHP_EOL;
     $log .= $Obj->getTraceAsString();
     error_log($log);
     if(ini_get('display_errors')):
       if(ini_get('html_errors')):
-        echo '<pre>' . str_replace("\n", '<br>', $log) . '</pre>';
+        echo '<pre>' . nl2br($log) . '</pre>';
       else:
         echo $log;
       endif;
@@ -249,14 +249,14 @@ abstract class PhpLivePdoBasics{
   }
 }
 
-class PhpLivePdoWhere{
+class PhpLiveDbWhere{
   public function __construct(
     public string $Field,
     public string|null $Value = null,
-    public PhpLivePdoTypes|null $Type = null,
-    public PhpLivePdoOperators $Operator = PhpLivePdoOperators::Equal,
-    public PhpLivePdoAndOr $AndOr = PhpLivePdoAndOr::And,
-    public PhpLivePdoParenthesis $Parenthesis = PhpLivePdoParenthesis::None,
+    public PhpLiveDbTypes|null $Type = null,
+    public PhpLiveDbOperators $Operator = PhpLiveDbOperators::Equal,
+    public PhpLiveDbAndOr $AndOr = PhpLiveDbAndOr::And,
+    public PhpLiveDbParenthesis $Parenthesis = PhpLiveDbParenthesis::None,
     public string|null $CustomPlaceholder = null,
     public bool $BlankIsNull = true,
     public bool $NoField = false,
