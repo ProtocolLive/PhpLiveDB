@@ -1,0 +1,17 @@
+{
+    "name": "protocollive/phplivedb",
+    "description": "A library to easy handling with database",
+    "type": "library",
+    "require": {
+        "php": ">=8.1",
+        "ext-openssl": "*",
+        "ext-curl": "*"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Protocol Corporation",
+            "email": "protocollive@outlook.com"
+        }
+    ]
+}
