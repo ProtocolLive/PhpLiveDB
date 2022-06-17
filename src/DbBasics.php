@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.06.17.00
+//Version 2022.06.17.01
 //For PHP >= 8.1
 
 enum PhpLiveDbTypes:int{
@@ -11,17 +11,17 @@ enum PhpLiveDbTypes:int{
   case Sql = 6;
 }
 
-enum PhpLiveDbOperators{
-  case Equal;
-  case Different;
-  case Smaller;
-  case Bigger;
-  case SmallerEqual;
-  case BiggerEqual;
-  case IsNotNull;
-  case Like;
-  case In;
-  case NotIn;
+enum PhpLiveDbOperators:string{
+  case Equal = '=';
+  case Different = '<>';
+  case Smaller = '<';
+  case Bigger = '>';
+  case SmallerEqual = '<=';
+  case BiggerEqual = '>=';
+  case IsNotNull = ' not null';
+  case Like = ' like ';
+  case In = ' in';
+  case NotIn = ' not in';
 }
 
 enum PhpLiveDbJoins{
@@ -89,24 +89,6 @@ abstract class PhpLiveDbBasics{
     $statement->execute();
   }
 
-  protected function Operator(PhpLiveDbOperators $Operator):string{
-    if($Operator === PhpLiveDbOperators::Equal):
-      return '=';
-    elseif($Operator === PhpLiveDbOperators::Different):
-      return '<>';
-    elseif($Operator === PhpLiveDbOperators::Smaller):
-      return '<';
-    elseif($Operator === PhpLiveDbOperators::Bigger):
-      return '>';
-    elseif($Operator === PhpLiveDbOperators::SmallerEqual):
-      return '<=';
-    elseif($Operator === PhpLiveDbOperators::BiggerEqual):
-      return '>=';
-    elseif($Operator === PhpLiveDbOperators::Like):
-      return ' like ';
-    endif;
-  }
-
   protected function BuildWhere(array $Wheres):void{
     //Wipe the NoField to not create problem with index 0
     $WheresTemp = $Wheres;
@@ -143,7 +125,7 @@ abstract class PhpLiveDbBasics{
         )):
           $this->Query .= $where->Field . ' is null';
         else:
-          $this->Query .= $where->Field . $this->Operator($where->Operator);
+          $this->Query .= $where->Field . $where->Operator->value;
           if($where->Type === PhpLiveDbTypes::Sql):
             $this->Query .= $where->Value;
           else:
