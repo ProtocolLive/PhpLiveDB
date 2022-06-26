@@ -10,74 +10,10 @@
     <tr>
       <td style="width:100%; background-color: #F2F2F2; padding: 20px; vertical-align: top;">
         <div class="maintitle">
-          <strong>PhpLivePdo</strong>
+          <strong>PhpLiveDb</strong>
         </div>
         <p>&nbsp;</p>
-
-        <div class="title">
-          <strong>Code Q&A</strong>
-        </div>
-        <br>
-        <p style="font-weight: bold;">
-          Why do I use named tokens internally in <a href="update.htm" class="func">PhpLivePdo::Update</a>
-          and <a href="update.htm" class="func">PhpLivePdo::Insert</a>?
-        </p>
-        <p>
-          The PDO doesn't accept both types of tokens in same query. Therefore, using named tokens, you can use tokens
-          in fields, with <span class="const">PdoSql</span> constant.
-        </p>
-        <div class="code">
-          <span class="func">$PDO->Update</span>([<br>
-          <span class="string ident">'Table'</span> => <span class="string">'lists'</span>,<br>
-          <span class="string ident">'Fields'</span> => [<br>
-          <span class="ident">
-            <span class="ident">
-              [<span class="string">'user_id'</span>,
-              <span class="var">$_SESSION</span>[<span class="string">'user'</span>],
-              <span class="const">PdoInt</span>],
-            </span>
-          </span><br>
-          <span class="ident">
-            <span class="ident">
-              [<span class="string">'name'</span>, <span class="var">$_POST</span>[<span class="string">'name'</span>],
-              <span class="const">PdoStr</span>],
-            </span>
-          </span><br>
-          <span class="ident">
-            <span class="ident">
-              [<span class="string">'itens'</span>,
-              <span class="string">'(select count(*) from itens where list_id=:list_id)'</span>,
-              <span class="const">PdoSql</span>]
-            </span>
-          </span><br>
-          <span class="ident">],</span><br>
-          <span class="string ident">'Where'</span> => [<br>
-          <span class="ident">
-            <span class="ident">
-              [<span class="string">'list_id'</span>, <span class="var">$_GET</span>[<span class="string">'id'</span>],
-              <span class="const">PdoInt</span>]
-            </span>
-          </span><br>
-          <span class="ident">]</span><br>
-          ]);<br>
-          <span class="comment">
-            //PdoSql parse:<br>
-            //update lists set user_id=:user_id,name=:name,itens=(select count(*) from itens where list_id=:list_id)
-            where list_id=:list_id<br>
-            //PDO parse:<br>
-            //update lists set user_id=1,name='List',itens=(select count(*) from itens where list_id=1) where list_id=1
-          </span>
-        </div>
-        <p>&nbsp;</p>
-
-        <p style="font-weight: bold;">
-          Why do I use an array for the parameters?
-        </p>
-        <p>
-          For you to have the freedom to use the parameters in any order. In the PHP 8, this is native. (See <a href="construct.htm" class="func">PhpLivePdo::__construct</a>)
-        </p>
-        <p>&nbsp;</p>
-
+        <p>Click in one item in side menu to see details.</p>
       </td>
       <td style="color: #ccc; font-size: 18px; vertical-align: top;">
         <iframe src="menu.htm" class="menu2"></iframe>
