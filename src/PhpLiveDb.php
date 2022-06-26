@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.05.09.00
+//Version 2022.06.24.00
 //For PHP >= 8.1
 
 require_once(__DIR__ . '/DbBasics.php');
@@ -210,7 +210,7 @@ class PhpLiveDbSelect extends PhpLiveDbBasics{
     bool $Log = false,
     int $LogEvent = null,
     int $LogUser = null
-  ):array|false{
+  ):array|null{
     $WheresCount = count($this->Wheres);
 
     $this->SelectHead();
@@ -240,7 +240,7 @@ class PhpLiveDbSelect extends PhpLiveDbBasics{
       $statement->execute();
     }catch(PDOException $e){
       $this->ErrorSet($e);
-      return false;
+      return null;
     }
 
     if($OnlyFieldsName):
@@ -327,10 +327,10 @@ class PhpLiveDbInsert extends PhpLiveDbBasics{
     bool $Log = false,
     int $LogEvent = null,
     int $LogUser = null
-  ):int|false{
+  ):int|null{
     $FieldsCount = count($this->Fields);
     if($FieldsCount === 0):
-      return false;
+      return null;
     endif;
 
     $this->Query = 'insert into ' . $this->Table . '(';
@@ -352,7 +352,7 @@ class PhpLiveDbInsert extends PhpLiveDbBasics{
       $statement->execute();
     }catch(PDOException $e){
       $this->ErrorSet($e);
-      return false;
+      return null;
     }
 
     $return = $this->Conn->lastInsertId();
@@ -474,7 +474,7 @@ class PhpLiveDbUpdate extends PhpLiveDbBasics{
     bool $Log = false,
     int $LogEvent = null,
     int $LogUser = null
-  ):int|false{
+  ):int|null{
     $WheresCount = count($this->Wheres);
 
     $this->Query = 'update ' . $this->Table . ' set ';
@@ -506,7 +506,7 @@ class PhpLiveDbUpdate extends PhpLiveDbBasics{
       $statement->execute();
     }catch(PDOException $e){
       $this->ErrorSet($e);
-      return false;
+      return null;
     }
 
     $return = $statement->rowCount();
@@ -583,7 +583,7 @@ class PhpLiveDbDelete extends PhpLiveDbBasics{
     bool $Log = false,
     int $LogEvent = null,
     int $LogUser = null
-  ):int|false{
+  ):int|null{
     $WheresCount = count($this->Wheres);
 
     $this->Query = 'delete from ' . $this->Table;
@@ -603,7 +603,7 @@ class PhpLiveDbDelete extends PhpLiveDbBasics{
       $statement->execute();
     }catch(PDOException $e){
       $this->ErrorSet($e);
-      return false;
+      return null;
     }
 
     $return = $statement->rowCount();
