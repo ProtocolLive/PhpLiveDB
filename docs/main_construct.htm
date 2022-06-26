@@ -1,0 +1,105 @@
+<html>
+
+<head>
+  <title>PhpLiveDb::__construct</title>
+  <link rel="stylesheet" href="global.css">
+</head>
+
+<body>
+  <table style="width:95%;margin-left: auto;margin-right: auto;" >
+    <tr>
+      <td style="width:100%; background-color: #F2F2F2; padding: 20px;">
+        <div class="maintitle">
+          <strong>PhpLiveDb::__construct</strong>
+        </div>
+        <p>Creates a connection to the database</p>
+        <p>&nbsp;</p>
+
+        <div class="title">
+          <strong>Sintaxe</strong>
+        </div>
+        <br>
+        <div class="code">
+          <span class="const">public function</span> <span class="func">PhpLiveDb::__construct</span> (<br>
+          <span class="ident">
+            <span class="type">string</span> <span class="var">$Ip</span>,
+          </span><br>
+          <span class="ident">
+            <span class="type">string</span> <span class="var">$User</span>,
+          </span><br>
+          <span class="ident">
+            <span class="type">string</span> <span class="var">$Pwd</span>,
+          </span><br>
+          <span class="ident">
+            <span class="type">string</span> <span class="var">$Db</span>,
+          </span><br>
+          <span class="ident">
+            <span class="type">string</span> <span class="var">$Drive</span> = <span class="string">'mysql'</span>,
+          </span><br>
+          <span class="ident">
+            <span class="type">string</span> <span class="var">$Charset</span> = <span class="string">'utf8mb4'</span>,
+          </span><br>
+          <span class="ident">
+            <span class="type">int</span> <span class="var">$TimeOut</span> = <span class="const">5</span>,
+          </span><br>
+          <span class="ident">
+            <span class="type">string</span> <span class="var">$Prefix</span> = ''
+          </span><br>
+          );
+        </div>
+        <p>&nbsp;</p>
+
+        <div class="title">
+          <strong>Parameters</strong>
+        </div>
+        <p><span class="var">$Ip</span> - Database address, ip or DNS;</p>
+        <p><span class="var">$User</span> - User to authenticate;</p>
+        <p><span class="var">$Pwd</span> - Password to authenticate;</p>
+        <p><span class="var">$Db</span> - Default database schema;</p>
+        <p><span class="var">$Drive</span> - The database used;</p>
+        <p><span class="var">$Charset</span> - The character set;</p>
+        <p>
+          <span class="var">$TimeOut</span> - Maximun seconds to run a query;
+        </p>
+        <p>
+          <span class="var">$Prefix</span> - Text to be concated with "_" and table name;
+        </p>
+        <p>&nbsp;</p>
+
+        <div class="title">
+          <strong>Dependencies</strong>
+        </div>
+        <p>- PHP >= 8.1;</p>
+        <p>- One of the PDO PHP extensions;</p>
+        <p>&nbsp;</p>
+
+        <div class="title">
+          <strong>See more</strong>
+        </div>
+        <p>- <a href="https://www.php.net/manual/en/pdo.construct.php" target="_blank">PDO construct</a></p>
+        <p>&nbsp;</p>
+
+        <div class="title">
+          <strong>Examples</strong>
+        </div>
+        <br>
+        <div class="code">
+          <span class="var">$DB</span> = <span class="type">new</span> <span class="func">PhpLiveDb</span>(
+          <span class="string">'localhost'</span>,
+          <span class="string">'root'</span>,
+          <span class="string">''</span>,
+          <span class="string">'mysite'</span>,
+          <span class="const">Prefix</span>: <span class="string">'mydb'</span>
+          );
+        </div>
+        <p>&nbsp;</p>
+
+      </td>
+      <td style="color: #ccc; font-size: 18px; vertical-align: top;">
+        <iframe src="menu.htm" class="menu2"></iframe>
+      </td>
+    </tr>
+  </table>
+</body>
+
+</html>
