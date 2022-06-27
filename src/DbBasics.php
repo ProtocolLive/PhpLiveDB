@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.06.24.00
+//Version 2022.06.24.01
 //For PHP >= 8.1
 
 enum PhpLiveDbTypes:int{
@@ -101,14 +101,19 @@ abstract class PhpLiveDbBasics{
 
     if(count($Wheres) > 0):
       $this->Query .= ' where ';
-      foreach($Wheres as $id => $where):
-        if($id > 0):
+      $i = 0;
+      /**
+       * @var PhpLiveDbWhere $where
+       */
+      foreach($Wheres as $where):
+        if($i > 0):
           if($where->AndOr === PhpLiveDbAndOr::And):
             $this->Query .= ' and ';
           elseif($where->AndOr === PhpLiveDbAndOr::Or):
             $this->Query .= ' or ';
           endif;
         endif;
+        $i++;
         if($where->Parenthesis === PhpLiveDbParenthesis::Open):
           $this->Query .= '(';
         endif;

@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.06.24.00
+//Version 2022.06.24.01
 //For PHP >= 8.1
 
 require_once(__DIR__ . '/DbBasics.php');
@@ -165,7 +165,7 @@ class PhpLiveDbSelect extends PhpLiveDbBasics{
     bool $NoField = false,
     bool $NoBind = false,
     bool $Debug = false
-  ){
+  ):bool{
     if($CustomPlaceholder === null):
       $this->FieldNeedCustomPlaceholder($Field);
     endif;
@@ -173,7 +173,13 @@ class PhpLiveDbSelect extends PhpLiveDbBasics{
       $Value = null;
       $Type = PhpLiveDbTypes::Null;
     endif;
-    $this->Wheres[] = new PhpLiveDbWhere(
+    if(isset($this->Wheres[$CustomPlaceholder ?? $Field])):
+      $this->ErrorSet(new PDOException(
+        'The where condition "' . ($CustomPlaceholder ?? $Field) . '" already added',
+      ));
+      return false;
+    endif;
+    $this->Wheres[$CustomPlaceholder ?? $Field] = new PhpLiveDbWhere(
       $Field,
       $Value,
       $Type,
@@ -188,6 +194,7 @@ class PhpLiveDbSelect extends PhpLiveDbBasics{
     if($Debug):
       var_dump($this->Wheres);
     endif;
+    return true;
   }
 
   public function Order(string $Fields):void{
@@ -445,7 +452,13 @@ class PhpLiveDbUpdate extends PhpLiveDbBasics{
     string $CustomPlaceholder = null,
     bool $BlankIsNull = true,
     bool $NoBind = false
-  ){
+  ):bool{
+    if(isset($this->Wheres[$CustomPlaceholder ?? $Field])):
+      $this->ErrorSet(new PDOException(
+        'The where condition "' . ($CustomPlaceholder ?? $Field) . '" already added',
+      ));
+      return false;
+    endif;
     if($CustomPlaceholder === null):
       $this->FieldNeedCustomPlaceholder(($Field));
     endif;
@@ -453,7 +466,7 @@ class PhpLiveDbUpdate extends PhpLiveDbBasics{
       $Value = null;
       $Type = PhpLiveDbTypes::Null;
     endif;
-    $this->Wheres[] = new PhpLiveDbWhere(
+    $this->Wheres[$CustomPlaceholder ?? $Field] = new PhpLiveDbWhere(
       $Field,
       $Value,
       $Type,
@@ -465,6 +478,7 @@ class PhpLiveDbUpdate extends PhpLiveDbBasics{
       false,
       $NoBind
     );
+    return true;
   }
 
   public function Run(
@@ -554,7 +568,13 @@ class PhpLiveDbDelete extends PhpLiveDbBasics{
     bool $BlankIsNull = true,
     bool $NoField = false,
     bool $NoBind = false
-  ){
+  ):bool{
+    if(isset($this->Wheres[$CustomPlaceholder ?? $Field])):
+      $this->ErrorSet(new PDOException(
+        'The where condition "' . ($CustomPlaceholder ?? $Field) . '" already added',
+      ));
+      return false;
+    endif;
     if($CustomPlaceholder === null):
       $this->FieldNeedCustomPlaceholder($Field);
     endif;
@@ -562,7 +582,7 @@ class PhpLiveDbDelete extends PhpLiveDbBasics{
       $Value = null;
       $Type = PhpLiveDbTypes::Null;
     endif;
-    $this->Wheres[] = new PhpLiveDbWhere(
+    $this->Wheres[$CustomPlaceholder ?? $Field] = new PhpLiveDbWhere(
       $Field,
       $Value,
       $Type,
@@ -574,6 +594,7 @@ class PhpLiveDbDelete extends PhpLiveDbBasics{
       $NoField,
       $NoBind
     );
+    return true;
   }
 
   public function Run(
