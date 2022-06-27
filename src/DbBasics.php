@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.06.17.01
+//Version 2022.06.24.00
 //For PHP >= 8.1
 
 enum PhpLiveDbTypes:int{
@@ -49,7 +49,7 @@ abstract class PhpLiveDbBasics{
 
   protected string|null $Query = null;
   
-  public PDOException|null $Error = null;
+  public string|null $Error = null;
 
   protected function ValueFunctions(
     string $Value,
@@ -176,14 +176,14 @@ abstract class PhpLiveDbBasics{
   }
 
   protected function ErrorSet(PDOException $Obj):void{
-    $this->Error = $Obj;
     $log = date('Y-m-d H:i:s') . PHP_EOL;
-    $log .= $Obj->getCode() . ' - ' . $Obj->getMessage() . PHP_EOL;
+    $log .= $Obj->getCode() . ' - ' . htmlspecialchars($Obj->getMessage()) . PHP_EOL;
     $log .= 'Query:' . PHP_EOL;
     $log .= $this->Query . PHP_EOL;
     $log .= 'Binds:' . PHP_EOL;
     $log .= var_export($this->Binds, true) . PHP_EOL;
     $log .= $Obj->getTraceAsString();
+    $this->Error = $log;
     error_log($log);
     if(ini_get('display_errors')):
       if(ini_get('html_errors')):
