@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.06.24.01
+//Version 2022.06.24.02
 //For PHP >= 8.1
 
 require_once(__DIR__ . '/DbBasics.php');
@@ -33,7 +33,7 @@ class PhpLiveDb extends PhpLiveDbBasics{
     $this->Prefix = $Prefix;
   }
 
-  public function Select(string $Table){
+  public function Select(string $Table):PhpLiveDbSelect{
     return new PhpLiveDbSelect(
       $this->Conn,
       $Table,
@@ -41,7 +41,7 @@ class PhpLiveDb extends PhpLiveDbBasics{
     );
   }
 
-  public function Insert(string $Table){
+  public function Insert(string $Table):PhpLiveDbInsert{
     return new PhpLiveDbInsert(
       $this->Conn,
       $Table,
@@ -49,7 +49,7 @@ class PhpLiveDb extends PhpLiveDbBasics{
     );
   }
 
-  public function Update(string $Table){
+  public function Update(string $Table):PhpLiveDbUpdate{
     return new PhpLiveDbUpdate(
       $this->Conn,
       $Table,
@@ -57,7 +57,7 @@ class PhpLiveDb extends PhpLiveDbBasics{
     );
   }
 
-  public function Delete(string $Table){
+  public function Delete(string $Table):PhpLiveDbDelete{
     return new PhpLiveDbDelete(
       $this->Conn,
       $Table,
