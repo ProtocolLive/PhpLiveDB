@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.06.24.02
+//Version 2022.07.03.00
 //For PHP >= 8.1
 
 require_once(__DIR__ . '/DbBasics.php');
@@ -33,11 +33,15 @@ class PhpLiveDb extends PhpLiveDbBasics{
     $this->Prefix = $Prefix;
   }
 
-  public function Select(string $Table):PhpLiveDbSelect{
+  public function Select(
+    string $Table,
+    bool $ThrowError = true
+  ):PhpLiveDbSelect{
     return new PhpLiveDbSelect(
       $this->Conn,
       $Table,
-      $this->Prefix
+      $this->Prefix,
+      $ThrowError
     );
   }
 
@@ -78,6 +82,7 @@ class PhpLiveDbSelect extends PhpLiveDbBasics{
   private string|null $Order = null;
   private string|null $Group = null;
   private string|null $Limit = null;
+  private bool $ThrowError = true;
 
   private function SelectHead():void{
     $this->Query = 'select ' . $this->Fields . ' from ' . $this->Table;
@@ -104,11 +109,13 @@ class PhpLiveDbSelect extends PhpLiveDbBasics{
   public function __construct(
     PDO &$Conn,
     string $Table,
-    string $Prefix
+    string $Prefix,
+    bool $ThrowError = true
   ){
     $this->Conn = $Conn;
     $this->Table = $Table;
     $this->Prefix = $Prefix;
+    $this->ThrowError = $ThrowError;
   }
 
   public function Fields(string $Fields):void{
@@ -174,10 +181,15 @@ class PhpLiveDbSelect extends PhpLiveDbBasics{
       $Type = PhpLiveDbTypes::Null;
     endif;
     if(isset($this->Wheres[$CustomPlaceholder ?? $Field])):
-      $this->ErrorSet(new PDOException(
+      $error = new PDOException(
         'The where condition "' . ($CustomPlaceholder ?? $Field) . '" already added',
-      ));
-      return false;
+      );
+      if($this->ThrowError):
+        throw $error;
+      else:
+        $this->ErrorSet($error);
+        return false;
+      endif;
     endif;
     $this->Wheres[$CustomPlaceholder ?? $Field] = new PhpLiveDbWhere(
       $Field,
@@ -408,6 +420,8 @@ class PhpLiveDbUpdate extends PhpLiveDbBasics{
   ){
     if($BlankIsNull and $Value === ''):
       $Value = null;
+    endif;
+    if($Value === null):
       $Type = PhpLiveDbTypes::Null;
     endif;
     $this->Fields[$Field] = new class(
