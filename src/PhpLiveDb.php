@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.07.10.00
+//Version 2022.07.10.01
 //For PHP >= 8.1
 
 require_once(__DIR__ . '/DbBasics.php');
@@ -331,6 +331,8 @@ class PhpLiveDbInsert extends PhpLiveDbBasics{
   ){
     if($BlankIsNull and $Value === ''):
       $Value = null;
+    endif;
+    if($Value === null):
       $Type = PhpLiveDbTypes::Null;
     endif;
     $this->Fields[$Field] = new class(
