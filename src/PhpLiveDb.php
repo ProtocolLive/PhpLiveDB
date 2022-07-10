@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.07.03.00
+//Version 2022.07.10.00
 //For PHP >= 8.1
 
 require_once(__DIR__ . '/DbBasics.php');
@@ -71,6 +71,21 @@ class PhpLiveDb extends PhpLiveDbBasics{
 
   public function GetCustom():PDO{
     return $this->Conn;
+  }
+
+  public function Begin():void{
+    $statement = $this->Conn->prepare('start transaction');
+    $statement->execute();
+  }
+
+  public function Commit():void{
+    $statement = $this->Conn->prepare('commit');
+    $statement->execute();
+  }
+
+  public function Rollback():void{
+    $statement = $this->Conn->prepare('rollback');
+    $statement->execute();
   }
 }
 
