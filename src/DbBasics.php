@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.06.24.01
+//Version 2022.07.18.00
 //For PHP >= 8.1
 
 enum PhpLiveDbTypes:int{
@@ -192,7 +192,7 @@ abstract class PhpLiveDbBasics{
     error_log($log);
     if(ini_get('display_errors')):
       if(ini_get('html_errors')):
-        echo '<pre>' . nl2br($log) . '</pre>';
+        echo '<pre>' . $log . '</pre>';
       else:
         echo $log;
       endif;
