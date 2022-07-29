@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.07.18.00
+//Version 2022.07.29.00
 //For PHP >= 8.1
 
 enum PhpLiveDbTypes:int{
@@ -155,7 +155,7 @@ abstract class PhpLiveDbBasics{
       and $where->Type !== null
       and $where->Type !== PhpLiveDbTypes::Null
       and $where->Type !== PhpLiveDbTypes::Sql
-      and $where->NoBind === false):
+      and ($where->NoBind ?? false) === false):
         $value = $this->ValueFunctions($where->Value, $HtmlSafe, $TrimValues);
         $Statement->bindValue(
           $where->CustomPlaceholder ?? $where->Field,
