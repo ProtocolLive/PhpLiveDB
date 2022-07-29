@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.07.29.00
+//Version 2022.07.29.01
 //For PHP >= 8.1
 
 enum PhpLiveDbTypes:int{
@@ -217,6 +217,7 @@ abstract class PhpLiveDbBasics{
         print '<pre style="text-align:left">';
       endif;
       echo htmlspecialchars($Dump);
+      error_log($Dump);
       if(ini_get('html_errors') == true):
         print '</pre>';
       endif;
