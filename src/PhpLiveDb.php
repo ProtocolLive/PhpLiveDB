@@ -1,35 +1,59 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.07.10.01
+//Version 2022.07.29.00
 //For PHP >= 8.1
 
 require_once(__DIR__ . '/DbBasics.php');
 
+enum PhpLiveDbDrivers:string{
+  case MySql = 'mysql';
+  case SqLite = 'sqlite';
+}
+
 class PhpLiveDb extends PhpLiveDbBasics{
   private PDO $Conn;
+  private PhpLiveDbDrivers $Driver;
 
+  /**
+   * @throws Exception
+   */
   public function __construct(
     string $Ip,
-    string $User,
-    string $Pwd,
-    string $Db,
-    string $Drive = 'mysql',
+    string $User = null,
+    string $Pwd = null,
+    string $Db = null,
+    PhpLiveDbDrivers $Driver = PhpLiveDbDrivers::MySql,
     string $Charset = 'utf8mb4',
     int $TimeOut = 5,
     string $Prefix = ''
   ){
-    $this->Conn = new PDO(
-      $Drive . ':host=' . $Ip . ';dbname=' . $Db . ';charset=' . $Charset,
-      $User,
-      $Pwd
-    );
+    $this->Driver = $Driver;
+    $dsn = $Driver->value . ':';
+    if($Driver === PhpLiveDbDrivers::MySql):
+      if(extension_loaded('pdo_mysql') === false):
+        throw new Exception('MySQL PDO driver not founded');
+      endif;
+      $dsn .= 'host=' . $Ip . ';dbname=' . $Db . ';charset=' . $Charset;
+    elseif($Driver === PhpLiveDbDrivers::SqLite):
+      if(extension_loaded('pdo_sqlite') === false):
+        throw new Exception('SQLite PDO driver not founded');
+      endif;
+      $dsn .= $Ip;
+    endif;
+    $this->Conn = new PDO($dsn, $User, $Pwd);
     $this->Conn->setAttribute(PDO::ATTR_TIMEOUT, $TimeOut);
     $this->Conn->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
     $this->Conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     //Enabling profiling to get duration
-    $statement = $this->Conn->prepare('set profiling_history_size=1;set profiling=1;');
-    $statement->execute();
+    if($Driver === PhpLiveDbDrivers::MySql):
+      $statement = $this->Conn->prepare('set profiling_history_size=1;set profiling=1;');
+      $statement->execute();
+    endif;
+    if($Driver === PhpLiveDbDrivers::SqLite):
+      $statement = $this->Conn->prepare('pragma foreign_keys=on');
+      $statement->execute();
+    endif;
     $this->Prefix = $Prefix;
   }
 
@@ -74,7 +98,11 @@ class PhpLiveDb extends PhpLiveDbBasics{
   }
 
   public function Begin():void{
-    $statement = $this->Conn->prepare('start transaction');
+    if($this->Driver === PhpLiveDbDrivers::MySql):
+      $statement = $this->Conn->prepare('start transaction');
+    elseif($this->Driver === PhpLiveDbDrivers::SqLite):
+      $statement = $this->Conn->prepare('begin transaction');
+    endif;
     $statement->execute();
   }
 
@@ -375,14 +403,8 @@ class PhpLiveDbInsert extends PhpLiveDbBasics{
     $this->Query = str_replace('##', $this->Prefix . '_', $this->Query);
     $statement = $this->Conn->prepare($this->Query);
 
-    foreach($this->Fields as $field):
-      $statement->bindValue(
-        $field->Field,
-        $this->ValueFunctions($field->Value, $HtmlSafe, $TrimValues),
-        $field->Type->value
-      );
-    endforeach;
-    
+    $this->Bind($statement, $this->Fields, $HtmlSafe, $TrimValues);
+
     try{
       $this->Error = null;
       $statement->execute();
@@ -531,17 +553,7 @@ class PhpLiveDbUpdate extends PhpLiveDbBasics{
     $this->Query = str_replace('##', $this->Prefix . '_', $this->Query);
     $statement = $this->Conn->prepare($this->Query);
 
-    foreach($this->Fields as $field):
-      if($field->Type !== PhpLiveDbTypes::Null
-      and $field->Type !== PhpLiveDbTypes::Sql):
-        $value = $this->ValueFunctions($field->Value, $HtmlSafe, $TrimValues);
-        $statement->bindValue(
-          $field->CustomPlaceholder ?? $field->Field,
-          $value,
-          $field->Type->value
-        );
-      endif;
-    endforeach;
+    $this->Bind($statement, $this->Fields, $HtmlSafe, $TrimValues);
     if($WheresCount > 0):
       $this->Bind($statement, $this->Wheres, $HtmlSafe, $TrimValues);
     endif;
