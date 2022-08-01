@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.07.29.01
+//Version 2022.08.01.00
 //For PHP >= 8.1
 
 enum PhpLiveDbTypes:int{
@@ -43,13 +43,20 @@ enum PhpLiveDbAndOr{
 }
 
 abstract class PhpLiveDbBasics{
-  private string $Table;
-  private string $Prefix;
+  protected string $Table;
+  protected string $Prefix;
+  protected PDO $Conn;
   protected array $Binds = [];
-
   protected string|null $Query = null;
-  
   public string|null $Error = null;
+
+  public function Begin():void{
+    $this->Conn->beginTransaction();
+  }
+
+  public function Commit():void{
+    $this->Conn->commit();
+  }
 
   protected function ValueFunctions(
     string $Value,
@@ -234,6 +241,10 @@ abstract class PhpLiveDbBasics{
       $Field = '`' . $Field . '`';
     endif;
     return $Field;
+  }
+
+  public function Rollback():void{
+    $this->Conn->rollBack();
   }
 }
 

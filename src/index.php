@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.07.29.00
+//Version 2022.08.01.00
 //For PHP >= 8.1
 
 require_once(__DIR__ . '/DbBasics.php');
@@ -12,9 +12,6 @@ enum PhpLiveDbDrivers:string{
 }
 
 class PhpLiveDb extends PhpLiveDbBasics{
-  private PDO $Conn;
-  private PhpLiveDbDrivers $Driver;
-
   /**
    * @throws Exception
    */
@@ -28,7 +25,6 @@ class PhpLiveDb extends PhpLiveDbBasics{
     int $TimeOut = 5,
     string $Prefix = ''
   ){
-    $this->Driver = $Driver;
     $dsn = $Driver->value . ':';
     if($Driver === PhpLiveDbDrivers::MySql):
       if(extension_loaded('pdo_mysql') === false):
@@ -96,29 +92,9 @@ class PhpLiveDb extends PhpLiveDbBasics{
   public function GetCustom():PDO{
     return $this->Conn;
   }
-
-  public function Begin():void{
-    if($this->Driver === PhpLiveDbDrivers::MySql):
-      $statement = $this->Conn->prepare('start transaction');
-    elseif($this->Driver === PhpLiveDbDrivers::SqLite):
-      $statement = $this->Conn->prepare('begin transaction');
-    endif;
-    $statement->execute();
-  }
-
-  public function Commit():void{
-    $statement = $this->Conn->prepare('commit');
-    $statement->execute();
-  }
-
-  public function Rollback():void{
-    $statement = $this->Conn->prepare('rollback');
-    $statement->execute();
-  }
 }
 
 class PhpLiveDbSelect extends PhpLiveDbBasics{
-  private PDO $Conn;
   private string $Fields = '*';
   private array $Join = [];
   private array $Wheres = [];
@@ -319,7 +295,6 @@ class PhpLiveDbSelect extends PhpLiveDbBasics{
 }
 
 class PhpLiveDbInsert extends PhpLiveDbBasics{
-  private PDO $Conn;
   private array $Fields = [];
 
   private function InsertFields():void{
@@ -422,7 +397,6 @@ class PhpLiveDbInsert extends PhpLiveDbBasics{
 }
 
 class PhpLiveDbUpdate extends PhpLiveDbBasics{
-  private PDO $Conn;
   private array $Fields = [];
   private array $Wheres = [];
 
@@ -575,7 +549,6 @@ class PhpLiveDbUpdate extends PhpLiveDbBasics{
 }
 
 class PhpLiveDbDelete extends PhpLiveDbBasics{
-  private PDO $Conn;
   private array $Wheres = [];
 
   public function __construct(
