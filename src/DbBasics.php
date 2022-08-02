@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.08.01.00
+//Version 2022.08.02.00
 //For PHP >= 8.1
 
 enum PhpLiveDbTypes:int{
@@ -73,7 +73,6 @@ abstract class PhpLiveDbBasics{
   }
 
   protected function LogSet(
-    PDO $Conn,
     int $LogEvent,
     int|null $User,
     string $Query
@@ -83,7 +82,7 @@ abstract class PhpLiveDbBasics{
     $Query = substr($Query, 0, strpos($Query, 'Params: '));
     $Query = trim($Query);
 
-    $statement = $Conn->prepare('
+    $statement = $this->Conn->prepare('
       insert into sys_logs(time,log,user_id,agent,ip,query)
       values(:time,:log,:user,:agent,:ip,:query)
     ');
@@ -207,7 +206,6 @@ abstract class PhpLiveDbBasics{
   }
 
   protected function LogAndDebug(
-    PDO &$Conn,
     PDOStatement &$Statement,
     bool $Debug = false,
     bool $Log = false,
@@ -231,7 +229,7 @@ abstract class PhpLiveDbBasics{
     endif;
 
     if($Log):
-      $this->LogSet($Conn, $LogEvent, $LogUser, $Dump);
+      $this->LogSet($LogEvent, $LogUser, $Dump);
     endif;
   }
 

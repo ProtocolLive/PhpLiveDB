@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.08.01.00
+//Version 2022.08.02.00
 //For PHP >= 8.1
 
 require_once(__DIR__ . '/DbBasics.php');
@@ -288,7 +288,7 @@ class PhpLiveDbSelect extends PhpLiveDbBasics{
     endif;
     $return = $statement->fetchAll($temp);
 
-    $this->LogAndDebug($this->Conn, $statement, $Debug, $Log, $LogEvent, $LogUser);
+    $this->LogAndDebug($statement, $Debug, $Log, $LogEvent, $LogUser);
 
     return $return;
   }
@@ -390,7 +390,7 @@ class PhpLiveDbInsert extends PhpLiveDbBasics{
 
     $return = $this->Conn->lastInsertId();
 
-    $this->LogAndDebug($this->Conn, $statement, $Debug, $Log, $LogEvent, $LogUser);
+    $this->LogAndDebug($statement, $Debug, $Log, $LogEvent, $LogUser);
 
     return $return;
   }
@@ -542,7 +542,7 @@ class PhpLiveDbUpdate extends PhpLiveDbBasics{
 
     $return = $statement->rowCount();
 
-    $this->LogAndDebug($this->Conn, $statement, $Debug, $Log, $LogEvent, $LogUser);
+    $this->LogAndDebug($statement, $Debug, $Log, $LogEvent, $LogUser);
 
     return $return;
   }
@@ -645,7 +645,7 @@ class PhpLiveDbDelete extends PhpLiveDbBasics{
 
     $return = $statement->rowCount();
 
-    $this->LogAndDebug($this->Conn, $statement, $Debug, $Log, $LogEvent, $LogUser);
+    $this->LogAndDebug($statement, $Debug, $Log, $LogEvent, $LogUser);
 
     return $return;
   }
