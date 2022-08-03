@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.08.02.01
+//Version 2022.08.03.00
 //For PHP >= 8.1
 
 require_once(__DIR__ . '/DbBasics.php');
@@ -345,7 +345,7 @@ class PhpLiveDbInsert extends PhpLiveDbBasics{
 
   public function FieldAdd(
     string $Field,
-    string|null $Value,
+    string|bool|null $Value,
     PhpLiveDbTypes $Type,
     bool $BlankIsNull = true
   ){
@@ -444,7 +444,7 @@ class PhpLiveDbUpdate extends PhpLiveDbBasics{
 
   public function FieldAdd(
     string $Field,
-    string|null $Value,
+    string|bool|null $Value,
     PhpLiveDbTypes $Type,
     bool $BlankIsNull = true
   ){

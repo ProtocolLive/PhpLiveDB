@@ -1,14 +1,15 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.08.02.00
+//Version 2022.08.03.00
 //For PHP >= 8.1
 
 enum PhpLiveDbTypes:int{
-  case Null = 0;
+  case Bool = 5;
   case Int = 1;
-  case Str = 2;
+  case Null = 0;
   case Sql = 6;
+  case Str = 2;
 }
 
 enum PhpLiveDbOperators:string{
