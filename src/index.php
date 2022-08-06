@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.08.03.00
+//Version 2022.08.06.00
 //For PHP >= 8.1
 
 require_once(__DIR__ . '/DbBasics.php');
@@ -200,8 +200,10 @@ class PhpLiveDbSelect extends PhpLiveDbBasics{
       $Value = null;
       $Type = PhpLiveDbTypes::Null;
     endif;
-    if(isset($this->Wheres[$CustomPlaceholder ?? $Field])):
-      $error = new PDOException(
+    if(array_search($CustomPlaceholder ?? $Field, $this->WheresControl) !== false
+    and $NoField === false
+    and $NoBind === false):
+      $error = new Exception(
         'The where condition "' . ($CustomPlaceholder ?? $Field) . '" already added',
       );
       if($this->ThrowError):
@@ -211,7 +213,7 @@ class PhpLiveDbSelect extends PhpLiveDbBasics{
         return false;
       endif;
     endif;
-    $this->Wheres[$CustomPlaceholder ?? $Field] = new PhpLiveDbWhere(
+    $this->Wheres[] = new PhpLiveDbWhere(
       $Field,
       $Value,
       $Type,
@@ -223,6 +225,7 @@ class PhpLiveDbSelect extends PhpLiveDbBasics{
       $NoField,
       $NoBind
     );
+    $this->WheresControl[] = $CustomPlaceholder ?? $Field;
     if($Debug):
       var_dump($this->Wheres);
     endif;

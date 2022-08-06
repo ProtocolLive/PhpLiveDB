@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.08.03.00
+//Version 2022.08.06.00
 //For PHP >= 8.1
 
 enum PhpLiveDbTypes:int{
@@ -49,6 +49,7 @@ abstract class PhpLiveDbBasics{
   protected PDO $Conn;
   protected array $Binds = [];
   protected string|null $Query = null;
+  protected array $WheresControl = [];
   public string|null $Error = null;
 
   public function Begin():void{
