@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.08.07.00
+//Version 2022.08.07.01
 //For PHP >= 8.1
 
 require_once(__DIR__ . '/DbBasics.php');
@@ -188,21 +188,10 @@ class PhpLiveDbSelect extends PhpLiveDbBasics{
     $this->Order = $Fields;
   }
 
-  public function Run(
-    bool $OnlyFieldsName = true,
-    bool $Debug = false,
-    bool $HtmlSafe = true,
-    bool $TrimValues = true,
-    bool $Log = false,
-    int $LogEvent = null,
-    int $LogUser = null,
-    bool $Fetch = false
-  ):array|bool|null{
-    $WheresCount = count($this->Wheres);
-
+  private function Prepare():PDOStatement{
     $this->SelectHead();
     $this->JoinBuild();
-    if($WheresCount > 0):
+    if(count($this->Wheres) > 0):
       $this->BuildWhere($this->Wheres);
     endif;
     if($this->Group !== null):
@@ -216,9 +205,26 @@ class PhpLiveDbSelect extends PhpLiveDbBasics{
     endif;
 
     $this->Query = str_replace('##', $this->Prefix . '_', $this->Query);
-    $statement = $this->Conn->prepare($this->Query);
+    return $this->Conn->prepare($this->Query);
+  }
 
-    if($WheresCount > 0):
+  public function QueryGet():string{
+    $this->Prepare();
+    return $this->Query;
+  }
+
+  public function Run(
+    bool $OnlyFieldsName = true,
+    bool $Debug = false,
+    bool $HtmlSafe = true,
+    bool $TrimValues = true,
+    bool $Log = false,
+    int $LogEvent = null,
+    int $LogUser = null,
+    bool $Fetch = false
+  ):array|bool|null{
+    $statement = $this->Prepare();
+    if(count($this->Wheres) > 0):
       $this->Bind($statement, $this->Wheres, $HtmlSafe, $TrimValues);
     endif;
     
