@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.08.07.02
+//Version 2022.08.07.03
 //For PHP >= 8.1
 
 require_once(__DIR__ . '/DbBasics.php');
@@ -41,6 +41,7 @@ final class PhpLiveDb extends PhpLiveDbBasics{
     $this->Conn->setAttribute(PDO::ATTR_TIMEOUT, $TimeOut);
     $this->Conn->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
     $this->Conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $this->Conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
     //Enabling profiling to get duration
     if($Driver === PhpLiveDbDrivers::MySql):
       $statement = $this->Conn->prepare('set profiling_history_size=1;set profiling=1;');
@@ -117,13 +118,11 @@ final class PhpLiveDbSelect extends PhpLiveDbBasics{
   }
 
   public function Fetch(
-    bool $OnlyFieldsName = true,
+    bool $FetchBoth = false,
     int $Offset = 0
   ):array|false{
-    if($OnlyFieldsName):
-      $this->Statement->setFetchMode(PDO::FETCH_ASSOC);
-    else:
-      $this->Statement->setFetchMode(PDO::FETCH_DEFAULT);
+    if($FetchBoth):
+      $this->Statement->setFetchMode(PDO::FETCH_BOTH);
     endif;
     return $this->Statement->fetch(cursorOffset: $Offset);
   }
@@ -214,7 +213,7 @@ final class PhpLiveDbSelect extends PhpLiveDbBasics{
   }
 
   public function Run(
-    bool $OnlyFieldsName = true,
+    bool $FetchBoth = false,
     bool $Debug = false,
     bool $HtmlSafe = true,
     bool $TrimValues = true,
@@ -242,10 +241,8 @@ final class PhpLiveDbSelect extends PhpLiveDbBasics{
       $this->Statement = $statement;
       return true;
     else:
-      if($OnlyFieldsName):
-        $statement->setFetchMode(PDO::FETCH_ASSOC);
-      else:
-        $statement->setFetchMode(PDO::FETCH_DEFAULT);
+      if($FetchBoth):
+        $statement->setFetchMode(PDO::FETCH_BOTH);
       endif;
       return $statement->fetchAll();
     endif;
