@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.08.07.01
+//Version 2022.08.07.02
 //For PHP >= 8.1
 
 require_once(__DIR__ . '/DbBasics.php');
@@ -11,7 +11,7 @@ enum PhpLiveDbDrivers:string{
   case SqLite = 'sqlite';
 }
 
-class PhpLiveDb extends PhpLiveDbBasics{
+final class PhpLiveDb extends PhpLiveDbBasics{
   /**
    * @throws Exception
    */
@@ -94,7 +94,7 @@ class PhpLiveDb extends PhpLiveDbBasics{
   }
 }
 
-class PhpLiveDbSelect extends PhpLiveDbBasics{
+final class PhpLiveDbSelect extends PhpLiveDbBasics{
   private string $Fields = '*';
   private array $Join = [];
   private array $Wheres = [];
@@ -320,7 +320,7 @@ class PhpLiveDbSelect extends PhpLiveDbBasics{
   }
 }
 
-class PhpLiveDbInsert extends PhpLiveDbBasics{
+final class PhpLiveDbInsert extends PhpLiveDbBasics{
   private array $Fields = [];
 
   private function InsertFields():void{
@@ -422,7 +422,7 @@ class PhpLiveDbInsert extends PhpLiveDbBasics{
   }
 }
 
-class PhpLiveDbUpdate extends PhpLiveDbBasics{
+final class PhpLiveDbUpdate extends PhpLiveDbBasics{
   private array $Fields = [];
   private array $Wheres = [];
 
@@ -574,7 +574,7 @@ class PhpLiveDbUpdate extends PhpLiveDbBasics{
   }
 }
 
-class PhpLiveDbDelete extends PhpLiveDbBasics{
+final class PhpLiveDbDelete extends PhpLiveDbBasics{
   private array $Wheres = [];
 
   public function __construct(

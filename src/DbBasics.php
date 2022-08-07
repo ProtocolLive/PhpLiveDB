@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.08.06.00
+//Version 2022.08.07.00
 //For PHP >= 8.1
 
 enum PhpLiveDbTypes:int{
@@ -248,7 +248,7 @@ abstract class PhpLiveDbBasics{
   }
 }
 
-class PhpLiveDbWhere{
+final class PhpLiveDbWhere{
   public function __construct(
     public string $Field,
     public string|null $Value = null,
