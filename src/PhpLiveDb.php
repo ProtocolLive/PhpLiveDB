@@ -1,13 +1,11 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.08.26.00
+//Version 2022.08.26.01
 
 namespace ProtocolLive\PhpLiveDb;
 use \Exception;
 use \PDO;
-
-require_once(__DIR__ . '/DbBasics.php');
 
 final class PhpLiveDb extends Basics{
   /**
