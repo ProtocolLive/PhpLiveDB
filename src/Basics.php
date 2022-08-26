@@ -1,49 +1,14 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.08.07.00
-//For PHP >= 8.1
+//Version 2022.08.26.00
 
-enum PhpLiveDbTypes:int{
-  case Bool = 5;
-  case Int = 1;
-  case Null = 0;
-  case Sql = 6;
-  case Str = 2;
-}
+namespace ProtocolLive\PhpLiveDb;
+use \PDO;
+use \PDOException;
+use \PDOStatement;
 
-enum PhpLiveDbOperators:string{
-  case Equal = '=';
-  case Different = '<>';
-  case Smaller = '<';
-  case Bigger = '>';
-  case SmallerEqual = '<=';
-  case BiggerEqual = '>=';
-  case IsNotNull = ' not null';
-  case Like = ' like ';
-  case In = ' in';
-  case NotIn = ' not in';
-}
-
-enum PhpLiveDbJoins{
-  case Default;
-  case Left;
-  case Right;
-  case Inner;
-}
-
-enum PhpLiveDbParenthesis{
-  case None;
-  case Open;
-  case Close;
-}
-
-enum PhpLiveDbAndOr{
-  case And;
-  case Or;
-}
-
-abstract class PhpLiveDbBasics{
+abstract class Basics{
   protected string $Table;
   protected string $Prefix;
   protected PDO $Conn;
@@ -111,41 +76,41 @@ abstract class PhpLiveDbBasics{
       $this->Query .= ' where ';
       $i = 0;
       /**
-       * @var PhpLiveDbWhere $where
+       * @var DbWhere $where
        */
       foreach($Wheres as $where):
         if($i > 0):
-          if($where->AndOr === PhpLiveDbAndOr::And):
+          if($where->AndOr === AndOr::And):
             $this->Query .= ' and ';
-          elseif($where->AndOr === PhpLiveDbAndOr::Or):
+          elseif($where->AndOr === AndOr::Or):
             $this->Query .= ' or ';
           endif;
         endif;
         $i++;
-        if($where->Parenthesis === PhpLiveDbParenthesis::Open):
+        if($where->Parenthesis === Parenthesis::Open):
           $this->Query .= '(';
         endif;
-        if($where->Operator === PhpLiveDbOperators::IsNotNull):
+        if($where->Operator === Operators::IsNotNull):
           $this->Query .= $where->Field . ' is not null';
-        elseif($where->Operator === PhpLiveDbOperators::In):
+        elseif($where->Operator === Operators::In):
           $this->Query .= $where->Field . ' in(' . $where->Value . ')';
-        elseif($where->Operator === PhpLiveDbOperators::NotIn):
+        elseif($where->Operator === Operators::NotIn):
           $this->Query .= $where->Field . ' not in(' . $where->Value . ')';
         elseif($where->NoBind === false
         and(
           $where->Value === null
-          or $where->Type === PhpLiveDbTypes::Null
+          or $where->Type === Types::Null
         )):
           $this->Query .= $where->Field . ' is null';
         else:
           $this->Query .= $where->Field . $where->Operator->value;
-          if($where->Type === PhpLiveDbTypes::Sql):
+          if($where->Type === Types::Sql):
             $this->Query .= $where->Value;
           else:
             $this->Query .= ':' . ($where->CustomPlaceholder ?? $where->Field);
           endif;
         endif;
-        if($where->Parenthesis === PhpLiveDbParenthesis::Close):
+        if($where->Parenthesis === Parenthesis::Close):
           $this->Query .= ')';
         endif;
       endforeach;
@@ -161,8 +126,8 @@ abstract class PhpLiveDbBasics{
     foreach($Wheres as $where):
       if($where->Value !== null
       and $where->Type !== null
-      and $where->Type !== PhpLiveDbTypes::Null
-      and $where->Type !== PhpLiveDbTypes::Sql
+      and $where->Type !== Types::Null
+      and $where->Type !== Types::Sql
       and ($where->NoBind ?? false) === false):
         $value = $this->ValueFunctions($where->Value, $HtmlSafe, $TrimValues);
         $Statement->bindValue(
@@ -246,19 +211,4 @@ abstract class PhpLiveDbBasics{
   public function Rollback():void{
     $this->Conn->rollBack();
   }
-}
-
-final class PhpLiveDbWhere{
-  public function __construct(
-    public string $Field,
-    public string|null $Value = null,
-    public PhpLiveDbTypes|null $Type = null,
-    public PhpLiveDbOperators $Operator = PhpLiveDbOperators::Equal,
-    public PhpLiveDbAndOr $AndOr = PhpLiveDbAndOr::And,
-    public PhpLiveDbParenthesis $Parenthesis = PhpLiveDbParenthesis::None,
-    public string|null $CustomPlaceholder = null,
-    public bool $BlankIsNull = true,
-    public bool $NoField = false,
-    public bool $NoBind = false
-  ){}
 }
