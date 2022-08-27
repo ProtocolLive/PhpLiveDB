@@ -5,7 +5,7 @@
     "require": {
         "php": ">=8.1",
         "ext-openssl": "*",
-        "ext-curl": "*"
+        "ext-pdo": "*"
     },
     "license": "MIT",
     "authors": [
