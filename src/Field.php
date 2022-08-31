@@ -1,13 +1,13 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.08.26.00
+//Version 2022.08.31.00
 
 namespace ProtocolLive\PhpLiveDb;
 
-final class Where{
+final class Field{
   public function __construct(
-    public string $Field,
+    public string $Name,
     public string|null $Value = null,
     public Types|null $Type = null,
     public Operators $Operator = Operators::Equal,
