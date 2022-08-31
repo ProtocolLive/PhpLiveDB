@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.08.26.00
+//Version 2022.08.31.00
 
 namespace ProtocolLive\PhpLiveDb;
 use \PDO;
@@ -12,7 +12,7 @@ final class Insert extends Basics{
 
   private function InsertFields():void{
     foreach($this->Fields as $field):
-      $this->Query .= $field->Field . ',';
+      $this->Query .= $field->Name . ',';
     endforeach;
     $this->Query = substr($this->Query, 0, -1) . ') values(';
     foreach($this->Fields as $id => $field):
@@ -23,7 +23,7 @@ final class Insert extends Basics{
         $this->Query .= $field->Value . ',';
         unset($this->Fields[$id]);
       else:
-        $this->Query .= ':' . ($field->CustomPlaceholder ?? $field->Field) . ',';
+        $this->Query .= ':' . ($field->CustomPlaceholder ?? $field->Name) . ',';
       endif;
     endforeach;
     $this->Query = substr($this->Query, 0, -1) . ')';
@@ -51,25 +51,18 @@ final class Insert extends Basics{
     if($Value === null):
       $Type = Types::Null;
     endif;
-    $this->Fields[$Field] = new class(
+    $this->Fields[$Field] = new Field(
       $Field,
       $Value,
-      $Type
-    ){
-      public string $Field;
-      public string|null $Value;
-      public Types $Type;
-
-      public function __construct(
-        string $Field,
-        string|null $Value,
-        Types $Type
-      ){
-        $this->Field = $Field;
-        $this->Value = $Value;
-        $this->Type = $Type;
-      }
-    };
+      $Type,
+      Operators::Equal,
+      AndOr::And,
+      Parenthesis::None,
+      null,
+      true,
+      false,
+      false
+    );
   }
 
   public function Run(

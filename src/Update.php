@@ -1,11 +1,12 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.08.26.00
+//Version 2022.08.31.00
 
 namespace ProtocolLive\PhpLiveDb;
 use \PDO;
 use \PDOException;
+use ProtocolLive\PhpLiveDb\Operators;
 
 final class Update extends Basics{
   private array $Fields = [];
@@ -14,13 +15,13 @@ final class Update extends Basics{
   private function UpdateFields():void{
     foreach($this->Fields as $id => $field):
       if($field->Type === Types::Null):
-        $this->Query .= $field->Field . '=null,';
+        $this->Query .= $field->Name . '=null,';
         unset($this->Fields[$id]);
       elseif($field->Type === Types::Sql):
-        $this->Query .= $field->Field . '=' . $field->Value . ',';
+        $this->Query .= $field->Name . '=' . $field->Value . ',';
         unset($this->Fields[$id]);
       else:
-        $this->Query .= $field->Field . '=:' . $field->Field . ',';
+        $this->Query .= $field->Name . '=:' . $field->Name . ',';
       endif;
     endforeach;
     $this->Query = substr($this->Query, 0, -1);
@@ -48,25 +49,18 @@ final class Update extends Basics{
     if($Value === null):
       $Type = Types::Null;
     endif;
-    $this->Fields[$Field] = new class(
+    $this->Fields[$Field] = new Field(
       $Field,
       $Value,
-      $Type
-    ){
-      public string $Field;
-      public string|null $Value;
-      public Types $Type;
-
-      public function __construct(
-        string $Field,
-        string|null $Value,
-        Types $Type
-      ){
-        $this->Field = $Field;
-        $this->Value = $Value;
-        $this->Type = $Type;
-      }
-    };
+      $Type,
+      Operators::Equal,
+      AndOr::And,
+      Parenthesis::None,
+      null,
+      true,
+      false,
+      false
+    );
   }
 
   /**
@@ -104,7 +98,7 @@ final class Update extends Basics{
       $Value = null;
       $Type = Types::Null;
     endif;
-    $this->Wheres[$CustomPlaceholder ?? $Field] = new Where(
+    $this->Wheres[$CustomPlaceholder ?? $Field] = new Field(
       $Field,
       $Value,
       $Type,

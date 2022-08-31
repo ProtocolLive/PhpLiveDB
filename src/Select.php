@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.08.31.00
+//Version 2022.08.31.01
 
 namespace ProtocolLive\PhpLiveDb;
 use \PDO;
@@ -205,7 +205,7 @@ final class Select extends Basics{
       $NoField,
       $NoBind
     );
-    $this->Wheres[] = new Where(
+    $this->Wheres[] = new Field(
       $Field,
       $Value,
       $Type,

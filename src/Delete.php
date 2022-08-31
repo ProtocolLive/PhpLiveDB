@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.08.26.00
+//Version 2022.08.31.00
 
 namespace ProtocolLive\PhpLiveDb;
 use \PDO;
@@ -57,7 +57,7 @@ final class Delete extends Basics{
       $Value = null;
       $Type = Types::Null;
     endif;
-    $this->Wheres[$CustomPlaceholder ?? $Field] = new Where(
+    $this->Wheres[$CustomPlaceholder ?? $Field] = new Field(
       $Field,
       $Value,
       $Type,

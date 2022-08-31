@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.08.31.01
+//Version 2022.08.31.02
 
 namespace ProtocolLive\PhpLiveDb;
 use \Exception;
@@ -92,23 +92,23 @@ abstract class Basics{
           $this->Query .= '(';
         endif;
         if($where->Operator === Operators::IsNotNull):
-          $this->Query .= $where->Field . ' is not null';
+          $this->Query .= $where->Name . ' is not null';
         elseif($where->Operator === Operators::In):
-          $this->Query .= $where->Field . ' in(' . $where->Value . ')';
+          $this->Query .= $where->Name . ' in(' . $where->Value . ')';
         elseif($where->Operator === Operators::NotIn):
-          $this->Query .= $where->Field . ' not in(' . $where->Value . ')';
+          $this->Query .= $where->Name . ' not in(' . $where->Value . ')';
         elseif($where->NoBind === false
         and(
           $where->Value === null
           or $where->Type === Types::Null
         )):
-          $this->Query .= $where->Field . ' is null';
+          $this->Query .= $where->Name . ' is null';
         else:
-          $this->Query .= $where->Field . $where->Operator->value;
+          $this->Query .= $where->Name . $where->Operator->value;
           if($where->Type === Types::Sql):
             $this->Query .= $where->Value;
           else:
-            $this->Query .= ':' . ($where->CustomPlaceholder ?? $where->Field);
+            $this->Query .= ':' . ($where->CustomPlaceholder ?? $where->Name);
           endif;
         endif;
         if($where->Parenthesis === Parenthesis::Close):
@@ -135,12 +135,12 @@ abstract class Basics{
       and ($field->NoBind ?? false) === false):
         $value = $this->ValueFunctions($field->Value, $HtmlSafe, $TrimValues);
         $Statement->bindValue(
-          $field->CustomPlaceholder ?? $field->Field,
+          $field->CustomPlaceholder ?? $field->Name,
           $value,
           $field->Type->value
         );
         $this->Binds[] = [
-          $field->CustomPlaceholder ?? $field->Field,
+          $field->CustomPlaceholder ?? $field->Name,
           $value,
           $field->Type
         ];
