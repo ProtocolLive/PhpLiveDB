@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.08.31.00
+//Version 2022.08.31.01
 
 namespace ProtocolLive\PhpLiveDb;
 use \Exception;
@@ -119,30 +119,30 @@ abstract class Basics{
   }
 
   protected function Bind(
-    PDOStatement &$Statement,
-    array $Wheres,
+    PDOStatement $Statement,
+    array $Fields,
     bool $HtmlSafe = true,
     bool $TrimValues = true
   ):void{
-    foreach($Wheres as $where):
-      if($where->Value !== null
-      and $where->Type !== null
-      and $where->Type !== Types::Null
-      and $where->Type !== Types::Sql
-      and $where->Operator !== Operators::In
-      and $where->Operator !== Operators::NotIn
-      and $where->Operator !== Operators::IsNotNull
-      and ($where->NoBind ?? false) === false):
-        $value = $this->ValueFunctions($where->Value, $HtmlSafe, $TrimValues);
+    foreach($Fields as $field):
+      if($field->Value !== null
+      and $field->Type !== null
+      and $field->Type !== Types::Null
+      and $field->Type !== Types::Sql
+      and $field->Operator !== Operators::In
+      and $field->Operator !== Operators::NotIn
+      and $field->Operator !== Operators::IsNotNull
+      and ($field->NoBind ?? false) === false):
+        $value = $this->ValueFunctions($field->Value, $HtmlSafe, $TrimValues);
         $Statement->bindValue(
-          $where->CustomPlaceholder ?? $where->Field,
+          $field->CustomPlaceholder ?? $field->Field,
           $value,
-          $where->Type->value
+          $field->Type->value
         );
         $this->Binds[] = [
-          $where->CustomPlaceholder ?? $where->Field,
+          $field->CustomPlaceholder ?? $field->Field,
           $value,
-          $where->Type
+          $field->Type
         ];
       endif;
     endforeach;
