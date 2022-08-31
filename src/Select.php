@@ -1,10 +1,9 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.08.26.00
+//Version 2022.08.31.00
 
 namespace ProtocolLive\PhpLiveDb;
-use \Exception;
 use \PDO;
 use \PDOStatement;
 use \PDOException;
@@ -198,19 +197,14 @@ final class Select extends Basics{
       $Value = null;
       $Type = Types::Null;
     endif;
-    if(array_search($CustomPlaceholder ?? $Field, $this->WheresControl) !== false
-    and $NoField === false
-    and $NoBind === false):
-      $error = new Exception(
-        'The where condition "' . ($CustomPlaceholder ?? $Field) . '" already added',
-      );
-      if($this->ThrowError):
-        throw $error;
-      else:
-        $this->ErrorSet($error);
-        return false;
-      endif;
-    endif;
+    $this->WheresControl(
+      $this->ThrowError,
+      $Field,
+      $Type,
+      $Operator,
+      $NoField,
+      $NoBind
+    );
     $this->Wheres[] = new Where(
       $Field,
       $Value,

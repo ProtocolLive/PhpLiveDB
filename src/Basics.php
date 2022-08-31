@@ -1,9 +1,10 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.08.26.00
+//Version 2022.08.31.00
 
 namespace ProtocolLive\PhpLiveDb;
+use \Exception;
 use \PDO;
 use \PDOException;
 use \PDOStatement;
@@ -128,6 +129,9 @@ abstract class Basics{
       and $where->Type !== null
       and $where->Type !== Types::Null
       and $where->Type !== Types::Sql
+      and $where->Operator !== Operators::In
+      and $where->Operator !== Operators::NotIn
+      and $where->Operator !== Operators::IsNotNull
       and ($where->NoBind ?? false) === false):
         $value = $this->ValueFunctions($where->Value, $HtmlSafe, $TrimValues);
         $Statement->bindValue(
@@ -210,5 +214,39 @@ abstract class Basics{
 
   public function Rollback():void{
     $this->Conn->rollBack();
+  }
+
+  /**
+   * @throws Exception
+   */
+  protected function WheresControl(
+    bool $ThrowError,
+    string $Field,
+    Types $Type = null,
+    Operators $Operator,
+    bool $NoField,
+    bool $NoBind
+  ):bool{
+    if($NoField === false
+    and $NoBind === false
+    and $Type !== Types::Sql
+    and $Type !== Types::Null
+    and $Operator !== Operators::In
+    and $Operator !== Operators::NotIn
+    and $Operator !== Operators::IsNotNull):
+      //Search separated for performance improvement
+      if(array_search($CustomPlaceholder ?? $Field, $this->WheresControl) !== false):
+        $error = new Exception(
+          'The where condition "' . ($CustomPlaceholder ?? $Field) . '" already added',
+        );
+        $this->ErrorSet($error);
+        if($ThrowError):
+          throw $error;
+        else:
+          return false;
+        endif;
+      endif;
+    endif;
+    return true;
   }
 }

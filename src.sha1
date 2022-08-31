@@ -1,5 +1,5 @@
 962e67d0657dae9614ca8a335fd05623da51c9c6  src/AndOr.php
-1873be75ef1bb26e5176159b066f4dadc9fafd35  src/Basics.php
+e1b2ca8c35880a5356dea7a50cf64de5907ec3bc  src/Basics.php
 3cc482c375f48a05b9c4c40717969328962deaf2  src/Delete.php
 609b0fcdbcbf7c46ee26a0b5a59575e43ce3baf7  src/Drivers.php
 db528d8a05f43db6d7519ba12dd80e0e1656b45f  src/Insert.php
@@ -7,7 +7,7 @@ db528d8a05f43db6d7519ba12dd80e0e1656b45f  src/Insert.php
 7dc244aeb510db438b22743edad5436261440214  src/Operators.php
 5962dcca58ab093cca7a5da6e898e6479f4a62d6  src/Parenthesis.php
 d90ae7883d23d8599de0e65ac31d12a219491342  src/PhpLiveDb.php
-53495615afb6fa70a378cc8f203d9031e79e647d  src/Select.php
+92ad11ec542fc4575da899c02ca781b38a74435d  src/Select.php
 c039b2ac0be7bd039e71693b9d34c21676c54884  src/Types.php
 7d0194b4d6b0e442e0e6072bf0b461e1f8e21060  src/Update.php
 10d5b6ea3d6e95c3a9735f781205258ed86dc82e  src/Where.php
