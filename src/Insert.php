@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.08.31.00
+//Version 2022.09.01.00
 
 namespace ProtocolLive\PhpLiveDb;
 use \PDO;
@@ -54,14 +54,7 @@ final class Insert extends Basics{
     $this->Fields[$Field] = new Field(
       $Field,
       $Value,
-      $Type,
-      Operators::Equal,
-      AndOr::And,
-      Parenthesis::None,
-      null,
-      true,
-      false,
-      false
+      $Type
     );
   }
 
