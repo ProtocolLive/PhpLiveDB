@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.09.01.00
+//Version 2022.09.01.01
 
 namespace ProtocolLive\PhpLiveDb;
 use \PDO;
@@ -20,11 +20,13 @@ final class Select extends Basics{
 
   public function __construct(
     PDO $Conn,
+    string $Database,
     string $Table,
     string $Prefix,
     bool $ThrowError = true
   ){
     $this->Conn = $Conn;
+    $this->Database = $Database;
     $this->Table = $Table;
     $this->Prefix = $Prefix;
     $this->ThrowError = $ThrowError;
@@ -42,6 +44,38 @@ final class Select extends Basics{
 
   public function Fields(string $Fields):void{
     $this->Fields = $Fields;
+  }
+
+  /**
+   * @throws PDOException
+   */
+  public function FieldsGet(
+    string $Table = null,
+    bool $String = false,
+    string $Alias = null
+  ):array|string{
+    if($String):
+      $query = 'select group_concat(';
+      if($Alias !== null):
+        $query .= "concat('" . $Alias . ".',column_name)";
+      else:
+        $query .= 'column_name';
+      endif;
+      $query .= ')';
+    else:
+      $query = 'select column_name';
+    endif;
+    $query .= "
+      from information_schema.columns
+      where table_schema='" . $this->Database . "'
+      and table_name='" . ($Table ?? $this->Table) . "'
+    ";
+    $fields = $this->Conn->query($query);
+    if($String):
+      return $fields->fetchColumn();
+    else:
+      return array_column($fields->fetchAll(), 'COLUMN_NAME');
+    endif;
   }
 
   public function Group(string $Fields):void{

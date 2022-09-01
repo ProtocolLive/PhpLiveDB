@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.09.01.01
+//Version 2022.09.01.02
 
 namespace ProtocolLive\PhpLiveDb;
 use \Exception;
@@ -17,6 +17,7 @@ abstract class Basics{
   protected string|null $Query = null;
   protected array $WheresControl = [];
   public string|null $Error = null;
+  public string $Database;
 
   public function Begin():void{
     $this->Conn->beginTransaction();

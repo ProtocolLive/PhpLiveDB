@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.09.01.00
+//Version 2022.09.01.01
 
 namespace ProtocolLive\PhpLiveDb;
 use \Exception;
@@ -46,6 +46,7 @@ final class PhpLiveDb extends Basics{
       $this->Conn->exec('pragma foreign_keys=on');
     endif;
     $this->Prefix = $Prefix;
+    $this->Database = $Db;
   }
 
   public function Delete(string $Table):Delete{
@@ -74,6 +75,7 @@ final class PhpLiveDb extends Basics{
   ):Select{
     return new Select(
       $this->Conn,
+      $this->Database,
       $Table,
       $this->Prefix,
       $ThrowError
