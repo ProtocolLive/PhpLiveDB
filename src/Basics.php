@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.09.01.00
+//Version 2022.09.01.01
 
 namespace ProtocolLive\PhpLiveDb;
 use \Exception;
@@ -140,7 +140,7 @@ abstract class Basics{
   }
 
   protected function LogAndDebug(
-    PDOStatement &$Statement,
+    PDOStatement $Statement,
     bool $Debug = false,
     bool $Log = false,
     int $LogEvent = null,

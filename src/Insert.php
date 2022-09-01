@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.09.01.01
+//Version 2022.09.01.02
 
 namespace ProtocolLive\PhpLiveDb;
 use \PDO;
@@ -11,7 +11,7 @@ final class Insert extends Basics{
   private array $Fields = [];
 
   public function __construct(
-    PDO &$Conn,
+    PDO $Conn,
     string $Table,
     string $Prefix
   ){

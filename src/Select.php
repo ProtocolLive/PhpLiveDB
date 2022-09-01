@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.08.31.01
+//Version 2022.09.01.00
 
 namespace ProtocolLive\PhpLiveDb;
 use \PDO;
@@ -19,7 +19,7 @@ final class Select extends Basics{
   private PDOStatement|null $Statement = null;
 
   public function __construct(
-    PDO &$Conn,
+    PDO $Conn,
     string $Table,
     string $Prefix,
     bool $ThrowError = true
