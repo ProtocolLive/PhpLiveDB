@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.08.31.00
+//Version 2022.09.01.00
 
 namespace ProtocolLive\PhpLiveDb;
 use \PDO;
@@ -18,6 +18,43 @@ final class Delete extends Basics{
     $this->Conn = $Conn;
     $this->Table = $Table;
     $this->Prefix = $Prefix;
+  }
+
+  public function Run(
+    bool $Debug = false,
+    bool $HtmlSafe = true,
+    bool $TrimValues = true,
+    bool $Log = false,
+    int $LogEvent = null,
+    int $LogUser = null
+  ):int|null{
+    $WheresCount = count($this->Wheres);
+
+    $this->Query = 'delete from ' . $this->Table;
+    if($WheresCount > 0):
+      $this->BuildWhere($this->Wheres);
+    endif;
+
+    $this->Query = str_replace('##', $this->Prefix . '_', $this->Query);
+    $statement = $this->Conn->prepare($this->Query);
+
+    if($WheresCount > 0):
+      $this->Bind($statement, $this->Wheres, $HtmlSafe, $TrimValues);
+    endif;
+    
+    try{
+      $this->Error = null;
+      $statement->execute();
+    }catch(PDOException $e){
+      $this->ErrorSet($e);
+      return null;
+    }
+
+    $return = $statement->rowCount();
+
+    $this->LogAndDebug($statement, $Debug, $Log, $LogEvent, $LogUser);
+
+    return $return;
   }
 
   /**
@@ -70,42 +107,5 @@ final class Delete extends Basics{
       $NoBind
     );
     return true;
-  }
-
-  public function Run(
-    bool $Debug = false,
-    bool $HtmlSafe = true,
-    bool $TrimValues = true,
-    bool $Log = false,
-    int $LogEvent = null,
-    int $LogUser = null
-  ):int|null{
-    $WheresCount = count($this->Wheres);
-
-    $this->Query = 'delete from ' . $this->Table;
-    if($WheresCount > 0):
-      $this->BuildWhere($this->Wheres);
-    endif;
-
-    $this->Query = str_replace('##', $this->Prefix . '_', $this->Query);
-    $statement = $this->Conn->prepare($this->Query);
-
-    if($WheresCount > 0):
-      $this->Bind($statement, $this->Wheres, $HtmlSafe, $TrimValues);
-    endif;
-    
-    try{
-      $this->Error = null;
-      $statement->execute();
-    }catch(PDOException $e){
-      $this->ErrorSet($e);
-      return null;
-    }
-
-    $return = $statement->rowCount();
-
-    $this->LogAndDebug($statement, $Debug, $Log, $LogEvent, $LogUser);
-
-    return $return;
   }
 }

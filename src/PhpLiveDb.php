@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.08.26.01
+//Version 2022.09.01.00
 
 namespace ProtocolLive\PhpLiveDb;
 use \Exception;
@@ -48,6 +48,26 @@ final class PhpLiveDb extends Basics{
     $this->Prefix = $Prefix;
   }
 
+  public function Delete(string $Table):Delete{
+    return new Delete(
+      $this->Conn,
+      $Table,
+      $this->Prefix
+    );
+  }
+  
+  public function GetCustom():PDO{
+    return $this->Conn;
+  }
+  
+  public function Insert(string $Table):Insert{
+    return new Insert(
+      $this->Conn,
+      $Table,
+      $this->Prefix
+    );
+  }
+
   public function Select(
     string $Table,
     bool $ThrowError = true
@@ -60,31 +80,11 @@ final class PhpLiveDb extends Basics{
     );
   }
 
-  public function Insert(string $Table):Insert{
-    return new Insert(
-      $this->Conn,
-      $Table,
-      $this->Prefix
-    );
-  }
-
   public function Update(string $Table):Update{
     return new Update(
       $this->Conn,
       $Table,
       $this->Prefix
     );
-  }
-
-  public function Delete(string $Table):Delete{
-    return new Delete(
-      $this->Conn,
-      $Table,
-      $this->Prefix
-    );
-  }
-
-  public function GetCustom():PDO{
-    return $this->Conn;
   }
 }

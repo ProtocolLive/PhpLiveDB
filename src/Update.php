@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.09.01.00
+//Version 2022.09.01.01
 
 namespace ProtocolLive\PhpLiveDb;
 use \PDO;
@@ -11,21 +11,6 @@ use ProtocolLive\PhpLiveDb\Operators;
 final class Update extends Basics{
   private array $Fields = [];
   private array $Wheres = [];
-
-  private function UpdateFields():void{
-    foreach($this->Fields as $id => $field):
-      if($field->Type === Types::Null):
-        $this->Query .= $field->Name . '=null,';
-        unset($this->Fields[$id]);
-      elseif($field->Type === Types::Sql):
-        $this->Query .= $field->Name . '=' . $field->Value . ',';
-        unset($this->Fields[$id]);
-      else:
-        $this->Query .= $field->Name . '=:' . $field->Name . ',';
-      endif;
-    endforeach;
-    $this->Query = substr($this->Query, 0, -1);
-  }
 
   public function __construct(
     PDO $Conn,
@@ -54,6 +39,60 @@ final class Update extends Basics{
       $Value,
       $Type
     );
+  }
+
+  public function Run(
+    bool $Debug = false,
+    bool $HtmlSafe = true,
+    bool $TrimValues = true,
+    bool $Log = false,
+    int $LogEvent = null,
+    int $LogUser = null
+  ):int|null{
+    $WheresCount = count($this->Wheres);
+
+    $this->Query = 'update ' . $this->Table . ' set ';
+    $this->UpdateFields();
+    if($WheresCount > 0):
+      $this->BuildWhere($this->Wheres);
+    endif;
+
+    $this->Query = str_replace('##', $this->Prefix . '_', $this->Query);
+    $statement = $this->Conn->prepare($this->Query);
+
+    $this->Bind($statement, $this->Fields, $HtmlSafe, $TrimValues);
+    if($WheresCount > 0):
+      $this->Bind($statement, $this->Wheres, $HtmlSafe, $TrimValues);
+    endif;
+    
+    try{
+      $this->Error = null;
+      $statement->execute();
+    }catch(PDOException $e){
+      $this->ErrorSet($e);
+      return null;
+    }
+
+    $return = $statement->rowCount();
+
+    $this->LogAndDebug($statement, $Debug, $Log, $LogEvent, $LogUser);
+
+    return $return;
+  }
+
+  private function UpdateFields():void{
+    foreach($this->Fields as $id => $field):
+      if($field->Type === Types::Null):
+        $this->Query .= $field->Name . '=null,';
+        unset($this->Fields[$id]);
+      elseif($field->Type === Types::Sql):
+        $this->Query .= $field->Name . '=' . $field->Value . ',';
+        unset($this->Fields[$id]);
+      else:
+        $this->Query .= $field->Name . '=:' . $field->Name . ',';
+      endif;
+    endforeach;
+    $this->Query = substr($this->Query, 0, -1);
   }
 
   /**
@@ -104,44 +143,5 @@ final class Update extends Basics{
       $NoBind
     );
     return true;
-  }
-
-  public function Run(
-    bool $Debug = false,
-    bool $HtmlSafe = true,
-    bool $TrimValues = true,
-    bool $Log = false,
-    int $LogEvent = null,
-    int $LogUser = null
-  ):int|null{
-    $WheresCount = count($this->Wheres);
-
-    $this->Query = 'update ' . $this->Table . ' set ';
-    $this->UpdateFields();
-    if($WheresCount > 0):
-      $this->BuildWhere($this->Wheres);
-    endif;
-
-    $this->Query = str_replace('##', $this->Prefix . '_', $this->Query);
-    $statement = $this->Conn->prepare($this->Query);
-
-    $this->Bind($statement, $this->Fields, $HtmlSafe, $TrimValues);
-    if($WheresCount > 0):
-      $this->Bind($statement, $this->Wheres, $HtmlSafe, $TrimValues);
-    endif;
-    
-    try{
-      $this->Error = null;
-      $statement->execute();
-    }catch(PDOException $e){
-      $this->ErrorSet($e);
-      return null;
-    }
-
-    $return = $statement->rowCount();
-
-    $this->LogAndDebug($statement, $Debug, $Log, $LogEvent, $LogUser);
-
-    return $return;
   }
 }

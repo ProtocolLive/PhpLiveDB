@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.09.01.00
+//Version 2022.09.01.01
 
 namespace ProtocolLive\PhpLiveDb;
 use \PDO;
@@ -9,25 +9,6 @@ use \PDOException;
 
 final class Insert extends Basics{
   private array $Fields = [];
-
-  private function InsertFields():void{
-    foreach($this->Fields as $field):
-      $this->Query .= $field->Name . ',';
-    endforeach;
-    $this->Query = substr($this->Query, 0, -1) . ') values(';
-    foreach($this->Fields as $id => $field):
-      if($field->Type === Types::Null):
-        $this->Query .= 'null,';
-        unset($this->Fields[$id]);
-      elseif($field->Type === Types::Sql):
-        $this->Query .= $field->Value . ',';
-        unset($this->Fields[$id]);
-      else:
-        $this->Query .= ':' . ($field->CustomPlaceholder ?? $field->Name) . ',';
-      endif;
-    endforeach;
-    $this->Query = substr($this->Query, 0, -1) . ')';
-  }
 
   public function __construct(
     PDO &$Conn,
@@ -56,6 +37,25 @@ final class Insert extends Basics{
       $Value,
       $Type
     );
+  }
+
+  private function InsertFields():void{
+    foreach($this->Fields as $field):
+      $this->Query .= $field->Name . ',';
+    endforeach;
+    $this->Query = substr($this->Query, 0, -1) . ') values(';
+    foreach($this->Fields as $id => $field):
+      if($field->Type === Types::Null):
+        $this->Query .= 'null,';
+        unset($this->Fields[$id]);
+      elseif($field->Type === Types::Sql):
+        $this->Query .= $field->Value . ',';
+        unset($this->Fields[$id]);
+      else:
+        $this->Query .= ':' . ($field->CustomPlaceholder ?? $field->Name) . ',';
+      endif;
+    endforeach;
+    $this->Query = substr($this->Query, 0, -1) . ')';
   }
 
   public function Run(

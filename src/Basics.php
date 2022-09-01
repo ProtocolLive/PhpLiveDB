@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.08.31.02
+//Version 2022.09.01.00
 
 namespace ProtocolLive\PhpLiveDb;
 use \Exception;
@@ -22,45 +22,34 @@ abstract class Basics{
     $this->Conn->beginTransaction();
   }
 
-  public function Commit():void{
-    $this->Conn->commit();
-  }
-
-  protected function ValueFunctions(
-    string $Value,
-    bool $HtmlSafe,
-    bool $TrimValues
-  ):string{
-    if($HtmlSafe):
-      $Value = htmlspecialchars($Value);
-    endif;
-    if($TrimValues):
-      $Value = trim($Value);
-    endif;
-    return $Value;
-  }
-
-  protected function LogSet(
-    int $LogEvent,
-    int|null $User,
-    string $Query
+  protected function Bind(
+    PDOStatement $Statement,
+    array $Fields,
+    bool $HtmlSafe = true,
+    bool $TrimValues = true
   ):void{
-    $Query = substr($Query, strpos($Query, 'Sent SQL: ['));
-    $Query = substr($Query, strpos($Query, '] ') + 2);
-    $Query = substr($Query, 0, strpos($Query, 'Params: '));
-    $Query = trim($Query);
-
-    $statement = $this->Conn->prepare('
-      insert into sys_logs(time,log,user_id,agent,ip,query)
-      values(:time,:log,:user,:agent,:ip,:query)
-    ');
-    $statement->bindValue('time', time(), PDO::PARAM_INT);
-    $statement->bindValue('log', $LogEvent, PDO::PARAM_INT);
-    $statement->bindValue('user', $User, PDO::PARAM_INT);
-    $statement->bindValue('agent', $_SERVER['HTTP_USER_AGENT'], PDO::PARAM_STR);
-    $statement->bindValue('ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
-    $statement->bindValue('query', $Query, PDO::PARAM_STR);
-    $statement->execute();
+    foreach($Fields as $field):
+      if($field->Value !== null
+      and $field->Type !== null
+      and $field->Type !== Types::Null
+      and $field->Type !== Types::Sql
+      and $field->Operator !== Operators::In
+      and $field->Operator !== Operators::NotIn
+      and $field->Operator !== Operators::IsNotNull
+      and ($field->NoBind ?? false) === false):
+        $value = $this->ValueFunctions($field->Value, $HtmlSafe, $TrimValues);
+        $Statement->bindValue(
+          $field->CustomPlaceholder ?? $field->Name,
+          $value,
+          $field->Type->value
+        );
+        $this->Binds[] = [
+          $field->CustomPlaceholder ?? $field->Name,
+          $value,
+          $field->Type
+        ];
+      endif;
+    endforeach;
   }
 
   protected function BuildWhere(array $Wheres):void{
@@ -118,43 +107,8 @@ abstract class Basics{
     endif;
   }
 
-  protected function Bind(
-    PDOStatement $Statement,
-    array $Fields,
-    bool $HtmlSafe = true,
-    bool $TrimValues = true
-  ):void{
-    foreach($Fields as $field):
-      if($field->Value !== null
-      and $field->Type !== null
-      and $field->Type !== Types::Null
-      and $field->Type !== Types::Sql
-      and $field->Operator !== Operators::In
-      and $field->Operator !== Operators::NotIn
-      and $field->Operator !== Operators::IsNotNull
-      and ($field->NoBind ?? false) === false):
-        $value = $this->ValueFunctions($field->Value, $HtmlSafe, $TrimValues);
-        $Statement->bindValue(
-          $field->CustomPlaceholder ?? $field->Name,
-          $value,
-          $field->Type->value
-        );
-        $this->Binds[] = [
-          $field->CustomPlaceholder ?? $field->Name,
-          $value,
-          $field->Type
-        ];
-      endif;
-    endforeach;
-  }
-
-  protected function FieldNeedCustomPlaceholder(string $Field):void{
-    if(strpos($Field, '.') !== false
-    or strpos($Field, '(') !== false):
-      $this->ErrorSet(new PDOException(
-        'The field ' . $Field . ' need a custom placeholder',
-      ));
-    endif;
+  public function Commit():void{
+    $this->Conn->commit();
   }
 
   protected function ErrorSet(PDOException $Obj):void{
@@ -173,6 +127,15 @@ abstract class Basics{
       else:
         echo $log;
       endif;
+    endif;
+  }
+
+  protected function FieldNeedCustomPlaceholder(string $Field):void{
+    if(strpos($Field, '.') !== false
+    or strpos($Field, '(') !== false):
+      $this->ErrorSet(new PDOException(
+        'The field ' . $Field . ' need a custom placeholder',
+      ));
     endif;
   }
 
@@ -204,6 +167,29 @@ abstract class Basics{
     endif;
   }
 
+  protected function LogSet(
+    int $LogEvent,
+    int|null $User,
+    string $Query
+  ):void{
+    $Query = substr($Query, strpos($Query, 'Sent SQL: ['));
+    $Query = substr($Query, strpos($Query, '] ') + 2);
+    $Query = substr($Query, 0, strpos($Query, 'Params: '));
+    $Query = trim($Query);
+
+    $statement = $this->Conn->prepare('
+      insert into sys_logs(time,log,user_id,agent,ip,query)
+      values(:time,:log,:user,:agent,:ip,:query)
+    ');
+    $statement->bindValue('time', time(), PDO::PARAM_INT);
+    $statement->bindValue('log', $LogEvent, PDO::PARAM_INT);
+    $statement->bindValue('user', $User, PDO::PARAM_INT);
+    $statement->bindValue('agent', $_SERVER['HTTP_USER_AGENT'], PDO::PARAM_STR);
+    $statement->bindValue('ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);
+    $statement->bindValue('query', $Query, PDO::PARAM_STR);
+    $statement->execute();
+  }
+
   public static function Reserved(string $Field):string{
     $names = ['order', 'default', 'group'];
     if(in_array($Field, $names)):
@@ -214,6 +200,20 @@ abstract class Basics{
 
   public function Rollback():void{
     $this->Conn->rollBack();
+  }
+
+  protected function ValueFunctions(
+    string $Value,
+    bool $HtmlSafe,
+    bool $TrimValues
+  ):string{
+    if($HtmlSafe):
+      $Value = htmlspecialchars($Value);
+    endif;
+    if($TrimValues):
+      $Value = trim($Value);
+    endif;
+    return $Value;
   }
 
   /**
