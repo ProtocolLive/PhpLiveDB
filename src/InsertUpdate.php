@@ -4,27 +4,15 @@
 //2022.09.21.00
 
 namespace ProtocolLive\PhpLiveDb;
-use \PDO;
 use \PDOException;
 
-class Insert extends Basics{
-  protected array $Fields = [];
-
-  public function __construct(
-    PDO $Conn,
-    string $Table,
-    string $Prefix
-  ){
-    $this->Conn = $Conn;
-    $this->Table = $Table;
-    $this->Prefix = $Prefix;
-  }
-
+final class InsertUpdate extends Insert{
   public function FieldAdd(
     string $Field,
     string|bool|null $Value,
     Types $Type,
-    bool $BlankIsNull = true
+    bool $BlankIsNull = true,
+    bool $Update = false
   ){
     if($BlankIsNull and $Value === ''):
       $Value = null;
@@ -35,29 +23,14 @@ class Insert extends Basics{
     $this->Fields[$Field] = new Field(
       $Field,
       $Value,
-      $Type
+      $Type,
+      InsertUpdate: $Update
     );
   }
 
-  protected function InsertFields():void{
-    foreach($this->Fields as $field):
-      $this->Query .= $field->Name . ',';
-    endforeach;
-    $this->Query = substr($this->Query, 0, -1) . ') values(';
-    foreach($this->Fields as $id => $field):
-      if($field->Type === Types::Null):
-        $this->Query .= 'null,';
-        unset($this->Fields[$id]);
-      elseif($field->Type === Types::Sql):
-        $this->Query .= $field->Value . ',';
-        unset($this->Fields[$id]);
-      else:
-        $this->Query .= ':' . ($field->CustomPlaceholder ?? $field->Name) . ',';
-      endif;
-    endforeach;
-    $this->Query = substr($this->Query, 0, -1) . ')';
-  }
-
+  /**
+   * @return void
+   */
   public function Run(
     bool $Debug = false,
     bool $HtmlSafe = true,
@@ -65,7 +38,7 @@ class Insert extends Basics{
     bool $Log = false,
     int $LogEvent = null,
     int $LogUser = null
-  ):int|null{
+  ):int{
     $FieldsCount = count($this->Fields);
     if($FieldsCount === 0):
       return null;
@@ -75,6 +48,14 @@ class Insert extends Basics{
     $this->InsertFields();
 
     $this->Query = str_replace('##', $this->Prefix . '_', $this->Query);
+    $this->Query .= ' on duplicate key update ';
+    foreach($this->Fields as $field):
+      if($field->InsertUpdate):
+        $this->Query .= ($field->CustomPlaceholder ?? $field->Name) .
+          '=values(' . ($field->CustomPlaceholder ?? $field->Name) . '),';
+      endif;
+    endforeach;
+    $this->Query = substr($this->Query, 0, -1);
     $statement = $this->Conn->prepare($this->Query);
 
     $this->Bind($statement, $this->Fields, $HtmlSafe, $TrimValues);
@@ -87,10 +68,7 @@ class Insert extends Basics{
       return null;
     }
 
-    $return = $this->Conn->lastInsertId();
-
     $this->LogAndDebug($statement, $Debug, $Log, $LogEvent, $LogUser);
-
-    return $return;
+    return 0;
   }
 }

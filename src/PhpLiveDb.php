@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.09.01.01
+//2022.09.21.00
 
 namespace ProtocolLive\PhpLiveDb;
 use \Exception;
@@ -63,6 +63,14 @@ final class PhpLiveDb extends Basics{
   
   public function Insert(string $Table):Insert{
     return new Insert(
+      $this->Conn,
+      $Table,
+      $this->Prefix
+    );
+  }
+
+  public function InsertUpdate(string $Table):InsertUpdate{
+    return new InsertUpdate(
       $this->Conn,
       $Table,
       $this->Prefix
