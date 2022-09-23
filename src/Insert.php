@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2022.09.21.00
+//2022.09.23.00
 
 namespace ProtocolLive\PhpLiveDb;
 use \PDO;
@@ -47,10 +47,8 @@ class Insert extends Basics{
     foreach($this->Fields as $id => $field):
       if($field->Type === Types::Null):
         $this->Query .= 'null,';
-        unset($this->Fields[$id]);
       elseif($field->Type === Types::Sql):
         $this->Query .= $field->Value . ',';
-        unset($this->Fields[$id]);
       else:
         $this->Query .= ':' . ($field->CustomPlaceholder ?? $field->Name) . ',';
       endif;

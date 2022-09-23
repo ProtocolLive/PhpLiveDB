@@ -3,7 +3,7 @@
 67d97b9ac11b8d75e6522b1932b2ee46b2a2f3f8  src/Delete.php
 609b0fcdbcbf7c46ee26a0b5a59575e43ce3baf7  src/Drivers.php
 2d3b3f58a063fde11fafd9b7807fea4166f0b256  src/Field.php
-2ff637da6c338b549e78a45e948947838aa313f4  src/Insert.php
+00ffbc95dc791ceb8abd0f3681500ff3559db579  src/Insert.php
 1b03fa3ab3e3ff68147209357e0f9b43a2c3f2c2  src/InsertUpdate.php
 037507a28e5fd925f8f6c77cd53d8421427ee3f0  src/Joins.php
 dc5a8d26534572f19ad15daae888dcaabc658d9a  src/Operators.php
