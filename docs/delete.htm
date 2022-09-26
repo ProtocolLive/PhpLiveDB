@@ -1,7 +1,7 @@
 <html>
 
 <head>
-  <title>PhpLiveDb::Update</title>
+  <title>PhpLiveDb::Delete</title>
   <link rel="stylesheet" href="global.css">
 </head>
 
@@ -9,35 +9,35 @@
   <table style="width:95%;margin-left: auto;margin-right: auto;">
     <tr>
       <td style="width:100%; background-color: #F2F2F2; padding: 20px;">
-        <div class="maintitle">PhpLiveDb::Update</div>
-        <p>Create an object to run Update querys</p>
+        <div class="maintitle">PhpLiveDb::Delete</div>
+        <p>Create an object to run Delete querys</p>
         <p>&nbsp;</p>
 
         <div class="title">Sintaxe</div><br>
         <div class="code">
           <span class="const">public</span>
-          <span class="func">PhpLiveDb::Update</span>(<br>
+          <span class="func">PhpLiveDb::Delete</span>(<br>
           <span class="ident">
             <span class="const">string</span>
             <span class="var">$Table</span>
           </span><br>
-          ):<span class="func">PhpLiveDbUpdate</span>;
+          ):<span class="func">Delete</span>;
         </div>
         <p>&nbsp;</p>
 
         <div class="title">Parameters</div>
-        <p><span class="var">$Table</span> - The table to perform the update. The table alias can be specified</p>
+        <p><span class="var">$Table</span> - The table to perform the delete. The table alias can be specified</p>
         <p>&nbsp;</p>
 
         <div class="title">Return Values</div>
-        <p>An object to add options and run the Update.</p>
+        <p>An object to add options and run the Delete.</p>
         <p>&nbsp;</p>
 
         <div class="title">Examples</div>
         <br>
         <div class="code">
           <span class="var">$consult</span> =
-          <span class="func">$Db->Update</span>(<span class="string">'users u'</span>);
+          <span class="func">$Db->Delete</span>(<span class="string">'users u'</span>);
         </div>
         <p>&nbsp;</p>
 
