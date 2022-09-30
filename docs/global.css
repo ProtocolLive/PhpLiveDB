@@ -14,7 +14,8 @@ a:visited{
 }
 
 .code{
-  background-color: #fff;
+  color:#fff;
+  background-color: #282a36;
   padding: 10px; border: dotted 1px;
   font-family: Consolas, 'Courier New', monospace;
 }
@@ -51,21 +52,34 @@ a:visited{
 .menulink{
   color: #ccc !important;
 }
+
 .func{
-  color: #369 !important;
+  color: #50fa7b !important;
 }
 .type{
-  color: #693;
+  color: #ff79c6;
+}
+.code .var{
+  color: #fff;
 }
 .var{
-  color: #369;
+  color:#369
 }
 .const{
-  color: #936;
+  color: #bd93f9;
 }
 .string{
-  color: #d00;
+  color: #f1fa8c;
 }
 .comment{
-  color: #FF8000;
+  color: #6272a4;
+}
+.code .object{
+  color:#8be9fd
+}
+.object{
+  color:#369
+}
+.argument{
+  color:#ffb86c
 }
