@@ -82,7 +82,7 @@
         <p>&nbsp;</p>
         <div class="title">Parameters</div>
         <p>
-          <span class="var">$Field</span>
+          <a name="field" class="var">$Field</a>
           - The field name;
         </p>
         <p>
@@ -106,8 +106,8 @@
           - The parenthesis operator. See more in <span class="object">Parenthesis</span>;
         </p>
         <p>
-          <span class="var">$CustomPlaceholder</span>
-          - String to use as placeholder. Very common to use with SQL commands;
+          <a name="custom" class="var">$CustomPlaceholder</a>
+          - String to use as placeholder;
         </p>
         <p>
           <span class="var">$BlankIsNull</span>
@@ -126,9 +126,19 @@
           - Dump the command debug;
         </p>
         <p>&nbsp;</p>
-        <div class="title">Notes</div><br>
-        - When the <a href="#value">$Value</a> is null, the <a href="#type">Type</a> are changed to <span class="var">Types::Null</span>;<br>
-        - When the <a href="#operator">$Operator</a> is <span class="var">Operators::Sql</span>, the <a href="#nobind">$NoBind</a> are changed to <span class="var">true</span>;
+        <div class="title">Notes</div>
+        <p>
+          - When the <a href="#value">$Value</a> is null, the <a href="#type">Type</a> are changed to <span
+            class="var">Types::Null</span>;
+        </p>
+        <p>
+          - When the <a href="#operator">$Operator</a> is <span class="var">Operators::Sql</span>, the <a
+            href="#nobind">$NoBind</a> are changed to <span class="var">true</span>;
+        </p>
+        <p>
+          - When using a SQL expression in <a href="#field">$Field</a>, its mandatory to use the <a
+            href="#custom">$CustomPlaceholder</a>;
+        </p>
 
         <p>&nbsp;</p>
         <div class="title">Examples</div><br>
