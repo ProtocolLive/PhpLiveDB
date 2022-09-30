@@ -226,7 +226,7 @@
           <span class="comment">//select * from users where type=1 or type=2</span>
           <br>
         </div><br>
-        Operators and Parenthesis:
+        Operators, Parenthesis, CustomPlaceholder and NoBind:
         <div class="code">
           <span class="var">$consult</span>
           = <span class="var">$Db</span>-><span class="func">Select</span>('<span class="string">users</span>');<br>
@@ -272,31 +272,29 @@
             <span class="string">'email'</span>,
           </span><br>
           <span class="ident">
-            <span class="string">'%'</span>
-            <span class="type">.</span>
-            $_POST<span class="type">[</span><span class="string">'text'</span><span class="type">]</span>
-            <span class="type">.</span>
-            <span class="string">'%'</span>,
-          </span><br>
-          <span class="ident">
-            <span class="object">Types</span><span class="type">::</span><span class="const">Str</span>,
+            <span class="argument">Operator</span>:
+            <span class="object">Operators</span><span class="type">::</span><span class="const">Like</span>,
           </span><br>
           <span class="ident">
             <span class="argument">AndOr</span>:
             <span class="object">AndOr</span><span class="type">::</span><span class="const">Or</span>,
           </span><br>
           <span class="ident">
-            <span class="argument">Operator</span>:
-            <span class="object">Operators</span><span class="type">::</span><span class="const">Like</span>,
-          </span><br>
-          <span class="ident">
             <span class="argument">Parenthesis</span>:
             <span class="object">Parenthesis</span><span class="type">::</span><span class="const">Close</span>,
+          </span><br>
+          <span class="ident">
+            <span class="argument">CustomPlaceholder</span>:
+            <span class="string">'name'</span>,
+          </span><br>
+          <span class="ident">
+            <span class="argument">NoBind</span>:
+            <span class="const">true</span>
           </span><br>
           );</span>
           <br>
           <span class="comment">//select * from users where active=:active and (name like :name or email like
-            :email)</span><br>
+            :name)</span><br>
           <span class="comment">//select * from users where active=1 and (name like '%foo%' or email like
             '%foo%')</span>
         </div>
