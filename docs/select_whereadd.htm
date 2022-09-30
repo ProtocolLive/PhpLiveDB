@@ -83,51 +83,53 @@
         <div class="title">Parameters</div>
         <p>
           <span class="var">$Field</span>
-          - The field name
+          - The field name;
         </p>
         <p>
-          <span class="var">$Value</span>
-          - The field value
+          <a class="var">$Value</a>
+          - The field value;
         </p>
         <p>
-          <span class="var">$Type</span>
-          - The field type. See more in <span class="object">Types</span>
+          <a name="type" class="var">$Type</a>
+          - The field type. See more in <span class="object">Types</span>;
         </p>
         <p>
-          <span class="var">$Operator</span>
-          - The comparing operator. See more in <span class="object">Operators</span>
-          .
+          <a name="operator" class="var">$Operator</a>
+          - The comparing operator. See more in <span class="object">Operators</span>;
         </p>
         <p>
           <span class="var">$AndOr</span>
-          - The relation with the previous field. See more in <span class="object">AndOr</span>
-          .
+          - The relation with the previous field. See more in <span class="object">AndOr</span>;
         </p>
         <p>
           <span class="var">$Parenthesis</span>
-          - The parenthesis operator. See more in <span class="object">Parenthesis</span>
-          .
+          - The parenthesis operator. See more in <span class="object">Parenthesis</span>;
         </p>
         <p>
           <span class="var">$CustomPlaceholder</span>
-          - String to use as placeholder. Very common to use with SQL commands.
+          - String to use as placeholder. Very common to use with SQL commands;
         </p>
         <p>
           <span class="var">$BlankIsNull</span>
-          - Replace '' to null
+          - Replace '' to null;
         </p>
         <p>
           <span class="var">$NoField</span>
-          - To bind a placeholder previously indicated
+          - To bind a placeholder previously indicated;
         </p>
         <p>
-          <span class="var">$NoBind</span>
-          - To add a field without binding
+          <a name="nobind" class="var">$NoBind</a>
+          - To add a field without binding;
         </p>
         <p>
           <span class="var">$Debug</span>
-          - Dump the command debug
+          - Dump the command debug;
         </p>
+        <p>&nbsp;</p>
+        <div class="title">Notes</div><br>
+        - When the <a href="#value">$Value</a> is null, the <a href="#type">Type</a> are changed to <span class="var">Types::Null</span>;<br>
+        - When the <a href="#operator">$Operator</a> is <span class="var">Operators::Sql</span>, the <a href="#nobind">$NoBind</a> are changed to <span class="var">true</span>;
+
         <p>&nbsp;</p>
         <div class="title">Examples</div><br>
         Select with one condition:<br>
