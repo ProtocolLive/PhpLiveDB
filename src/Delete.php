@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.09.01.01
+//Version 2022.09.30.00
 
 namespace ProtocolLive\PhpLiveDb;
 use \PDO;
@@ -59,15 +59,15 @@ final class Delete extends Basics{
 
   /**
    * @param string $Field Field name
-   * @param string $Value Field value. Can be null in case of OperatorNull
-   * @param int $Type Field type. Can be null in case of OperatorIsNull
-   * @param int $Operator Comparison operator
+   * @param string $Value Field value. Can be null in case of use another field value. If null, sets the $Operator to Operator::Null
+   * @param Types $Type Field type. Can be null in case of Operator::IsNull. Are changed to Types::Null if $Value is null
+   * @param Operators $Operator Comparison operator. Operator::Sql sets NoBind to true
    * @param AndOr $AndOr Relation with the prev field
-   * @param Parenthesis $Parenthesis
-   * @param bool $SqlInField The field have a SQL function?
+   * @param Parenthesis $Parenthesis Open or close parenthesis
+   * @param string $CustomPlaceholder Substitute the field name as placeholder
    * @param bool $BlankIsNull Convert '' to null
    * @param bool $NoField Bind values with fields declared in Fields function
-   * @param bool $NoBind Don't bind values who are already binded
+   * @param bool $NoBind Don't bind values. Are set to true if Operator is Operators::Sql
    */
   public function WhereAdd(
     string $Field,
