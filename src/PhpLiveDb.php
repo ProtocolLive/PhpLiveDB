@@ -1,11 +1,12 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2022.10.08.00
+//2022.10.08.01
 
 namespace ProtocolLive\PhpLiveDb;
 use \Exception;
 use \PDO;
+use \PDOException;
 
 final class PhpLiveDb extends Basics{
   /**
@@ -90,6 +91,9 @@ final class PhpLiveDb extends Basics{
     );
   }
 
+  /**
+   * @throws PDOException
+   */
   public function Truncate(string $Table):int|false{
     return $this->Conn->exec('truncate '. $Table);
   }

@@ -8,7 +8,7 @@
 037507a28e5fd925f8f6c77cd53d8421427ee3f0  src/Joins.php
 dc5a8d26534572f19ad15daae888dcaabc658d9a  src/Operators.php
 e4d7083ccffc636218ac2597a839baa82b6ba2e8  src/Parenthesis.php
-fdff493580912b46ded4253aeba72a0c14631c40  src/PhpLiveDb.php
+a9311c74e1ff62b6c036935bd5ba40b05abd4e32  src/PhpLiveDb.php
 69293732d984231006e49974a3a59ace1143b2b8  src/Select.php
 c039b2ac0be7bd039e71693b9d34c21676c54884  src/Types.php
 89da9e0550d798424e4c2ee55dd7757d08dec63f  src/Update.php
