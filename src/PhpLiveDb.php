@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2022.09.21.00
+//2022.10.08.00
 
 namespace ProtocolLive\PhpLiveDb;
 use \Exception;
@@ -88,6 +88,10 @@ final class PhpLiveDb extends Basics{
       $this->Prefix,
       $ThrowError
     );
+  }
+
+  public function Truncate(string $Table):int|false{
+    return $this->Conn->exec('truncate '. $Table);
   }
 
   public function Update(string $Table):Update{

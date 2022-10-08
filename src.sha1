@@ -1,6 +1,6 @@
 962e67d0657dae9614ca8a335fd05623da51c9c6  src/AndOr.php
 4cac5e5fae4d2a660dbed1e16bd132f1e356afc9  src/Basics.php
-67d97b9ac11b8d75e6522b1932b2ee46b2a2f3f8  src/Delete.php
+6e1f103f63ce3503649787181e5175b88d0ab307  src/Delete.php
 609b0fcdbcbf7c46ee26a0b5a59575e43ce3baf7  src/Drivers.php
 2d3b3f58a063fde11fafd9b7807fea4166f0b256  src/Field.php
 00ffbc95dc791ceb8abd0f3681500ff3559db579  src/Insert.php
@@ -8,7 +8,7 @@
 037507a28e5fd925f8f6c77cd53d8421427ee3f0  src/Joins.php
 dc5a8d26534572f19ad15daae888dcaabc658d9a  src/Operators.php
 e4d7083ccffc636218ac2597a839baa82b6ba2e8  src/Parenthesis.php
-0e798fd2f01ce7e0902b0bd571894f24bb4feac8  src/PhpLiveDb.php
-3d195b7a09a5bc7aed91da8c68e64c0c52d3bd62  src/Select.php
+fdff493580912b46ded4253aeba72a0c14631c40  src/PhpLiveDb.php
+69293732d984231006e49974a3a59ace1143b2b8  src/Select.php
 c039b2ac0be7bd039e71693b9d34c21676c54884  src/Types.php
-1afe7be93abe9f21279cfc6456517e56fea9f221  src/Update.php
+89da9e0550d798424e4c2ee55dd7757d08dec63f  src/Update.php
