@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.09.30.00
+//Version 2022.10.11.00
 
 namespace ProtocolLive\PhpLiveDb;
 use \PDO;
@@ -47,6 +47,10 @@ final class Select extends Basics{
   }
 
   /**
+   * @param string $Table The table name. If null, get the current table
+   * @param bool $String Return fields list as string or array
+   * @param string $Alias Concat the table alias with fields in string return format
+   * @return array|string
    * @throws PDOException
    */
   public function FieldsGet(
