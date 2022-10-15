@@ -146,8 +146,8 @@
         Select with one condition:<br>
         <div class="code">
           <span class="var">$consult</span>
-          = <span class="var">$Db</span>-><span class="func">Select</span>('<span class="string">users</span>');<br>
-          <span class="var">$consult</span>-><span class="func">WhereAdd</span>(<br>
+          = <span class="var">$Db</span><span class="type">-></span><span class="func">Select</span>('<span class="string">users</span>');<br>
+          <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd</span>(<br>
           <span class="ident">
             <span class="string">'email'</span>,
           </span><br>
@@ -166,8 +166,8 @@
         Select with more conditions:<br>
         <div class="code">
           <span class="var">$consult</span>
-          = <span class="var">$Db</span>-><span class="func">Select</span>('<span class="string">users</span>');<br>
-          <span class="var">$consult</span>-><span class="func">WhereAdd</span>(<br>
+          = <span class="var">$Db</span><span class="type">-></span><span class="func">Select</span>('<span class="string">users</span>');<br>
+          <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd</span>(<br>
           <span class="ident">
             <span class="string">'email'</span>,
           </span><br>
@@ -178,7 +178,7 @@
             <span class="object">Types</span><span class="type">::</span><span class="const">Str</span>
           </span><br>
           );<br>
-          <span class="var">$consult</span>-><span class="func">WhereAdd</span>(<br>
+          <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd</span>(<br>
           <span class="ident">
             <span class="string">'active'</span>,
           </span><br>
@@ -197,9 +197,8 @@
         Select with "Or" and "CustomPlaceholder":<br>
         <div class="code">
           <span class="var">$consult</span>
-          = <span class="var">$Db</span>-><span class="func">Select</span>('<span class="string">users</span>');<br>
-          <span class="var">$consult</span>
-          -><span class="func">WhereAdd</span>(<br>
+          = <span class="var">$Db</span><span class="type">-></span><span class="func">Select</span>('<span class="string">users</span>');<br>
+          <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd</span>(<br>
           <span class="ident">
             <span class="string">'type'</span>,
           </span><br>
@@ -210,7 +209,7 @@
             <span class="object">Types</span><span class="type">::</span><span class="const">Int</span>
           </span><br>
           );<br>
-          <span class="var">$consult</span>-><span class="func">WhereAdd</span>(<br>
+          <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd</span>(<br>
           <span class="ident">
             <span class="string">'type'</span>,
           </span><br>
@@ -237,9 +236,9 @@
         Operators, Parenthesis, CustomPlaceholder and NoBind:
         <div class="code">
           <span class="var">$consult</span>
-          = <span class="var">$Db</span>-><span class="func">Select</span>('<span class="string">users</span>');<br>
+          = <span class="var">$Db</span><span class="type">-></span><span class="func">Select</span>('<span class="string">users</span>');<br>
 
-          <span class="var">$consult</span>-><span class="func">WhereAdd</span>(<br>
+          <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd</span>(<br>
           <span class="ident">
             <span class="string">'active'</span>,
           </span><br>
@@ -251,7 +250,7 @@
           </span><br>
           );<br>
 
-          <span class="var">$consult</span>-><span class="func">WhereAdd</span>(<br>
+          <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd</span>(<br>
           <span class="ident">
             <span class="string">'name'</span>,
           </span><br>
@@ -275,7 +274,7 @@
           </span><br>
           );<br>
 
-          <span class="var">$consult</span>-><span class="func">WhereAdd</span>(<br>
+          <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd</span>(<br>
           <span class="ident">
             <span class="string">'email'</span>,
           </span><br>
