@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Select::Fields</title>
+  <link rel="stylesheet" href="global.css">
+</head>
+
+<body>
+  <table style="width:95%;margin-left: auto;margin-right: auto;">
+    <tr>
+      <td style="width:100%; background-color: #F2F2F2; padding: 20px;">
+        <div class="maintitle">Select::Fields</div>
+        <p>Specify the table fields to return</p>
+        <p>&nbsp;</p>
+        <div class="title">Sintaxe</div><br>
+        <div class="code">
+          <span class="type">public</span>
+          <span class="object">ProtocolLive\PhpLiveDb\Select</span><span class="type">::</span><span class="func">Fields</span><span
+            class="type">(</span><br>
+          <span class="ident">
+            <span class="type">string</span>
+            <span class="var">$Fields</span><br>
+          </span>
+          <span class="type">):void</span>
+        </div>
+        <p>&nbsp;</p>
+        <div class="title">Parameters</div>
+        <p>
+          <a name="field" class="var">$Field</a>
+          - The fields names, separated by a comma. Can be used alias and subquerys;
+        </p>
+        <p>&nbsp;</p>
+
+        <div class="title">Examples</div><br>
+        <div class="code">
+          <span class="var">$consult</span>
+          = <span class="var">$Db</span><span class="type">-></span><span class="func">Select</span>('<span class="string">users</span>');<br>
+          <span class="var">$consult</span><span class="type">-></span><span class="func">Fields</span>(<span
+            class="string">'user_id,name,email,active,lastlogin'</span>);<br>
+          $consult<span class="type">-></span><span class="func">Run</span>();<br>
+          <span class="comment">//select user_id,name,email,active,lastlogin from users</span><br>
+        </div><br>
+
+        <div class="code">
+          <span class="var">$consult</span>
+          = <span class="var">$Db</span><span class="type">-></span><span class="func">Select</span>('<span class="string">users u</span>');<br>
+          <span class="var">$consult</span><span class="type">-></span><span class="func">Fields</span>(<span class="string">'</span><br>
+            <span class="ident string">
+              user_id,(
+            </span><br>
+            <span class="ident">
+              <span class="ident string">
+                select value from socialmedias where name='Telegram' and user_id=u.user_id
+              </span>
+            </span><br>
+            <span class="ident string">
+              ) as telegram
+            </span><br>
+          <span class="string">'</span></span>);<br>
+          $consult<span class="type">-></span><span class="func">Run</span>();<br>
+          <span class="comment">//select user_id,(select value from socialmedias where name='Telegram' and
+            user_id=u.user_id<br>) as telegram from users u</span><br>
+        </div><br>
+        <p>&nbsp;</p>
+      </td>
+      <td style="color: #ccc; font-size: 18px; vertical-align: top;"><iframe src="menu.htm" class="menu2"></iframe></td>
+    </tr>
+  </table>
+</body>
+
+</html>
