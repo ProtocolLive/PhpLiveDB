@@ -79,6 +79,19 @@
           <span class="comment">//select * from users left join socialmedias on users.id=socialmedias.user_id</span><br>
         </div><br>
 
+        <div class="code">
+          <span class="var">$consult</span>
+          = <span class="var">$Db</span><span class="type">-></span><span class="func">Select</span>('<span class="string">users</span>');<br>
+
+          <span class="var">$consult</span><span class="type">-></span><span class="func">JoinAdd</span>(<span class="string">'socialmedias'</span>,
+          <span class="string">'user_id'</span>,
+          
+          <span class="argument">Type:</span>
+          <span class="object">Joins</span><span class="type">::</span><span class="const">Inner</span>);<br>
+          $consult<span class="type">-></span><span class="func">Run</span>();<br>
+          <span class="comment">//select * from users inner join socialmedias using('user_id')</span><br>
+        </div><br>
+
         <p>&nbsp;</p>
       </td>
       <td style="color: #ccc; font-size: 18px; vertical-align: top;"><iframe src="menu.htm" class="menu2"></iframe></td>
