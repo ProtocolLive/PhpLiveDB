@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2022.10.24.00
+//2022.10.24.01
 
 namespace ProtocolLive\PhpLiveDb;
 use Exception;
@@ -182,6 +182,18 @@ abstract class Basics{
 
   public function Rollback():void{
     $this->Conn->rollBack();
+  }
+
+  public function Transaction(callable $Code):mixed{
+    try{
+      self::Begin();
+      $return = $Code();
+      self::Commit();
+      return $return;
+    }catch(PDOException $e){
+      self::Rollback();
+      return $e;
+    }
   }
 
   protected function ValueFunctions(
