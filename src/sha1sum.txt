@@ -1,0 +1,14 @@
+962e67d0657dae9614ca8a335fd05623da51c9c6  AndOr.php
+e6a5824c4e4c48fd44a42e9ca1cfb7a2a7cc8442  Basics.php
+5cbc7c86efb6e54582648a5572dfc82a67b97bbf  Delete.php
+609b0fcdbcbf7c46ee26a0b5a59575e43ce3baf7  Drivers.php
+2d3b3f58a063fde11fafd9b7807fea4166f0b256  Field.php
+9f6521a3d1928cc20c60b1d687853b1511743f80  Insert.php
+98c52c93994dae1c89efc00fbd48150fc63c1a5e  InsertUpdate.php
+037507a28e5fd925f8f6c77cd53d8421427ee3f0  Joins.php
+dc5a8d26534572f19ad15daae888dcaabc658d9a  Operators.php
+e4d7083ccffc636218ac2597a839baa82b6ba2e8  Parenthesis.php
+a9311c74e1ff62b6c036935bd5ba40b05abd4e32  PhpLiveDb.php
+dd4a60bdafa70d6ea3aa0ce0d476fcd765cbae71  Select.php
+c039b2ac0be7bd039e71693b9d34c21676c54884  Types.php
+c6ed020ac25f5f3d7a500de9d739aa74e4e8cd7c  Update.php
