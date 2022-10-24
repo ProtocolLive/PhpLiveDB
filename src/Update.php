@@ -1,11 +1,11 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.09.30.00
+//2022.09.30.00
 
 namespace ProtocolLive\PhpLiveDb;
-use \PDO;
-use \PDOException;
+use PDO;
+use PDOException;
 use ProtocolLive\PhpLiveDb\Operators;
 
 final class Update extends Basics{
@@ -41,6 +41,9 @@ final class Update extends Basics{
     );
   }
 
+  /**
+   * @throws PDOException
+   */
   public function Run(
     bool $Debug = false,
     bool $HtmlSafe = true,
@@ -48,7 +51,7 @@ final class Update extends Basics{
     bool $Log = false,
     int $LogEvent = null,
     int $LogUser = null
-  ):int|null{
+  ):int{
     $WheresCount = count($this->Wheres);
 
     $this->Query = 'update ' . $this->Table . ' set ';
@@ -65,14 +68,7 @@ final class Update extends Basics{
       $this->Bind($statement, $this->Wheres, $HtmlSafe, $TrimValues);
     endif;
     
-    try{
-      $this->Error = null;
-      $statement->execute();
-    }catch(PDOException $e){
-      $this->ErrorSet($e);
-      return null;
-    }
-
+    $statement->execute();
     $return = $statement->rowCount();
 
     $this->LogAndDebug($statement, $Debug, $Log, $LogEvent, $LogUser);
@@ -116,12 +112,11 @@ final class Update extends Basics{
     string $CustomPlaceholder = null,
     bool $BlankIsNull = true,
     bool $NoBind = false
-  ):bool{
+  ):void{
     if(isset($this->Wheres[$CustomPlaceholder ?? $Field])):
-      $this->ErrorSet(new PDOException(
+      throw new PDOException(
         'The where condition "' . ($CustomPlaceholder ?? $Field) . '" already added',
-      ));
-      return false;
+      );
     endif;
     if($CustomPlaceholder === null):
       $this->FieldNeedCustomPlaceholder(($Field));
@@ -142,6 +137,5 @@ final class Update extends Basics{
       false,
       $NoBind
     );
-    return true;
   }
 }

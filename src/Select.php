@@ -1,12 +1,12 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.10.11.00
+//2022.10.24.00
 
 namespace ProtocolLive\PhpLiveDb;
-use \PDO;
-use \PDOStatement;
-use \PDOException;
+use PDO;
+use PDOStatement;
+use PDOException;
 
 final class Select extends Basics{
   private string $Fields = '*';
@@ -47,10 +47,6 @@ final class Select extends Basics{
   }
 
   /**
-   * @param string $Table The table name. If null, get the current table
-   * @param bool $String Return fields list as string or array
-   * @param string $Alias Concat the table alias with fields in string return format
-   * @return array|string
    * @throws PDOException
    */
   public function FieldsGet(
@@ -163,6 +159,9 @@ final class Select extends Basics{
     return $this->Query;
   }
 
+  /**
+   * @throws PDOException
+   */
   public function Run(
     bool $FetchBoth = false,
     bool $Debug = false,
@@ -172,19 +171,13 @@ final class Select extends Basics{
     int $LogEvent = null,
     int $LogUser = null,
     bool $Fetch = false
-  ):array|bool|null{
+  ):array|bool{
     $statement = $this->Prepare();
     if(count($this->Wheres) > 0):
       $this->Bind($statement, $this->Wheres, $HtmlSafe, $TrimValues);
     endif;
-    
-    try{
-      $this->Error = null;
-      $statement->execute();
-    }catch(PDOException $e){
-      $this->ErrorSet($e);
-      return null;
-    }
+
+    $statement->execute();
 
     $this->LogAndDebug($statement, $Debug, $Log, $LogEvent, $LogUser);
 
@@ -236,7 +229,7 @@ final class Select extends Basics{
       $Value = null;
       $Type = Types::Null;
     endif;
-    $this->WheresControl(
+    $temp = $this->WheresControl(
       $this->ThrowError,
       $Field,
       $Type,
@@ -244,6 +237,9 @@ final class Select extends Basics{
       $NoField,
       $NoBind
     );
+    if($temp === false):
+      return false;
+    endif;
     $this->Wheres[] = new Field(
       $Field,
       $Value,

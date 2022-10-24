@@ -1,13 +1,13 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.09.07.00
+//2022.10.24.00
 
 namespace ProtocolLive\PhpLiveDb;
-use \Exception;
-use \PDO;
-use \PDOException;
-use \PDOStatement;
+use Exception;
+use PDO;
+use PDOException;
+use PDOStatement;
 
 abstract class Basics{
   protected string $Table;
@@ -112,31 +112,12 @@ abstract class Basics{
     $this->Conn->commit();
   }
 
-  protected function ErrorSet(PDOException $Obj):void{
-    $log = date('Y-m-d H:i:s') . PHP_EOL;
-    $log .= $Obj->getCode() . ' - ' . htmlspecialchars($Obj->getMessage()) . PHP_EOL;
-    $log .= 'Query:' . PHP_EOL;
-    $log .= $this->Query . PHP_EOL;
-    $log .= 'Binds:' . PHP_EOL;
-    $log .= var_export($this->Binds, true) . PHP_EOL;
-    $log .= $Obj->getTraceAsString();
-    $this->Error = $log;
-    error_log($log);
-    if(ini_get('display_errors')):
-      if(ini_get('html_errors')):
-        echo '<pre>' . $log . '</pre>';
-      else:
-        echo $log;
-      endif;
-    endif;
-  }
-
   protected function FieldNeedCustomPlaceholder(string $Field):void{
     if(strpos($Field, '.') !== false
     or strpos($Field, '(') !== false):
-      $this->ErrorSet(new PDOException(
+      throw new PDOException(
         'The field ' . $Field . ' need a custom placeholder',
-      ));
+      );
     endif;
   }
 
@@ -237,12 +218,10 @@ abstract class Basics{
     and $Operator !== Operators::IsNotNull):
       //Search separated for performance improvement
       if(array_search($CustomPlaceholder ?? $Field, $this->WheresControl) !== false):
-        $error = new Exception(
-          'The where condition "' . ($CustomPlaceholder ?? $Field) . '" already added',
-        );
-        $this->ErrorSet($error);
         if($ThrowError):
-          throw $error;
+          throw new Exception(
+            'The where condition "' . ($CustomPlaceholder ?? $Field) . '" already added',
+          );
         else:
           return false;
         endif;

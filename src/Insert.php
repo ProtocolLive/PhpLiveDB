@@ -1,11 +1,11 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2022.09.23.00
+//2022.10.24.00
 
 namespace ProtocolLive\PhpLiveDb;
-use \PDO;
-use \PDOException;
+use PDO;
+use PDOException;
 
 class Insert extends Basics{
   protected array $Fields = [];
@@ -56,6 +56,9 @@ class Insert extends Basics{
     $this->Query = substr($this->Query, 0, -1) . ')';
   }
 
+  /**
+   * @throws PDOException
+   */
   public function Run(
     bool $Debug = false,
     bool $HtmlSafe = true,
@@ -63,7 +66,7 @@ class Insert extends Basics{
     bool $Log = false,
     int $LogEvent = null,
     int $LogUser = null
-  ):int|null{
+  ):int{
     $FieldsCount = count($this->Fields);
     if($FieldsCount === 0):
       return null;
@@ -77,14 +80,7 @@ class Insert extends Basics{
 
     $this->Bind($statement, $this->Fields, $HtmlSafe, $TrimValues);
 
-    try{
-      $this->Error = null;
-      $statement->execute();
-    }catch(PDOException $e){
-      $this->ErrorSet($e);
-      return null;
-    }
-
+    $statement->execute();
     $return = $this->Conn->lastInsertId();
 
     $this->LogAndDebug($statement, $Debug, $Log, $LogEvent, $LogUser);

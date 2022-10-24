@@ -1,11 +1,11 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.09.30.00
+//2022.10.24.00
 
 namespace ProtocolLive\PhpLiveDb;
-use \PDO;
-use \PDOException;
+use PDO;
+use PDOException;
 
 final class Delete extends Basics{
   private array $Wheres = [];
@@ -20,6 +20,9 @@ final class Delete extends Basics{
     $this->Prefix = $Prefix;
   }
 
+  /**
+   * @throws PDOException
+   */
   public function Run(
     bool $Debug = false,
     bool $HtmlSafe = true,
@@ -27,7 +30,7 @@ final class Delete extends Basics{
     bool $Log = false,
     int $LogEvent = null,
     int $LogUser = null
-  ):int|null{
+  ):int{
     $WheresCount = count($this->Wheres);
 
     $this->Query = 'delete from ' . $this->Table;
@@ -42,14 +45,7 @@ final class Delete extends Basics{
       $this->Bind($statement, $this->Wheres, $HtmlSafe, $TrimValues);
     endif;
     
-    try{
-      $this->Error = null;
-      $statement->execute();
-    }catch(PDOException $e){
-      $this->ErrorSet($e);
-      return null;
-    }
-
+    $statement->execute();
     $return = $statement->rowCount();
 
     $this->LogAndDebug($statement, $Debug, $Log, $LogEvent, $LogUser);
@@ -68,6 +64,7 @@ final class Delete extends Basics{
    * @param bool $BlankIsNull Convert '' to null
    * @param bool $NoField Bind values with fields declared in Fields function
    * @param bool $NoBind Don't bind values. Are set to true if Operator is Operators::Sql
+   * @throws PDOException
    */
   public function WhereAdd(
     string $Field,
@@ -80,12 +77,11 @@ final class Delete extends Basics{
     bool $BlankIsNull = true,
     bool $NoField = false,
     bool $NoBind = false
-  ):bool{
+  ):void{
     if(isset($this->Wheres[$CustomPlaceholder ?? $Field])):
-      $this->ErrorSet(new PDOException(
+      throw new PDOException(
         'The where condition "' . ($CustomPlaceholder ?? $Field) . '" already added',
-      ));
-      return false;
+      );
     endif;
     if($CustomPlaceholder === null):
       $this->FieldNeedCustomPlaceholder($Field);
@@ -106,6 +102,5 @@ final class Delete extends Basics{
       $NoField,
       $NoBind
     );
-    return true;
   }
 }

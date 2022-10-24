@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2022.09.21.00
+//2022.10.24.00
 
 namespace ProtocolLive\PhpLiveDb;
 use \PDOException;
@@ -28,9 +28,6 @@ final class InsertUpdate extends Insert{
     );
   }
 
-  /**
-   * @return void
-   */
   public function Run(
     bool $Debug = false,
     bool $HtmlSafe = true,
@@ -39,9 +36,8 @@ final class InsertUpdate extends Insert{
     int $LogEvent = null,
     int $LogUser = null
   ):int{
-    $FieldsCount = count($this->Fields);
-    if($FieldsCount === 0):
-      return null;
+    if(count($this->Fields) === 0):
+      return 0;
     endif;
 
     $this->Query = 'insert into ' . $this->Table . '(';
@@ -51,8 +47,8 @@ final class InsertUpdate extends Insert{
     $this->Query .= ' on duplicate key update ';
     foreach($this->Fields as $field):
       if($field->InsertUpdate):
-        $this->Query .= ($field->CustomPlaceholder ?? $field->Name) .
-          '=values(' . ($field->CustomPlaceholder ?? $field->Name) . '),';
+        $this->Query .= ($field->CustomPlaceholder ?? $field->Name);
+        $this->Query .= '=values(' . ($field->CustomPlaceholder ?? $field->Name) . '),';
       endif;
     endforeach;
     $this->Query = substr($this->Query, 0, -1);
@@ -60,13 +56,7 @@ final class InsertUpdate extends Insert{
 
     $this->Bind($statement, $this->Fields, $HtmlSafe, $TrimValues);
 
-    try{
-      $this->Error = null;
-      $statement->execute();
-    }catch(PDOException $e){
-      $this->ErrorSet($e);
-      return null;
-    }
+    $statement->execute();
 
     $this->LogAndDebug($statement, $Debug, $Log, $LogEvent, $LogUser);
     return 0;
