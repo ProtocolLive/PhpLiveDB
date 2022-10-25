@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2022.10.24.01
+//2022.10.25.00
 
 namespace ProtocolLive\PhpLiveDb;
 use Exception;
@@ -110,6 +110,15 @@ abstract class Basics{
 
   public function Commit():void{
     $this->Conn->commit();
+  }
+
+  /**
+   * Get the duration of the last query executed
+   */
+  public function Duration():float{
+    $temp = $this->Conn->query('show profiles');
+    $temp = $temp->fetchAll();
+    return $temp[0]['Duration'];
   }
 
   protected function FieldNeedCustomPlaceholder(string $Field):void{
