@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2022.10.24.00
+//2022.11.02.00
 
 namespace ProtocolLive\PhpLiveDb;
 use \PDOException;
@@ -28,6 +28,10 @@ final class InsertUpdate extends Insert{
     );
   }
 
+  /**
+   * @return void
+   * @throws PDOException
+   */
   public function Run(
     bool $Debug = false,
     bool $HtmlSafe = true,
