@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2022.11.02.00
+//2022.11.02.01
 
 namespace ProtocolLive\PhpLiveDb;
 use \PDOException;
@@ -26,6 +26,10 @@ final class InsertUpdate extends Insert{
       $Type,
       InsertUpdate: $Update
     );
+  }
+
+  public function IdGet():int{
+    return $this->Conn->lastInsertId();
   }
 
   /**
