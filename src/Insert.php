@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2022.10.24.00
+//2022.11.10.00
 
 namespace ProtocolLive\PhpLiveDb;
 use PDO;
@@ -13,11 +13,13 @@ class Insert extends Basics{
   public function __construct(
     PDO $Conn,
     string $Table,
-    string $Prefix
+    string $Prefix,
+    callable $OnRun = null
   ){
     $this->Conn = $Conn;
     $this->Table = $Table;
     $this->Prefix = $Prefix;
+    $this->OnRun = $OnRun;
   }
 
   public function FieldAdd(
@@ -83,7 +85,18 @@ class Insert extends Basics{
     $statement->execute();
     $return = $this->Conn->lastInsertId();
 
-    $this->LogAndDebug($statement, $Debug, $Log, $LogEvent, $LogUser);
+    $query = $this->LogAndDebug($statement, $Debug, $Log, $LogEvent, $LogUser);
+
+    if($this->OnRun !== null):
+      call_user_func_array(
+        $this->OnRun,
+        [
+          'Query' => $query,
+          'Result' => $return,
+          'Time' => $this->Duration(),
+        ]
+      );
+    endif;
 
     return $return;
   }

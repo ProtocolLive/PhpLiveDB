@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2022.10.24.00
+//2022.11.10.00
 
 namespace ProtocolLive\PhpLiveDb;
 use PDO;
@@ -23,13 +23,15 @@ final class Select extends Basics{
     string $Database = null,
     string $Table,
     string $Prefix,
-    bool $ThrowError = true
+    bool $ThrowError = true,
+    callable $OnRun = null
   ){
     $this->Conn = $Conn;
     $this->Database = $Database;
     $this->Table = $Table;
     $this->Prefix = $Prefix;
     $this->ThrowError = $ThrowError;
+    $this->OnRun = $OnRun;
   }
 
   public function Fetch(
@@ -179,17 +181,29 @@ final class Select extends Basics{
 
     $statement->execute();
 
-    $this->LogAndDebug($statement, $Debug, $Log, $LogEvent, $LogUser);
+    $query = $this->LogAndDebug($statement, $Debug, $Log, $LogEvent, $LogUser);
 
     if($Fetch):
       $this->Statement = $statement;
-      return true;
+      $return = true;
     else:
       if($FetchBoth):
         $statement->setFetchMode(PDO::FETCH_BOTH);
       endif;
-      return $statement->fetchAll();
+      $return = $statement->fetchAll();
     endif;
+
+    if($this->OnRun !== null):
+      call_user_func_array(
+        $this->OnRun,
+        [
+          'Query' => $query,
+          'Result' => $return,
+          'Time' => $this->Duration(),
+        ]
+      );
+    endif;
+    return $return;
   }
 
   private function SelectHead():void{

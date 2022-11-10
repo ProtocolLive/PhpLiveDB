@@ -1,12 +1,12 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2022.10.08.01
+//2022.11.10.00
 
 namespace ProtocolLive\PhpLiveDb;
-use \Exception;
-use \PDO;
-use \PDOException;
+use Exception;
+use PDO;
+use PDOException;
 
 final class PhpLiveDb extends Basics{
   /**
@@ -20,7 +20,8 @@ final class PhpLiveDb extends Basics{
     Drivers $Driver = Drivers::MySql,
     string $Charset = 'utf8mb4',
     int $TimeOut = 5,
-    string $Prefix = ''
+    string $Prefix = '',
+    callable $OnRun = null
   ){
     $dsn = $Driver->value . ':';
     if($Driver === Drivers::MySql):
@@ -48,13 +49,15 @@ final class PhpLiveDb extends Basics{
     endif;
     $this->Prefix = $Prefix;
     $this->Database = $Db;
+    $this->OnRun = $OnRun;
   }
 
   public function Delete(string $Table):Delete{
     return new Delete(
       $this->Conn,
       $Table,
-      $this->Prefix
+      $this->Prefix,
+      $this->OnRun
     );
   }
   
@@ -66,7 +69,8 @@ final class PhpLiveDb extends Basics{
     return new Insert(
       $this->Conn,
       $Table,
-      $this->Prefix
+      $this->Prefix,
+      $this->OnRun
     );
   }
 
@@ -74,7 +78,8 @@ final class PhpLiveDb extends Basics{
     return new InsertUpdate(
       $this->Conn,
       $Table,
-      $this->Prefix
+      $this->Prefix,
+      $this->OnRun
     );
   }
 
@@ -87,7 +92,8 @@ final class PhpLiveDb extends Basics{
       $this->Database,
       $Table,
       $this->Prefix,
-      $ThrowError
+      $ThrowError,
+      $this->OnRun
     );
   }
 
@@ -95,14 +101,27 @@ final class PhpLiveDb extends Basics{
    * @throws PDOException
    */
   public function Truncate(string $Table):int|false{
-    return $this->Conn->exec('truncate '. $Table);
+    $query = 'truncate '. $Table;
+    $return = $this->Conn->exec($query);
+    if($this->OnRun !== null):
+      call_user_func_array(
+        $this->OnRun,
+        [
+          'Query' => $query,
+          'Result' => $return,
+          'Time' => $this->Duration(),
+        ]
+      );
+    endif;
+    return $return;
   }
 
   public function Update(string $Table):Update{
     return new Update(
       $this->Conn,
       $Table,
-      $this->Prefix
+      $this->Prefix,
+      $this->OnRun
     );
   }
 }

@@ -1,9 +1,10 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2022.10.25.00
+//2022.11.10.00
 
 namespace ProtocolLive\PhpLiveDb;
+use Closure;
 use Exception;
 use PDO;
 use PDOException;
@@ -16,6 +17,7 @@ abstract class Basics{
   protected array $Binds = [];
   protected string|null $Query = null;
   protected array $WheresControl = [];
+  protected string|Closure|null $OnRun = null;
   public string|null $Error = null;
   public string|null $Database = null;
 
@@ -130,18 +132,20 @@ abstract class Basics{
     endif;
   }
 
+  /**
+   * @return string The final query
+   */
   protected function LogAndDebug(
     PDOStatement $Statement,
     bool $Debug = false,
     bool $Log = false,
     int $LogEvent = null,
     int $LogUser = null
-  ):void{
+  ):string{
     ob_start();
     $Statement->debugDumpParams();
     $Dump = ob_get_contents();
     ob_end_clean();
-
     if($Debug):
       if(ini_get('html_errors') == true):
         print '<pre style="text-align:left">';
@@ -152,10 +156,10 @@ abstract class Basics{
         print '</pre>';
       endif;
     endif;
-
     if($Log):
       $this->LogSet($LogEvent, $LogUser, $Dump);
     endif;
+    return $Dump;
   }
 
   protected function LogSet(
