@@ -9,6 +9,6 @@ a3492d910b0c2e2d4bf6997a0aae29b8f85ebced  Insert.php
 dc5a8d26534572f19ad15daae888dcaabc658d9a  Operators.php
 e4d7083ccffc636218ac2597a839baa82b6ba2e8  Parenthesis.php
 5dfb14b0dd24858d1d9e932839dda3e672bcf61c  PhpLiveDb.php
-e8f94b3a87dd29f10f55c2528de1317a30e4dbd5  Select.php
+dd539c4a3d42382b09633de6e54a01b7f84f3537  Select.php
 c039b2ac0be7bd039e71693b9d34c21676c54884  Types.php
 8966e00e4f741f985f03a03a7063101038223dde  Update.php

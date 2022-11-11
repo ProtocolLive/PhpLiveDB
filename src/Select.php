@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2022.11.10.00
+//2022.11.11.00
 
 namespace ProtocolLive\PhpLiveDb;
 use PDO;
@@ -59,13 +59,17 @@ final class Select extends Basics{
     if($String):
       $query = 'select group_concat(';
       if($Alias !== null):
-        $query .= "concat('" . $Alias . ".',column_name)";
+        $query .= "concat('$Alias.',column_name)";
       else:
         $query .= 'column_name';
       endif;
-      $query .= ')';
+      $query .= ') as column_name';
     else:
-      $query = 'select column_name';
+      $query = 'select ';
+      if($Alias !== null):
+        $query .= "concat('$Alias.',column_name) as ";
+      endif;
+        $query .= 'column_name';
     endif;
     $query .= "
       from information_schema.columns
@@ -76,7 +80,7 @@ final class Select extends Basics{
     if($String):
       return $fields->fetchColumn();
     else:
-      return array_column($fields->fetchAll(), 'COLUMN_NAME');
+      return array_column($fields->fetchAll(), 'column_name');
     endif;
   }
 
