@@ -39,16 +39,17 @@
         <div class="title">Examples</div><br>
         <div class="code">
           <span class="var">$consult</span>
-          = <span class="var">$Db</span><span class="type">-></span><span class="func">Select</span>('<span class="string">users</span>');<br>
-          <span class="var">$consult</span><span class="type">-></span><span class="func">Fields</span>(<span
-            class="string">'user_id,name,email,active,lastlogin'</span>);<br>
+          <span class="type">=</span>
+          <span class="var">$Db</span><span class="type">-></span><span class="func">Select</span>(<span class="string">'users'</span>);<br>
+          <span class="var">$consult</span><span class="type">-></span><span class="func">Fields</span>(<span class="string">'user_id,name,email,active,lastlogin'</span>);<br>
           $consult<span class="type">-></span><span class="func">Run</span>();<br>
           <span class="comment">//select user_id,name,email,active,lastlogin from users</span><br>
         </div><br>
 
         <div class="code">
           <span class="var">$consult</span>
-          = <span class="var">$Db</span><span class="type">-></span><span class="func">Select</span>('<span class="string">users u</span>');<br>
+          <span class="type">=</span>
+          <span class="var">$Db</span><span class="type">-></span><span class="func">Select</span>(<span class="string">'users u'</span>);<br>
           <span class="var">$consult</span><span class="type">-></span><span class="func">Fields</span>(<span class="string">'</span><br>
             <span class="ident string">
               user_id,(
@@ -63,8 +64,7 @@
             </span><br>
           <span class="string">'</span></span>);<br>
           $consult<span class="type">-></span><span class="func">Run</span>();<br>
-          <span class="comment">//select user_id,(select value from socialmedias where name='Telegram' and
-            user_id=u.user_id<br>) as telegram from users u</span><br>
+          <span class="comment">//select user_id,(select value from socialmedias where name='Telegram' and user_id=u.user_id<br>) as telegram from users u</span><br>
         </div><br>
         <p>&nbsp;</p>
       </td>
