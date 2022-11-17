@@ -32,7 +32,7 @@ a:visited{
 .menu2{
   border: none;
   width: 200px;
-  height: 500px;
+  height: calc(100vh - 26px);
 }
 .maintitle{
   color: #793862;
