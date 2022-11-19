@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2022.11.10.00
+//2022.11.19.00
 
 namespace ProtocolLive\PhpLiveDb;
 use PDO;
@@ -29,7 +29,7 @@ final class Update extends Basics{
     string|bool|null $Value,
     Types $Type,
     bool $BlankIsNull = true
-  ){
+  ):self{
     if($BlankIsNull and $Value === ''):
       $Value = null;
     endif;
@@ -41,6 +41,7 @@ final class Update extends Basics{
       $Value,
       $Type
     );
+    return $this;
   }
 
   /**
@@ -125,7 +126,7 @@ final class Update extends Basics{
     string $CustomPlaceholder = null,
     bool $BlankIsNull = true,
     bool $NoBind = false
-  ):void{
+  ):self{
     if(isset($this->Wheres[$CustomPlaceholder ?? $Field])):
       throw new PDOException(
         'The where condition "' . ($CustomPlaceholder ?? $Field) . '" already added',
@@ -150,5 +151,6 @@ final class Update extends Basics{
       false,
       $NoBind
     );
+    return $this;
   }
 }

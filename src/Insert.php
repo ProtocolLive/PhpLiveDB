@@ -27,7 +27,7 @@ class Insert extends Basics{
     string|bool|null $Value,
     Types $Type,
     bool $BlankIsNull = true
-  ){
+  ):self{
     if($BlankIsNull and $Value === ''):
       $Value = null;
     endif;
@@ -39,6 +39,7 @@ class Insert extends Basics{
       $Value,
       $Type
     );
+    return $this;
   }
 
   protected function InsertFields():void{

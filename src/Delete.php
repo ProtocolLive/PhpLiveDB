@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2022.11.10.00
+//2022.11.19.00
 
 namespace ProtocolLive\PhpLiveDb;
 use PDO;
@@ -90,7 +90,7 @@ final class Delete extends Basics{
     bool $BlankIsNull = true,
     bool $NoField = false,
     bool $NoBind = false
-  ):void{
+  ):self{
     if(isset($this->Wheres[$CustomPlaceholder ?? $Field])):
       throw new PDOException(
         'The where condition "' . ($CustomPlaceholder ?? $Field) . '" already added',
@@ -115,5 +115,6 @@ final class Delete extends Basics{
       $NoField,
       $NoBind
     );
+    return $this;
   }
 }

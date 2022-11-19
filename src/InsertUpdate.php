@@ -1,10 +1,10 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2022.11.02.01
+//2022.11.19.00
 
 namespace ProtocolLive\PhpLiveDb;
-use \PDOException;
+use PDOException;
 
 final class InsertUpdate extends Insert{
   public function FieldAdd(
@@ -13,7 +13,7 @@ final class InsertUpdate extends Insert{
     Types $Type,
     bool $BlankIsNull = true,
     bool $Update = false
-  ){
+  ):self{
     if($BlankIsNull and $Value === ''):
       $Value = null;
     endif;
@@ -26,6 +26,7 @@ final class InsertUpdate extends Insert{
       $Type,
       InsertUpdate: $Update
     );
+    return $this;
   }
 
   public function IdGet():int{

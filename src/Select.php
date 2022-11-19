@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2022.11.11.00
+//2022.11.19.00
 
 namespace ProtocolLive\PhpLiveDb;
 use PDO;
@@ -44,8 +44,9 @@ final class Select extends Basics{
     return $this->Statement->fetch(cursorOffset: $Offset);
   }
 
-  public function Fields(string $Fields):void{
+  public function Fields(string $Fields):self{
     $this->Fields = $Fields;
+    return $this;
   }
 
   /**
@@ -84,8 +85,9 @@ final class Select extends Basics{
     endif;
   }
 
-  public function Group(string $Fields):void{
+  public function Group(string $Fields):self{
     $this->Group = $Fields;
+    return $this;
   }
 
   public function JoinAdd(
@@ -93,7 +95,7 @@ final class Select extends Basics{
     string|null $Using = null,
     string|null $On = null,
     Joins $Type = Joins::Left
-  ):void{
+  ):self{
     $this->Join[] = new class($Table, $Type, $Using, $On){
       public string $Table;
       public Joins $Type;
@@ -112,6 +114,8 @@ final class Select extends Basics{
         $this->On = $On;
       }
     };
+    return $this;
+
   }
 
   private function JoinBuild():void{
@@ -132,12 +136,14 @@ final class Select extends Basics{
     endforeach;
   }
 
-  public function Limit(int $Amount, int $First = 0):void{
+  public function Limit(int $Amount, int $First = 0):self{
     $this->Limit = $First . ',' . $Amount;
+    return $this;
   }
 
-  public function Order(string $Fields):void{
+  public function Order(string $Fields):self{
     $this->Order = $Fields;
+    return $this;
   }
 
   private function Prepare():PDOStatement{
@@ -226,6 +232,7 @@ final class Select extends Basics{
    * @param bool $NoField Bind values with fields declared in Fields function
    * @param bool $NoBind Don't bind values. Are set to true if Operator is Operators::Sql
    * @param bool $Debug Show debug information
+   * @return self|false Return false if ThrowError are set
    */
   public function WhereAdd(
     string $Field,
@@ -239,7 +246,7 @@ final class Select extends Basics{
     bool $NoField = false,
     bool $NoBind = false,
     bool $Debug = false
-  ):bool{
+  ):self|false{
     if($CustomPlaceholder === null):
       $this->FieldNeedCustomPlaceholder($Field);
     endif;
@@ -274,6 +281,6 @@ final class Select extends Basics{
     if($Debug):
       var_dump($this->Wheres);
     endif;
-    return true;
+    return $this;
   }
 }
