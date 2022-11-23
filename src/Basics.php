@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2022.11.10.00
+//2022.11.23.00
 
 namespace ProtocolLive\PhpLiveDb;
 use Closure;
@@ -197,7 +197,10 @@ abstract class Basics{
     $this->Conn->rollBack();
   }
 
-  public function Transaction(callable $Code):mixed{
+  public function Transaction(
+    callable $Code,
+    bool $RunDefinedExceptionHandler = false
+  ):mixed{
     try{
       self::Begin();
       $return = $Code();
@@ -205,7 +208,13 @@ abstract class Basics{
       return $return;
     }catch(PDOException $e){
       self::Rollback();
-      return $e;
+      if($RunDefinedExceptionHandler):
+        $handler = set_exception_handler(null);
+        $handler($e);
+        set_exception_handler($handler);
+      else:
+        return $e;
+      endif;
     }
   }
 
