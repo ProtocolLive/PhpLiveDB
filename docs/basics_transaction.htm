@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="global.css">
+  <meta property="og:locale" content="en-us">
+  <meta property="og:site_name" content="PhpLiveDb Docs">
+  <meta property="og:title" content="PhpLiveDb Docs">
+  <meta property="og:description" content="PhpLiveDb library Documentation">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://protocollive.github.io/PhpLiveDB">
+  <meta property="og:image" content="https://opengraph.githubassets.com/31f593b768176dcc3fd800bfbfa6b9d47b7ea0aca35cc40d438893fe35776f3e/ProtocolLive/PhpLiveDB">
+  <meta property="og:image:width" content="864">
+  <meta property="og:image:height" content="432">
+  <title>PhpLiveDb - Basics::Transaction</title>
+</head>
+
+<body>
+  <table style="width:95%;margin-left: auto;margin-right: auto;">
+    <tr>
+      <td style="width:100%;background-color:#F2F2F2;padding:20px;vertical-align:top">
+        <div class="maintitle">Basics::Transaction</div>
+        <p>Run a callable function. The begin command will be executed before, and a commit command will be executed later. If an exception occurs, a rollback is executed.</p>
+        <p>&nbsp;</p>
+
+        <div class="title">Sintaxe</div><br>
+        <div class="code">
+          <span class="type">namespace</span>
+          <span class="object">ProtocolLive</span>\<span class="object">PhpLiveDb</span>;<br>
+          <br>
+          
+          <span class="type">public function</span>
+          <span class="object">Basics</span><span class="type">::</span><span class="func">Transaction</span><span class="type">(</span>
+          <div class="ident">
+            <span class="type">callable</span>
+            $Code,<br>
+            <span class="type">bool</span>
+            $RunDefinedExceptionHandler
+            <span class="type">=</span>
+            <span class="const">false</span>
+          </div>
+          <span class="type">):mixed</span>;
+          </div>
+        </div>
+        <p>&nbsp;</p>
+
+        <div class="title">Parameters</div>
+        <p><span class="var">$Code</span> - A callable function to be executed</p>
+        <p><span class="var">$RunDefinedExceptionHandler</span> - If the custom (or default) exception handler must be executed if an exception occurs inside the callable function.</p>
+        <p>&nbsp;</p>
+
+        <div class="title">Return</div>
+        <p>Returns the value returned by the callable function or the <a href="https://www.php.net/manual/en/class.pdoexception.php" target="_blank">PDOException</a> occurred</p>
+        <p>&nbsp;</p>
+
+        <div class="title">Examples</div><br>
+        <div class="code">
+          $consult
+          <span class="type">=</span>
+          $Db<span class="type">-></span><span class="func">Transaction(</span><span class="type">function()</span>
+          <span class="type">use(</span>$Db<span class="type">){</span><br>
+          <div class="ident">
+            $id
+            <span class="type">=</span>
+            $Db<span class="type">-></span><span class="func">Insert(</span><span class="string">'users'</span><span class="func">)</span><br>
+            <span class="type">-></span><span class="func">FieldAdd(</span><span class="string">'email'</span>,
+            <span class="string">'a@a.com'</span>,
+            <span class="object">Types</span>::<span class="const">Str</span><span class="func">)</span><br>
+            <span class="type">-></span><span class="func">FieldAdd(</span><span class="string">'pwd'</span>,
+            <span class="string">'123'</span>,
+            <span class="object">Types</span>::<span class="const">Str</span><span class="func">)</span><br>
+            <span class="type">-></span><span class="func">Run()</span>;<br>
+            $Db<span class="type">-></span><span class="func">Insert(</span><span class="string">'socialmedias'</span><span class="func">)</span><br>
+            <span class="type">-></span><span class="func">FieldAdd(</span><span class="string">'user_id'</span>,
+            $id,
+            <span class="object">Types</span>::<span class="const">Int</span><span class="func">)</span><br>
+            <span class="type">-></span><span class="func">FieldAdd(</span><span class="string">'name'</span>,
+            <span class="string">'Facebook'</span>,
+            <span class="object">Types</span>::<span class="const">Str</span><span class="func">)</span><br>
+            <span class="type">-></span><span class="func">FieldAdd(</span><span class="string">'value'</span>,
+            <span class="string">'autgbavgtaga'</span>,
+            <span class="object">Types</span>::<span class="const">Str</span><span class="func">)</span><br>
+            <span class="type">-></span><span class="func">Run()</span>;<br>
+            <span class="type">return</span> $id;
+          </div>
+          <span class="type">}</span><span class="func">)</span>;<br>
+        </div>
+        <p>&nbsp;</p>
+
+        <div class="title">See more</div><br>
+        - <a href="basics_begin.htm">Begin</a><br>
+        - <a href="basics_commit.htm">Commit</a><br>
+        - <a href="basics_rollback.htm">Rollback</a><br>
+      </td>
+      <td style="color: #ccc; font-size: 18px; vertical-align: top;"><iframe src="menu.htm" class="menu2"></iframe></td>
+    </tr>
+  </table>
+</body>
+
+</html>

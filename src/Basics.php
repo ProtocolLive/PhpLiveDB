@@ -197,6 +197,12 @@ abstract class Basics{
     $this->Conn->rollBack();
   }
 
+  /**
+   * Run a callable function. The begin command will be executed before, and a commit command will be executed later. If an exception occurs, a rollback is executed.
+   * @param callable $Code A callable function to be executed
+   * @param bool $RunDefinedExceptionHandler If the custom (or default) exception handler must be executed if an exception occurs inside the callable function.
+   * @return mixed Returns the value returned by the callable function or the PDOException occurred
+   */
   public function Transaction(
     callable $Code,
     bool $RunDefinedExceptionHandler = false
