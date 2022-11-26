@@ -29,37 +29,34 @@
           <br>
 
           <span class="type">enum</span>
-          <span class="object">Types</span><span class="type">:int{</span><br>
-          <span class="ident">
+          <span class="object">Types</span><span class="type">:</span>
+          <span class="type">int{</span><br>
+          <div class="ident">
             <span class="type">case</span>
             <span class="const">Bool</span>
             <span class="type">=</span>
-            <span class="const">5</span>;
-          </span><br>
-          <span class="ident">
+            <span class="const">5</span>;<br>
+
             <span class="type">case</span>
             <span class="const">Int</span>
             <span class="type">=</span>
-            <span class="const">1</span>;
-          </span><br>
-          <span class="ident">
+            <span class="const">1</span>;<br>
+
             <span class="type">case</span>
             <span class="const">Null</span>
             <span class="type">=</span>
-            <span class="const">0</span>;
-          </span><br>
-          <span class="ident">
+            <span class="const">0</span>;<br>
+
             <span class="type">case</span>
             <span class="const">Sql</span>
             <span class="type">=</span>
-            <span class="const">6</span>;
-          </span><br>
-          <span class="ident">
+            <span class="const">6</span>;<br>
+
             <span class="type">case</span>
             <span class="const">Str</span>
             <span class="type">=</span>
             <span class="const">2</span>;
-          </span><br>
+          </div>
           <span class="type">}</span>
         </div>
         <p>&nbsp;</p>
@@ -92,16 +89,11 @@
           <span class="type">=</span>
           <span class="var">$Db</span><span class="type">-></span><span class="func">Select(</span><span class="string">'users'</span><span class="func">)</span>;<br>
           <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd(</span><br>
-          <span class="ident">
-            <span class="string">'email'</span>,
-          </span>
-          <br>
-          <span class="ident">
-            $_POST<span class="type">[</span><span class="string">'email'</span><span class="type">]</span>,
-          </span><br>
-          <span class="ident">
+          <div class="ident">
+            <span class="string">'email'</span>,<br>
+            $_POST<span class="type">[</span><span class="string">'email'</span><span class="type">]</span>,<br>
             <span class="object">Types</span><span class="type">::</span><span class="const">Str</span>
-          </span><br>
+          </div>
           <span class="func">)</span>;
         </div><br>
 
@@ -110,16 +102,11 @@
           <span class="type">=</span>
           <span class="var">$Db</span><span class="type">-></span><span class="func">Select(</span><span class="string">'users'</span><span class="func">)</span>;<br>
           <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd(</span><br>
-          <span class="ident">
-            <span class="string">'type'</span>,
-          </span>
-          <br>
-          <span class="ident">
-            <span class="const">1</span>,
-          </span><br>
-          <span class="ident">
+          <div class="ident">
+            <span class="string">'type'</span>,<br>
+            <span class="const">1</span>,<br>
             <span class="object">Types</span><span class="type">::</span><span class="const">Int</span>
-          </span><br>
+          </div>
           <span class="func">)</span>;
         </div><br>
 
@@ -128,16 +115,11 @@
           <span class="type">=</span>
           <span class="var">$Db</span><span class="type">-></span><span class="func">Update(</span><span class="string">'users'</span><span class="func">)</span>;<br>
           <span class="var">$consult</span><span class="type">-></span><span class="func">FieldAdd(</span><br>
-          <span class="ident">
-            <span class="string">'lastlogin'</span>,
-          </span>
-          <br>
-          <span class="ident">
-            <span class="string">'lastlogin2'</span>,
-          </span><br>
-          <span class="ident">
+          <div class="ident">
+            <span class="string">'lastlogin'</span>,<br>
+            <span class="string">'lastlogin2'</span>,<br>
             <span class="object">Types</span><span class="type">::</span><span class="const">Sql</span>
-          </span><br>
+          </div>
           <span class="func">)</span>;<br>
           <span class="comment">//update users set lastlogin=lastlogin2</span>
         </div><br>

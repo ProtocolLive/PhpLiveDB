@@ -161,16 +161,12 @@
           <span class="var">$consult</span>
           = <span class="var">$Db</span><span class="type">-></span><span class="func">Select(</span><span class="string">'users'</span><span class="func">)</span>;<br>
           <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd(</span><br>
-          <span class="ident">
-            <span class="string">'email'</span>,
-          </span><br>
-          <span class="ident">
-            $_POST<span class="type">[</span><span class="string">'email'</span><span class="type">]</span>,
-          </span><br>
-          <span class="ident">
-            <span class="object">Types</span><span class="type">::</span><span class="const">Str</span><br>
-            <span class="func">)</span>;
-          </span><br>
+          <div class="ident">
+            <span class="string">'email'</span>,<br>
+            $_POST<span class="type">[</span><span class="string">'email'</span><span class="type">]</span>,<br>
+            <span class="object">Types</span><span class="type">::</span><span class="const">Str</span>
+          </div>
+          <span class="func">)</span>;<br>
           $consult<span class="type">-></span><span class="func">Run()</span>;<br>
           <span class="comment">//select * from users where email=:email</span><br>
           <span class="comment">//select * from users where email='foo@bar.com'</span><br>
@@ -181,26 +177,18 @@
           <span class="var">$consult</span>
           = <span class="var">$Db</span><span class="type">-></span><span class="func">Select(</span><span class="string">'users'</span><span class="func">)</span>;<br>
           <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd(</span><br>
-          <span class="ident">
-            <span class="string">'email'</span>,
-          </span><br>
-          <span class="ident">
-            $_POST<span class="type">[</span><span class="string">'email'</span><span class="type">]</span>,
-          </span><br>
-          <span class="ident">
+          <div class="ident">
+            <span class="string">'email'</span>,<br>
+            $_POST<span class="type">[</span><span class="string">'email'</span><span class="type">]</span>,<br>
             <span class="object">Types</span><span class="type">::</span><span class="const">Str</span>
-          </span><br>
+          </div>
           <span class="func">)</span>;<br>
           <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd(</span><br>
-          <span class="ident">
-            <span class="string">'active'</span>,
-          </span><br>
-          <span class="ident">
-            <span class="const">1</span>,
-          </span><br>
-          <span class="ident">
+          <div class="ident">
+            <span class="string">'active'</span>,<br>
+            <span class="const">1</span>,<br>
             <span class="object">Types</span><span class="type">::</span><span class="const">Int</span>
-          </span><br>
+          </div>
           <span class="func">)</span>;<br>
           $consult<span class="type">-></span><span class="func">Run()</span>;<br>
           <span class="comment">//select * from users where email=:email and active=:active</span><br>
@@ -212,34 +200,22 @@
           <span class="var">$consult</span>
           = <span class="var">$Db</span><span class="type">-></span><span class="func">Select(</span><span class="string">'users'</span><span class="func">)</span>;<br>
           <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd(</span><br>
-          <span class="ident">
-            <span class="string">'type'</span>,
-          </span><br>
-          <span class="ident">
-            <span class="const">1</span>,
-          </span><br>
-          <span class="ident">
+          <div class="ident">
+            <span class="string">'type'</span>,<br>
+            <span class="const">1</span>,<br>
             <span class="object">Types</span><span class="type">::</span><span class="const">Int</span>
-          </span><br>
+          </div><br>
           <span class="func">)</span>;<br>
           <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd(</span><br>
-          <span class="ident">
-            <span class="string">'type'</span>,
-          </span><br>
-          <span class="ident">
-            <span class="const">2</span>,
-          </span><br>
-          <span class="ident">
-            <span class="object">Types</span><span class="type">::</span><span class="const">Int</span>,
-          </span><br>
-          <span class="ident">
+          <div class="ident">
+            <span class="string">'type'</span>,<br>
+            <span class="const">2</span>,<br>
+            <span class="object">Types</span><span class="type">::</span><span class="const">Int</span>,<br>
             <span class="argument">AndOr</span>:
-            <span class="object">AndOr</span><span class="type">::</span><span class="const">Or</span>,
-          </span><br>
-          <span class="ident">
+            <span class="object">AndOr</span><span class="type">::</span><span class="const">Or</span>,<br>
             <span class="argument">CustomPlaceholder</span>:
             <span class="string">'type2'</span>
-          </span><br>
+          </div>
           <span class="func">)</span>;</span><br>
           $consult<span class="type">-></span><span class="func">Run()</span>;<br>
           <span class="comment">//select * from users where type=:type or type=:type2</span><br>
@@ -252,65 +228,52 @@
           = <span class="var">$Db</span><span class="type">-></span><span class="func">Select(</span><span class="string">'users'</span><span class="func">)</span>;<br>
 
           <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd(</span><br>
-          <span class="ident">
-            <span class="string">'active'</span>,
-          </span><br>
-          <span class="ident">
-            <span class="const">true</span>,
-          </span><br>
-          <span class="ident">
+          <div class="ident">
+            <span class="string">'active'</span>,<br>
+            <span class="const">true</span>,<br>
             <span class="object">Types</span><span class="type">::</span><span class="const">Bool</span>
-          </span><br>
+          </div>
           <span class="func">)</span>;<br>
 
           <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd(</span><br>
-          <span class="ident">
-            <span class="string">'name'</span>,
-          </span><br>
-          <span class="ident">
+          <div class="ident">
+            <span class="string">'name'</span>,<br>
+
             <span class="string">'%'</span>
             <span class="type">.</span>
             $_POST<span class="type">[</span><span class="string">'text'</span><span class="type">]</span>
             <span class="type">.</span>
-            <span class="string">'%'</span>,
-          </span><br>
-          <span class="ident">
-            <span class="object">Types</span><span class="type">::</span><span class="const">Str</span>,
-          </span><br>
-          <span class="ident">
+            <span class="string">'%'</span>,<br>
+
+            <span class="object">Types</span><span class="type">::</span><span class="const">Str</span>,<br>
+
             <span class="argument">Operator</span>:
-            <span class="object">Operators</span><span class="type">::</span><span class="const">Like</span>,
-          </span><br>
-          <span class="ident">
+            <span class="object">Operators</span><span class="type">::</span><span class="const">Like</span>,<br>
+
             <span class="argument">Parenthesis</span>:
             <span class="object">Parenthesis</span><span class="type">::</span><span class="const">Open</span>,
-          </span><br>
+          </div>
           <span class="func">)</span>;<br>
 
           <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd(</span><br>
-          <span class="ident">
-            <span class="string">'email'</span>,
-          </span><br>
-          <span class="ident">
+          <div class="ident">
+            <span class="string">'email'</span>,<br>
+
             <span class="argument">Operator</span>:
-            <span class="object">Operators</span><span class="type">::</span><span class="const">Like</span>,
-          </span><br>
-          <span class="ident">
+            <span class="object">Operators</span><span class="type">::</span><span class="const">Like</span>,<br>
+
             <span class="argument">AndOr</span>:
-            <span class="object">AndOr</span><span class="type">::</span><span class="const">Or</span>,
-          </span><br>
-          <span class="ident">
+            <span class="object">AndOr</span><span class="type">::</span><span class="const">Or</span>,<br>
+
             <span class="argument">Parenthesis</span>:
-            <span class="object">Parenthesis</span><span class="type">::</span><span class="const">Close</span>,
-          </span><br>
-          <span class="ident">
+            <span class="object">Parenthesis</span><span class="type">::</span><span class="const">Close</span>,<br>
+
             <span class="argument">CustomPlaceholder</span>:
-            <span class="string">'name'</span>,
-          </span><br>
-          <span class="ident">
+            <span class="string">'name'</span>,<br>
+
             <span class="argument">NoBind</span>:
             <span class="const">true</span>
-          </span><br>
+          </div>
           <span class="func">)</span>;</span><br>
           $consult<span class="type">-></span><span class="func">Run()</span>;<br>
           <span class="comment">//select * from users where active=:active and (name like :name or email like :name)</span><br>

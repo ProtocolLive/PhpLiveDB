@@ -30,18 +30,14 @@
 
           <span class="type">enum</span>
           <span class="object">Parenthesis</span><span class="type">{</span><br>
-          <span class="ident">
+          <div class="ident">
             <span class="type">case</span>
-            <span class="const">Close</span>;
-          </span><br>
-          <span class="ident">
+            <span class="const">Close</span>;<br>
             <span class="type">case</span>
-            <span class="const">None</span>;
-          </span><br>
-          <span class="ident">
+            <span class="const">None</span>;<br>
             <span class="type">case</span>
             <span class="const">Open</span>;
-          </span><br>
+          </div>
           <span class="type">}</span>
         </div>
         <p>&nbsp;</p>
@@ -53,55 +49,35 @@
           <span class="var">$Db</span><span class="type">-></span><span class="func">Select(</span>'<span class="string">users</span>'<span class="func">)</span>;<br>
 
           <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd(</span><br>
-          <span class="ident">
-            <span class="string">'active'</span>,
-          </span><br>
-          <span class="ident">
-            <span class="const">true</span>,
-          </span><br>
-          <span class="ident">
+          <div class="ident">
+            <span class="string">'active'</span>,<br>
+            <span class="const">true</span>,<br>
             <span class="object">Types</span><span class="type">::</span><span class="const">Bool</span>
-          </span><br>
+          </div>
           <span class="func">)</span>;<br>
 
           <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd(</span><br>
-          <span class="ident">
-            <span class="string">'type'</span>,
-          </span><br>
-          <span class="ident">
-            <span class="const">1</span>,
-          </span><br>
-          <span class="ident">
-            <span class="object">Types</span><span class="type">::</span><span class="const">Int</span>,
-          </span><br>
-          <span class="ident">
+          <div class="ident">
+            <span class="string">'type'</span>,<br>
+            <span class="const">1</span>,<br>
+            <span class="object">Types</span><span class="type">::</span><span class="const">Int</span>,<br>
             <span class="argument">Parenthesis</span>:
             <span class="object">Parenthesis</span><span class="type">::</span><span class="const">Open</span>
-          </span><br>
+          </div>
           <span class="func">)</span>;<br>
 
           <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd(</span><br>
-          <span class="ident">
-            <span class="string">'type'</span>,
-          </span><br>
-          <span class="ident">
-            <span class="const">2</span>,
-          </span><br>
-          <span class="ident">
-            <span class="object">Types</span><span class="type">::</span><span class="const">Int</span>
-          </span><br>
-          <span class="ident">
+          <div class="ident">
+            <span class="string">'type'</span>,<br>
+            <span class="const">2</span>,<br>
+            <span class="object">Types</span><span class="type">::</span><span class="const">Int</span><br>
             <span class="argument">AndOr</span>:
-            <span class="object">AndOr</span><span class="type">::</span><span class="const">Or</span>,
-          </span><br>
-          <span class="ident">
+            <span class="object">AndOr</span><span class="type">::</span><span class="const">Or</span>,<br>
             <span class="argument">CustomPlaceholder</span>:
-            <span class="string">'type2'</span>,
-          </span><br>
-          <span class="ident">
+            <span class="string">'type2'</span>,<br>
             <span class="argument">Parenthesis</span>:
             <span class="object">Parenthesis</span><span class="type">::</span><span class="const">Close</span>
-          </span><br>
+          </div>
           <span class="func">)</span>;</span><br>
           $consult<span class="type">-></span><span class="func">Run()</span>;<br>
           <span class="comment">//select * from users where active=:active and (type=:type or type=:type2)</span><br>

@@ -30,10 +30,10 @@
 
           <span class="type">public function</span>
           <span class="object">Select</span><span class="type">::</span><span class="func">Fields(</span><br>
-          <span class="ident">
+          <div class="ident">
             <span class="type">string</span>
             <span class="var">$Fields</span><br>
-          </span>
+          </div>
           <span class="func">)</span><span class="type">:</span>
           <span class="object">self</span>;
         </div>
@@ -60,17 +60,17 @@
           <span class="type">=</span>
           <span class="var">$Db</span><span class="type">-></span><span class="func">Select(</span><span class="string">'users u'</span><span class="func">)</span>;<br>
           <span class="var">$consult</span><span class="type">-></span><span class="func">Fields(</span><span class="string">'</span><br>
-            <span class="ident string">
+          <div class="ident">
+            <span class="string">
               user_id,(
             </span><br>
-            <span class="ident">
-              <span class="ident string">
-                select value from socialmedias where name='Telegram' and user_id=u.user_id
-              </span>
-            </span><br>
-            <span class="ident string">
+            <div class="ident string">
+              select value from socialmedias where name='Telegram' and user_id=u.user_id
+            </div>
+            <span class="string">
               ) as telegram
-            </span><br>
+            </span>
+          </div>
           <span class="string">'</span></span><span class="func">)</span>;<br>
           $consult<span class="type">-></span><span class="func">Run()</span>;<br>
           <span class="comment">//select user_id,(select value from socialmedias where name='Telegram' and user_id=u.user_id<br>) as telegram from users u</span><br>
