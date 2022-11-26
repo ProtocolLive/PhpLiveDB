@@ -30,8 +30,7 @@
           <br>
 
           <span class="type">public function</span>
-          <span class="object">Select</span><span class="type">::</span><span class="func">JoinAdd</span><span
-            class="type">(</span><br>
+          <span class="object">Select</span><span class="type">::</span><span class="func">JoinAdd(</span><br>
           <span class="ident">
             <span class="type">string</span>
             <span class="var">$Table</span>,
@@ -48,7 +47,8 @@
             <span class="object">Joins</span>
             <span class="var">$Type</span> <span class="type">=</span> <span class="object">Joins</span><span class="type">::</span><span class="const">Left</span>
           </span><br>
-          <span class="type">):</span><span class="object">self</span>;
+          <span class="func">)</span><span class="type">:</span>
+          <span class="object">self</span>;
         </div>
         <p>&nbsp;</p>
 
@@ -75,33 +75,33 @@
 
         <div class="code">
           <span class="var">$consult</span>
-          = <span class="var">$Db</span><span class="type">-></span><span class="func">Select</span>(<span class="string">'users'</span>);<br>
-          <span class="var">$consult</span><span class="type">-></span><span class="func">JoinAdd</span>(<span class="string">'socialmedias'</span>,
-          <span class="string">'user_id'</span>);<br>
-          $consult<span class="type">-></span><span class="func">Run</span>();<br>
+          = <span class="var">$Db</span><span class="type">-></span><span class="func">Select(</span><span class="string">'users'</span><span class="func">)</span>;<br>
+          <span class="var">$consult</span><span class="type">-></span><span class="func">JoinAdd(</span><span class="string">'socialmedias'</span>,
+          <span class="string">'user_id'</span><span class="func">)</span>;<br>
+          $consult<span class="type">-></span><span class="func">Run()</span>;<br>
           <span class="comment">//select * from users left join socialmedias using('user_id')</span><br>
         </div><br>
 
         <div class="code">
           <span class="var">$consult</span>
-          = <span class="var">$Db</span><span class="type">-></span><span class="func">Select</span>(<span class="string">'users'</span>);<br>
-          <span class="var">$consult</span><span class="type">-></span><span class="func">JoinAdd</span>(<span class="string">'socialmedias'</span>,
+          = <span class="var">$Db</span><span class="type">-></span><span class="func">Select(</span><span class="string">'users'</span><span class="func">)</span>;<br>
+          <span class="var">$consult</span><span class="type">-></span><span class="func">JoinAdd(</span><span class="string">'socialmedias'</span>,
           <span class="argument">On:</span>
-          <span class="string">'users.id=socialmedias.user_id'</span>);<br>
-          $consult<span class="type">-></span><span class="func">Run</span>();<br>
+          <span class="string">'users.id=socialmedias.user_id'</span><span class="func">)</span>;<br>
+          $consult<span class="type">-></span><span class="func">Run()</span>;<br>
           <span class="comment">//select * from users left join socialmedias on users.id=socialmedias.user_id</span><br>
         </div><br>
 
         <div class="code">
           <span class="var">$consult</span>
-          = <span class="var">$Db</span><span class="type">-></span><span class="func">Select</span>(<span class="string">'users'</span>);<br>
+          = <span class="var">$Db</span><span class="type">-></span><span class="func">Select(</span><span class="string">'users'</span><span class="func">)</span>;<br>
 
-          <span class="var">$consult</span><span class="type">-></span><span class="func">JoinAdd</span>(<span class="string">'socialmedias'</span>,
+          <span class="var">$consult</span><span class="type">-></span><span class="func">JoinAdd(</span><span class="string">'socialmedias'</span>,
           <span class="string">'user_id'</span>,
           
           <span class="argument">Type:</span>
-          <span class="object">Joins</span><span class="type">::</span><span class="const">Inner</span>);<br>
-          $consult<span class="type">-></span><span class="func">Run</span>();<br>
+          <span class="object">Joins</span><span class="type">::</span><span class="const">Inner</span><span class="func">)</span>;<br>
+          $consult<span class="type">-></span><span class="func">Run()</span>;<br>
           <span class="comment">//select * from users inner join socialmedias using('user_id')</span><br>
         </div><br>
 

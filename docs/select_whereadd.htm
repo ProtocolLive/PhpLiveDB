@@ -29,8 +29,7 @@
           <br>
 
           <span class="type">public function</span>
-          <span class="object">Select</span>::<span class="func">WhereAdd</span><span
-            class="type">(</span><br>
+          <span class="object">Select</span>::<span class="func">WhereAdd(</span><br>
           <span class="ident">
             <span class="type">string</span>
             <span class="var">$Field</span>,<br>
@@ -90,7 +89,8 @@
             <span class="type">=</span>
             <span class="const">false</span>
           </span><br>
-          <span class="type">):</span><span class="object">self</span>;
+          <span class="func">)</span><span class="type">:</span>
+          <span class="object">self</span>;
         </div>
         <p>&nbsp;</p>
         <div class="title">Parameters</div>
@@ -159,8 +159,8 @@
         Select with one condition:<br>
         <div class="code">
           <span class="var">$consult</span>
-          = <span class="var">$Db</span><span class="type">-></span><span class="func">Select</span>(<span class="string">'users'</span>);<br>
-          <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd</span>(<br>
+          = <span class="var">$Db</span><span class="type">-></span><span class="func">Select(</span><span class="string">'users'</span><span class="func">)</span>;<br>
+          <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd(</span><br>
           <span class="ident">
             <span class="string">'email'</span>,
           </span><br>
@@ -169,9 +169,9 @@
           </span><br>
           <span class="ident">
             <span class="object">Types</span><span class="type">::</span><span class="const">Str</span><br>
-            );
+            <span class="func">)</span>;
           </span><br>
-          $consult<span class="type">-></span><span class="func">Run</span>();<br>
+          $consult<span class="type">-></span><span class="func">Run()</span>;<br>
           <span class="comment">//select * from users where email=:email</span><br>
           <span class="comment">//select * from users where email='foo@bar.com'</span><br>
         </div><br>
@@ -179,8 +179,8 @@
         Select with more conditions:<br>
         <div class="code">
           <span class="var">$consult</span>
-          = <span class="var">$Db</span><span class="type">-></span><span class="func">Select</span>(<span class="string">'users'</span>);<br>
-          <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd</span>(<br>
+          = <span class="var">$Db</span><span class="type">-></span><span class="func">Select(</span><span class="string">'users'</span><span class="func">)</span>;<br>
+          <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd(</span><br>
           <span class="ident">
             <span class="string">'email'</span>,
           </span><br>
@@ -190,8 +190,8 @@
           <span class="ident">
             <span class="object">Types</span><span class="type">::</span><span class="const">Str</span>
           </span><br>
-          );<br>
-          <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd</span>(<br>
+          <span class="func">)</span>;<br>
+          <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd(</span><br>
           <span class="ident">
             <span class="string">'active'</span>,
           </span><br>
@@ -201,8 +201,8 @@
           <span class="ident">
             <span class="object">Types</span><span class="type">::</span><span class="const">Int</span>
           </span><br>
-          );<br>
-          $consult<span class="type">-></span><span class="func">Run</span>();<br>
+          <span class="func">)</span>;<br>
+          $consult<span class="type">-></span><span class="func">Run()</span>;<br>
           <span class="comment">//select * from users where email=:email and active=:active</span><br>
           <span class="comment">//select * from users where email='foo@bar.com' and active=1</span><br>
         </div><br>
@@ -210,8 +210,8 @@
         Select with "Or" and "CustomPlaceholder":<br>
         <div class="code">
           <span class="var">$consult</span>
-          = <span class="var">$Db</span><span class="type">-></span><span class="func">Select</span>(<span class="string">'users'</span>);<br>
-          <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd</span>(<br>
+          = <span class="var">$Db</span><span class="type">-></span><span class="func">Select(</span><span class="string">'users'</span><span class="func">)</span>;<br>
+          <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd(</span><br>
           <span class="ident">
             <span class="string">'type'</span>,
           </span><br>
@@ -221,8 +221,8 @@
           <span class="ident">
             <span class="object">Types</span><span class="type">::</span><span class="const">Int</span>
           </span><br>
-          );<br>
-          <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd</span>(<br>
+          <span class="func">)</span>;<br>
+          <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd(</span><br>
           <span class="ident">
             <span class="string">'type'</span>,
           </span><br>
@@ -240,8 +240,8 @@
             <span class="argument">CustomPlaceholder</span>:
             <span class="string">'type2'</span>
           </span><br>
-          );</span><br>
-          $consult<span class="type">-></span><span class="func">Run</span>();<br>
+          <span class="func">)</span>;</span><br>
+          $consult<span class="type">-></span><span class="func">Run()</span>;<br>
           <span class="comment">//select * from users where type=:type or type=:type2</span><br>
           <span class="comment">//select * from users where type=1 or type=2</span><br>
         </div><br>
@@ -249,9 +249,9 @@
         Operators, Parenthesis, CustomPlaceholder and NoBind:
         <div class="code">
           <span class="var">$consult</span>
-          = <span class="var">$Db</span><span class="type">-></span><span class="func">Select</span>(<span class="string">'users'</span>);<br>
+          = <span class="var">$Db</span><span class="type">-></span><span class="func">Select(</span><span class="string">'users'</span><span class="func">)</span>;<br>
 
-          <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd</span>(<br>
+          <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd(</span><br>
           <span class="ident">
             <span class="string">'active'</span>,
           </span><br>
@@ -261,9 +261,9 @@
           <span class="ident">
             <span class="object">Types</span><span class="type">::</span><span class="const">Bool</span>
           </span><br>
-          );<br>
+          <span class="func">)</span>;<br>
 
-          <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd</span>(<br>
+          <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd(</span><br>
           <span class="ident">
             <span class="string">'name'</span>,
           </span><br>
@@ -285,9 +285,9 @@
             <span class="argument">Parenthesis</span>:
             <span class="object">Parenthesis</span><span class="type">::</span><span class="const">Open</span>,
           </span><br>
-          );<br>
+          <span class="func">)</span>;<br>
 
-          <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd</span>(<br>
+          <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd(</span><br>
           <span class="ident">
             <span class="string">'email'</span>,
           </span><br>
@@ -311,12 +311,10 @@
             <span class="argument">NoBind</span>:
             <span class="const">true</span>
           </span><br>
-          );</span><br>
-          $consult<span class="type">-></span><span class="func">Run</span>();<br>
-          <span class="comment">//select * from users where active=:active and (name like :name or email like
-            :name)</span><br>
-          <span class="comment">//select * from users where active=1 and (name like '%foo%' or email like
-            '%foo%')</span>
+          <span class="func">)</span>;</span><br>
+          $consult<span class="type">-></span><span class="func">Run()</span>;<br>
+          <span class="comment">//select * from users where active=:active and (name like :name or email like :name)</span><br>
+          <span class="comment">//select * from users where active=1 and (name like '%foo%' or email like '%foo%')</span>
         </div>
         <p>&nbsp;</p>
       </td>

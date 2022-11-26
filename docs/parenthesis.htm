@@ -50,9 +50,9 @@
         <div class="code">
           <span class="var">$consult</span>
           <span class="type">=</span>
-          <span class="var">$Db</span><span class="type">-></span><span class="func">Select</span>('<span class="string">users</span>');<br>
+          <span class="var">$Db</span><span class="type">-></span><span class="func">Select(</span>'<span class="string">users</span>'<span class="func">)</span>;<br>
 
-          <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd</span>(<br>
+          <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd(</span><br>
           <span class="ident">
             <span class="string">'active'</span>,
           </span><br>
@@ -62,9 +62,9 @@
           <span class="ident">
             <span class="object">Types</span><span class="type">::</span><span class="const">Bool</span>
           </span><br>
-          );<br>
+          <span class="func">)</span>;<br>
 
-          <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd</span>(<br>
+          <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd(</span><br>
           <span class="ident">
             <span class="string">'type'</span>,
           </span><br>
@@ -78,9 +78,9 @@
             <span class="argument">Parenthesis</span>:
             <span class="object">Parenthesis</span><span class="type">::</span><span class="const">Open</span>
           </span><br>
-          );<br>
+          <span class="func">)</span>;<br>
 
-          <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd</span>(<br>
+          <span class="var">$consult</span><span class="type">-></span><span class="func">WhereAdd(</span><br>
           <span class="ident">
             <span class="string">'type'</span>,
           </span><br>
@@ -102,8 +102,8 @@
             <span class="argument">Parenthesis</span>:
             <span class="object">Parenthesis</span><span class="type">::</span><span class="const">Close</span>
           </span><br>
-          );</span><br>
-          $consult<span class="type">-></span><span class="func">Run</span>();<br>
+          <span class="func">)</span>;</span><br>
+          $consult<span class="type">-></span><span class="func">Run()</span>;<br>
           <span class="comment">//select * from users where active=:active and (type=:type or type=:type2)</span><br>
           <span class="comment">//select * from users where active=1 and (type=1 or type=2)</span>
         </div>
