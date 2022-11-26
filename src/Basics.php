@@ -21,6 +21,9 @@ abstract class Basics{
   public string|null $Error = null;
   public string|null $Database = null;
 
+  /**
+   * Start a transaction
+   */
   public function Begin():void{
     $this->Conn->beginTransaction();
   }
@@ -110,6 +113,9 @@ abstract class Basics{
     endif;
   }
 
+  /**
+   * Commit the transactions created since last Basics::Begin
+   */
   public function Commit():void{
     $this->Conn->commit();
   }
@@ -193,6 +199,9 @@ abstract class Basics{
     return $Field;
   }
 
+  /**
+   * Drop the transactions created since last Basics::Begin
+   */
   public function Rollback():void{
     $this->Conn->rollBack();
   }
