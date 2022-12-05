@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2022.11.23.00
+//2022.12.05.00
 
 namespace ProtocolLive\PhpLiveDb;
 use Closure;
@@ -150,6 +150,7 @@ abstract class Basics{
   ):string{
     ob_start();
     $Statement->debugDumpParams();
+    debug_print_backtrace();
     $Dump = ob_get_contents();
     ob_end_clean();
     if($Debug):
