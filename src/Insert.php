@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2022.11.10.00
+//2022.12.16.00
 
 namespace ProtocolLive\PhpLiveDb;
 use PDO;
@@ -40,6 +40,34 @@ class Insert extends Basics{
       $Type
     );
     return $this;
+  }
+
+  public function RunFromSelect(
+    string $Fields,
+    Select $Select,
+    bool $Debug = false,
+    bool $Log = false,
+    int $LogEvent = null,
+    int $LogUser = null
+  ):void{
+    $this->Query = 'insert into ' . $this->Table . '(' . $Fields . ') ';
+    $this->Query .= $Select->QueryGet();
+
+    $this->Query = str_replace('##', $this->Prefix . '_', $this->Query);
+    $statement = $this->Conn->query($this->Query);
+
+    $query = $this->LogAndDebug($statement, $Debug, $Log, $LogEvent, $LogUser);
+
+    if($this->OnRun !== null):
+      call_user_func_array(
+        $this->OnRun,
+        [
+          'Query' => $query,
+          'Result' => null,
+          'Time' => $this->Duration(),
+        ]
+      );
+    endif;
   }
 
   protected function InsertFields():void{

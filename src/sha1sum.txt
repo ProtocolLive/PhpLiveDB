@@ -3,7 +3,7 @@
 a239779a9be6d71643c82b643aea47695ee40c31  Delete.php
 609b0fcdbcbf7c46ee26a0b5a59575e43ce3baf7  Drivers.php
 2d3b3f58a063fde11fafd9b7807fea4166f0b256  Field.php
-8a0025819cde999195fb2794b51574e255ff241a  Insert.php
+e0a43d5a42e3b4d80b4d3bbd9054121dca3ef198  Insert.php
 346f5e1982676836a30cc8281d4d02fe44ebb3f8  InsertUpdate.php
 037507a28e5fd925f8f6c77cd53d8421427ee3f0  Joins.php
 dc5a8d26534572f19ad15daae888dcaabc658d9a  Operators.php
