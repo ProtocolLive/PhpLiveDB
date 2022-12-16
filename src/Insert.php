@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2022.12.16.01
+//2022.12.16.02
 
 namespace ProtocolLive\PhpLiveDb;
 use PDO;
@@ -13,7 +13,7 @@ class Insert extends Basics{
   public function __construct(
     PDO $Conn,
     string $Table,
-    string $Prefix,
+    string $Prefix = null,
     callable $OnRun = null
   ){
     $this->Conn = $Conn;
