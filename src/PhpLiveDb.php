@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2022.11.10.00
+//2022.11.16.00
 
 namespace ProtocolLive\PhpLiveDb;
 use Exception;
@@ -20,7 +20,7 @@ final class PhpLiveDb extends Basics{
     Drivers $Driver = Drivers::MySql,
     string $Charset = 'utf8mb4',
     int $TimeOut = 5,
-    string $Prefix = '',
+    string $Prefix = null,
     callable $OnRun = null
   ){
     $dsn = $Driver->value . ':';

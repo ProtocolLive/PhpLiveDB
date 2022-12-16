@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2022.12.05.00
+//2022.12.16.00
 
 namespace ProtocolLive\PhpLiveDb;
 use Closure;
@@ -12,7 +12,7 @@ use PDOStatement;
 
 abstract class Basics{
   protected string $Table;
-  protected string $Prefix;
+  protected string|null $Prefix;
   protected PDO $Conn;
   protected array $Binds = [];
   protected string|null $Query = null;

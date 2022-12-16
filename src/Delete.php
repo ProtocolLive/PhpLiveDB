@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2022.11.19.00
+//2022.12.16.00
 
 namespace ProtocolLive\PhpLiveDb;
 use PDO;
@@ -40,7 +40,9 @@ final class Delete extends Basics{
       $this->BuildWhere($this->Wheres);
     endif;
 
-    $this->Query = str_replace('##', $this->Prefix . '_', $this->Query);
+    if($this->Prefix !== null):
+      $this->Query = str_replace('##', $this->Prefix . '_', $this->Query);
+    endif;
     $statement = $this->Conn->prepare($this->Query);
 
     if($WheresCount > 0):
