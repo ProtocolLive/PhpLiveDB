@@ -1,12 +1,32 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2022.12.16.00
+//2022.12.21.00
 
 namespace ProtocolLive\PhpLiveDb;
 use PDOException;
 
 final class InsertUpdate extends Insert{
+  private function BuildQuery():bool{
+    if(count($this->Fields) === 0):
+      return false;
+    endif;
+
+    $this->Query = 'insert into ' . $this->Table . '(';
+    $this->InsertFields();
+
+    $this->Query = str_replace('##', $this->Prefix . '_', $this->Query);
+    $this->Query .= ' on duplicate key update ';
+    foreach($this->Fields as $field):
+      if($field->InsertUpdate):
+        $this->Query .= ($field->CustomPlaceholder ?? $field->Name);
+        $this->Query .= '=values(' . ($field->CustomPlaceholder ?? $field->Name) . '),';
+      endif;
+    endforeach;
+    $this->Query = substr($this->Query, 0, -1);
+    return true;
+  }
+
   public function FieldAdd(
     string $Field,
     string|bool|null $Value,
@@ -33,6 +53,11 @@ final class InsertUpdate extends Insert{
     return $this->Conn->lastInsertId();
   }
 
+  public function QueryGet():string{
+    self::BuildQuery();
+    return $this->Query;
+  }
+
   /**
    * @return void
    * @throws PDOException
@@ -45,24 +70,9 @@ final class InsertUpdate extends Insert{
     int $LogEvent = null,
     int $LogUser = null
   ):int{
-    if(count($this->Fields) === 0):
+    if(self::BuildQuery() === false):
       return 0;
     endif;
-
-    $this->Query = 'insert into ' . $this->Table . '(';
-    $this->InsertFields();
-
-    if($this->Prefix !== null):
-      $this->Query = str_replace('##', $this->Prefix . '_', $this->Query);
-    endif;
-    $this->Query .= ' on duplicate key update ';
-    foreach($this->Fields as $field):
-      if($field->InsertUpdate):
-        $this->Query .= ($field->CustomPlaceholder ?? $field->Name);
-        $this->Query .= '=values(' . ($field->CustomPlaceholder ?? $field->Name) . '),';
-      endif;
-    endforeach;
-    $this->Query = substr($this->Query, 0, -1);
     $statement = $this->Conn->prepare($this->Query);
 
     $this->Bind($statement, $this->Fields, $HtmlSafe, $TrimValues);
