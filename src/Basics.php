@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2022.12.16.01
+//2022.12.27.00
 
 namespace ProtocolLive\PhpLiveDb;
 use Closure;
@@ -18,6 +18,7 @@ abstract class Basics{
   protected string|null $Query = null;
   protected array $WheresControl = [];
   protected string|Closure|null $OnRun = null;
+  protected Drivers $Driver = Drivers::MySql;
   public string|null $Error = null;
   public string|null $Database = null;
 
