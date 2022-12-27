@@ -16,7 +16,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "ProtocolLive\\PhpLiveDb\\": "scr"
+            "ProtocolLive\\PhpLiveDb\\": "src"
           }
     }
 }
