@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2022.11.16.00
+//2022.12.27.00
 
 namespace ProtocolLive\PhpLiveDb;
 use Exception;
@@ -50,6 +50,19 @@ final class PhpLiveDb extends Basics{
     $this->Prefix = $Prefix;
     $this->Database = $Db;
     $this->OnRun = $OnRun;
+    $this->Driver = $Driver;
+  }
+
+  public function Create(
+    string $Table
+  ):Create{
+    return new Create(
+      $this->Conn,
+      $Table,
+      $this->Prefix,
+      $this->Driver,
+      $this->OnRun
+    );
   }
 
   public function Delete(string $Table):Delete{
