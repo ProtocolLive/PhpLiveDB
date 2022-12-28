@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.12.27.00
+//Version 2022.12.28.00
 
 namespace ProtocolLive\PhpLiveDb;
 use InvalidArgumentException;
@@ -45,7 +45,7 @@ extends Basics{
     string $RefField = null,
     RefTypes $RefUpdate = RefTypes::Restrict,
     RefTypes $RefDelete = RefTypes::Restrict,
-  ):void{
+  ):self{
     if($Format === Formats::Varchar
     and $Size === null):
       throw new InvalidArgumentException('Varchar must have a size parameter');
@@ -67,6 +67,7 @@ extends Basics{
       'RefUpdate' => $RefUpdate,
       'RefDelete' => $RefDelete
     ];
+    return $this;
   }
 
   /**
@@ -205,12 +206,13 @@ extends Basics{
    */
   public function Unique(
     array $Fields
-  ):void{
+  ):self{
     foreach($Fields as $field):
       if(isset($this->Fields[$field]) === false):
         throw new InvalidArgumentException('Field ' . $field . ' not found');
       endif;
     endforeach;
     $this->Unique[] = $Fields;
+    return $this;
   }
 }
