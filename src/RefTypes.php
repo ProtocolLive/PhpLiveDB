@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.12.26.00
+//Version 2022.12.30.00
 
 namespace ProtocolLive\PhpLiveDb;
 
