@@ -1,14 +1,15 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2022.12.24.00
+//2023.01.03.00
 
 namespace ProtocolLive\PhpLiveDb;
 use PDO;
 use PDOException;
 use ProtocolLive\PhpLiveDb\Operators;
 
-final class Update extends Basics{
+final class Update
+extends Basics{
   private array $Fields = [];
   private array $Wheres = [];
 
@@ -22,6 +23,20 @@ final class Update extends Basics{
     $this->Table = $Table;
     $this->Prefix = $Prefix;
     $this->OnRun = $OnRun;
+  }
+
+  private function BuildQuery():void{
+    $WheresCount = count($this->Wheres);
+
+    $this->Query = 'update ' . $this->Table . ' set ';
+    $this->UpdateFields();
+    if($WheresCount > 0):
+      $this->BuildWhere($this->Wheres);
+    endif;
+
+    if($this->Prefix !== null):
+      $this->Query = str_replace('##', $this->Prefix . '_', $this->Query);
+    endif;
   }
 
   public function FieldAdd(
@@ -44,6 +59,11 @@ final class Update extends Basics{
     return $this;
   }
 
+  public function QueryGet():string{
+    self::BuildQuery();
+    return $this->Query;
+  }
+
   /**
    * @throws PDOException
    */
@@ -55,17 +75,8 @@ final class Update extends Basics{
     int $LogEvent = null,
     int $LogUser = null
   ):int{
+    self::BuildQuery();
     $WheresCount = count($this->Wheres);
-
-    $this->Query = 'update ' . $this->Table . ' set ';
-    $this->UpdateFields();
-    if($WheresCount > 0):
-      $this->BuildWhere($this->Wheres);
-    endif;
-
-    if($this->Prefix !== null):
-      $this->Query = str_replace('##', $this->Prefix . '_', $this->Query);
-    endif;
     $statement = $this->Conn->prepare($this->Query);
 
     $this->Bind($statement, $this->Fields, $HtmlSafe, $TrimValues);
@@ -76,7 +87,13 @@ final class Update extends Basics{
     $statement->execute();
     $return = $statement->rowCount();
 
-    $query = $this->LogAndDebug($statement, $Debug, $Log, $LogEvent, $LogUser);
+    $query = $this->LogAndDebug(
+      $statement,
+      $Debug,
+      $Log,
+      $LogEvent,
+      $LogUser
+    );
 
     if($this->OnRun !== null):
       call_user_func_array(
