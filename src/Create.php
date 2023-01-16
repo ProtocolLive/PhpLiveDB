@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.12.28.00
+//Version 2023.01.16.00
 
 namespace ProtocolLive\PhpLiveDb;
 use InvalidArgumentException;
@@ -202,6 +202,7 @@ extends Basics{
   }
 
   /**
+   * @param string[] $Fields
    * @throws InvalidArgumentException
    */
   public function Unique(
