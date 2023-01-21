@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2022.12.24.00
+//2023.01.21.00
 
 namespace ProtocolLive\PhpLiveDb;
 use PDO;
@@ -234,7 +234,7 @@ final class Select extends Basics{
    * @param bool $NoField Bind values with fields declared in Fields function
    * @param bool $NoBind Don't bind values. Are set to true if Operator is Operators::Sql
    * @param bool $Debug Show debug information
-   * @return self|false Return false if ThrowError are set
+   * @return self|false Return false if ThrowError are set or all wheres if $Debug are set
    */
   public function WhereAdd(
     string $Field,
@@ -248,7 +248,6 @@ final class Select extends Basics{
     bool $NoField = false,
     bool $NoBind = false,
     bool $Debug = false
-  ):self|false{
     if($CustomPlaceholder === null):
       $this->FieldNeedCustomPlaceholder($Field);
     endif;
@@ -266,6 +265,7 @@ final class Select extends Basics{
     );
     if($temp === false):
       return false;
+  ):self|array|false{
     endif;
     $this->Wheres[] = new Field(
       $Field,
@@ -281,7 +281,7 @@ final class Select extends Basics{
     );
     $this->WheresControl[] = $CustomPlaceholder ?? $Field;
     if($Debug):
-      var_dump($this->Wheres);
+      return $this->Wheres;
     endif;
     return $this;
   }
