@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2023.01.21.00
+//2023.01.21.01
 
 namespace ProtocolLive\PhpLiveDb;
 use Closure;
@@ -71,49 +71,52 @@ abstract class Basics{
       endif;
     endforeach;
     $Wheres = array_values($WheresTemp);
-
-    if(count($Wheres) > 0):
+    
+    $count = count($Wheres);
+    if($count > 0):
       $this->Query .= ' where ';
-      $i = 0;
-      /**
-       * @var DbWhere $where
-       */
-      foreach($Wheres as $where):
-        if($i > 0):
-          if($where->AndOr === AndOr::And):
+      for($i = 0; $i < $count; $i++):
+        //Complicated logic
+        if(($i === 0 or $Wheres[$i - 1]->Name === null
+        or ($Wheres[$i]->Name === null and isset($Wheres[$i + 1]) === false)) === false):
+          if($Wheres[$i]->AndOr === AndOr::And):
             $this->Query .= ' and ';
-          elseif($where->AndOr === AndOr::Or):
+          elseif($Wheres[$i]->AndOr === AndOr::Or):
             $this->Query .= ' or ';
           endif;
         endif;
-        $i++;
-        if($where->Parenthesis === Parenthesis::Open):
+
+        if($Wheres[$i]->Parenthesis === Parenthesis::Open):
           $this->Query .= '(';
         endif;
-        if($where->Operator === Operators::IsNotNull):
-          $this->Query .= $where->Name . ' is not null';
-        elseif($where->Operator === Operators::In):
-          $this->Query .= $where->Name . ' in(' . $where->Value . ')';
-        elseif($where->Operator === Operators::NotIn):
-          $this->Query .= $where->Name . ' not in(' . $where->Value . ')';
-        elseif($where->NoBind === false
-        and(
-          $where->Value === null
-          or $where->Type === Types::Null
-        )):
-          $this->Query .= $where->Name . ' is null';
-        else:
-          $this->Query .= $where->Name . $where->Operator->value;
-          if($where->Type === Types::Sql):
-            $this->Query .= $where->Value;
+
+        if($Wheres[$i]->Operator === Operators::IsNotNull):
+          $this->Query .= $Wheres[$i]->Name . ' is not null';
+        elseif($Wheres[$i]->Operator === Operators::In):
+          $this->Query .= $Wheres[$i]->Name . ' in(' . $Wheres[$i]->Value . ')';
+        elseif($Wheres[$i]->Operator === Operators::NotIn):
+          $this->Query .= $Wheres[$i]->Name . ' not in(' . $Wheres[$i]->Value . ')';
+        elseif($Wheres[$i]->Name !== null):
+          if($Wheres[$i]->NoBind === false
+          and(
+            $Wheres[$i]->Value === null
+            or $Wheres[$i]->Type === Types::Null
+          )):
+            $this->Query .= $Wheres[$i]->Name . ' is null';
           else:
-            $this->Query .= ':' . ($where->CustomPlaceholder ?? $where->Name);
+            $this->Query .= $Wheres[$i]->Name . $Wheres[$i]->Operator->value;
+            if($Wheres[$i]->Type === Types::Sql):
+              $this->Query .= $Wheres[$i]->Value;
+            else:
+              $this->Query .= ':' . ($Wheres[$i]->CustomPlaceholder ?? $Wheres[$i]->Name);
+            endif;
           endif;
         endif;
-        if($where->Parenthesis === Parenthesis::Close):
+
+        if($Wheres[$i]->Parenthesis === Parenthesis::Close):
           $this->Query .= ')';
         endif;
-      endforeach;
+      endfor;
     endif;
   }
 
@@ -134,8 +137,7 @@ abstract class Basics{
   }
 
   protected function FieldNeedCustomPlaceholder(string $Field):void{
-    if(strpos($Field, '.') !== false
-    or strpos($Field, '(') !== false):
+    if(str_contains($Field, '.') or str_contains($Field, '(')):
       throw new PDOException(
         'The field ' . $Field . ' need a custom placeholder',
       );
@@ -258,12 +260,13 @@ abstract class Basics{
   protected function WheresControl(
     bool $ThrowError,
     string $Field,
-    Types $Type = null,
+    Types $Type,
     Operators $Operator,
     bool $NoField,
     bool $NoBind
   ):bool{
-    if($NoField === false
+    if($Field !== null
+    and $NoField === false
     and $NoBind === false
     and $Type !== Types::Sql
     and $Type !== Types::Null

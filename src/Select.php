@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2023.01.21.00
+//2023.01.21.01
 
 namespace ProtocolLive\PhpLiveDb;
 use PDO;
@@ -223,7 +223,7 @@ final class Select extends Basics{
   }
 
   /**
-   * @param string $Field Field name
+   * @param string $Field Field name. Can be null to only add parenthesis
    * @param string|bool $Value Field value. Can be null in case of use another field value. If null, sets the $Operator to Operator::Null
    * @param Types $Type Field type. Can be null in case of Operator::IsNull. Are changed to Types::Null if $Value is null
    * @param Operators $Operator Comparison operator. Operator::Sql sets NoBind to true
@@ -237,7 +237,7 @@ final class Select extends Basics{
    * @return self|false Return false if ThrowError are set or all wheres if $Debug are set
    */
   public function WhereAdd(
-    string $Field,
+    string $Field = null,
     string|bool $Value = null,
     Types $Type = null,
     Operators $Operator = Operators::Equal,
@@ -248,24 +248,27 @@ final class Select extends Basics{
     bool $NoField = false,
     bool $NoBind = false,
     bool $Debug = false
-    if($CustomPlaceholder === null):
-      $this->FieldNeedCustomPlaceholder($Field);
-    endif;
-    if($BlankIsNull and $Value === ''):
-      $Value = null;
-      $Type = Types::Null;
-    endif;
-    $temp = $this->WheresControl(
-      $this->ThrowError,
-      $Field,
-      $Type,
-      $Operator,
-      $NoField,
-      $NoBind
-    );
-    if($temp === false):
-      return false;
   ):self|array|false{
+    if($Field !== null):
+      if($CustomPlaceholder === null):
+        $this->FieldNeedCustomPlaceholder($Field);
+      endif;
+      if($BlankIsNull and $Value === ''):
+        $Value = null;
+        $Type = Types::Null;
+      endif;
+      $temp = $this->WheresControl(
+        $this->ThrowError,
+        $Field,
+        $Type,
+        $Operator,
+        $NoField,
+        $NoBind
+      );
+      if($temp === false):
+        return false;
+      endif;
+      $this->WheresControl[] = $CustomPlaceholder ?? $Field;
     endif;
     $this->Wheres[] = new Field(
       $Field,
@@ -279,7 +282,6 @@ final class Select extends Basics{
       $NoField,
       $NoBind
     );
-    $this->WheresControl[] = $CustomPlaceholder ?? $Field;
     if($Debug):
       return $this->Wheres;
     endif;

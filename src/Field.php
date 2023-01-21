@@ -1,13 +1,13 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2022.09.21.00
+//2023.01.21.00
 
 namespace ProtocolLive\PhpLiveDb;
 
 final class Field{
   public function __construct(
-    public string $Name,
+    public string|null $Name = null,
     public string|null $Value = null,
     public Types|null $Type = null,
     public Operators $Operator = Operators::Equal,
