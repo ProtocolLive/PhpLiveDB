@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2022.12.21.00
+//2023.01.21.00
 
 namespace ProtocolLive\PhpLiveDb;
 use PDOException;
@@ -79,7 +79,18 @@ final class InsertUpdate extends Insert{
 
     $statement->execute();
 
-    $this->LogAndDebug($statement, $Debug, $Log, $LogEvent, $LogUser);
+    $query = $this->LogAndDebug($statement, $Debug, $Log, $LogEvent, $LogUser);
+
+    if($this->OnRun !== null):
+      call_user_func_array(
+        $this->OnRun,
+        [
+          'Query' => $query,
+          'Result' => 0,
+          'Time' => $this->Duration(),
+        ]
+      );
+    endif;
     return 0;
   }
 }
