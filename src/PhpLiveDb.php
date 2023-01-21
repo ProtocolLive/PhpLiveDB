@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2022.12.27.00
+//2023.01.21.00
 
 namespace ProtocolLive\PhpLiveDb;
 use Exception;
@@ -10,6 +10,7 @@ use PDOException;
 
 final class PhpLiveDb extends Basics{
   /**
+   * @param callable $OnRun A callable function to be executed after a Run. Arguments: string $Query, array|int $Result, float $Time
    * @throws Exception
    */
   public function __construct(

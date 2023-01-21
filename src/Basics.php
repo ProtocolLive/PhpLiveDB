@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2022.12.27.00
+//2023.01.21.00
 
 namespace ProtocolLive\PhpLiveDb;
 use Closure;
@@ -60,6 +60,9 @@ abstract class Basics{
   }
 
   protected function BuildWhere(array $Wheres):void{
+    /**
+     * @var Field[] $Wheres
+     */
     //Wipe the NoField to not create problem with index 0
     $WheresTemp = $Wheres;
     foreach($WheresTemp as $id => $where):
