@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2023.01.21.01
+//2023.01.23.00
 
 namespace ProtocolLive\PhpLiveDb;
 use Closure;
@@ -260,7 +260,7 @@ abstract class Basics{
   protected function WheresControl(
     bool $ThrowError,
     string $Field,
-    Types $Type,
+    Types $Type = null,
     Operators $Operator,
     bool $NoField,
     bool $NoBind
