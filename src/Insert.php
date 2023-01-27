@@ -1,13 +1,14 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2022.12.16.02
+//2023.01.27.00
 
 namespace ProtocolLive\PhpLiveDb;
 use PDO;
 use PDOException;
 
-class Insert extends Basics{
+class Insert
+extends Basics{
   protected array $Fields = [];
 
   public function __construct(
@@ -40,6 +41,20 @@ class Insert extends Basics{
       $Type
     );
     return $this;
+  }
+
+  private function QueryBuild():void{
+    $this->Query = 'insert into ' . $this->Table . '(';
+    $this->InsertFields();
+
+    if($this->Prefix !== null):
+      $this->Query = str_replace('##', $this->Prefix . '_', $this->Query);
+    endif;
+  }
+
+  public function QueryGet():string{
+    $this->QueryBuild();
+    return $this->Query;
   }
 
   public function RunFromSelect(
@@ -105,12 +120,7 @@ class Insert extends Basics{
       return null;
     endif;
 
-    $this->Query = 'insert into ' . $this->Table . '(';
-    $this->InsertFields();
-
-    if($this->Prefix !== null):
-      $this->Query = str_replace('##', $this->Prefix . '_', $this->Query);
-    endif;
+    $this->QueryBuild();
     $statement = $this->Conn->prepare($this->Query);
 
     $this->Bind($statement, $this->Fields, $HtmlSafe, $TrimValues);
