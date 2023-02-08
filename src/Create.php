@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2023.01.16.00
+//Version 2023.02.08.00
 
 namespace ProtocolLive\PhpLiveDb;
 use InvalidArgumentException;
@@ -147,6 +147,7 @@ extends Basics{
         Formats::Int => 'int',
         Formats::IntBig => 'bigint',
         Formats::IntTiny => 'tinyint',
+        Formats::Text => 'text',
         Formats::Varchar => 'varchar',
       };
       if($Format === Formats::Varchar):
@@ -164,6 +165,7 @@ extends Basics{
         Formats::Int,
         Formats::IntBig,
         Formats::IntTiny => 'integer',
+        Formats::Text,
         Formats::Varchar => 'text',
       };
     endif;

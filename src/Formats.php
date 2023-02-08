@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.12.27.00
+//Version 2023.02.08.00
 
 namespace ProtocolLive\PhpLiveDb;
 
@@ -9,5 +9,6 @@ enum Formats{
   case Int;
   case IntBig;
   case IntTiny;
+  case Text;
   case Varchar;
 }
