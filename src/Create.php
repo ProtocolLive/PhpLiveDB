@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2023.02.08.00
+//Version 2023.04.26.00
 
 namespace ProtocolLive\PhpLiveDb;
 use InvalidArgumentException;
@@ -105,7 +105,11 @@ extends Basics{
         $Query .= ' primary key';
       endif;
       if($field['AutoIncrement']):
-        $Query .= ' auto_increment';
+        if($this->Driver === Drivers::MySql):
+          $Query .= ' auto_increment';
+        else:
+          $Query .= ' autoincrement';
+        endif;
       endif;
       if($field['Unique']):
         $Query .= ' unique';
@@ -131,9 +135,12 @@ extends Basics{
       $Query .= '),';
     endforeach;
     $Query = substr($Query, 0, -1);
-    $Query .= ') engine=' . $Engine->name;
-    $Query .= ' default charset=' . $CharSet;
-    $Query .= ' collate=' . $Collate;
+    $Query .= ')';
+    if($this->Driver === Drivers::MySql):
+      $Query .= ' Engine=' . $Engine->name;
+      $Query .= ' default charset=' . $CharSet;
+      $Query .= ' collate=' . $Collate;
+    endif;
     return $Query;
   }
 
