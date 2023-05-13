@@ -1,7 +1,7 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2023.01.21.01
+//2023.05.13.00
 
 namespace ProtocolLive\PhpLiveDb;
 use PDO;
@@ -141,7 +141,10 @@ final class Select extends Basics{
     return $this;
   }
 
-  public function Order(string $Fields):self{
+  public function Order(string|null $Fields):self{
+    if($Fields === ''):
+      $Fields = null;
+    endif;
     $this->Order = $Fields;
     return $this;
   }
