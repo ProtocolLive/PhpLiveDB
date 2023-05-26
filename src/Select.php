@@ -9,7 +9,7 @@ use PDOStatement;
 use PDOException;
 
 /**
- * @version 2023.05.25.00
+ * @version 2023.05.25.01
  */
 final class Select extends Basics{
   private string $Fields = '*';
@@ -279,7 +279,7 @@ final class Select extends Basics{
       endif;
       $temp = $this->WheresControl(
         $this->ThrowError,
-        $Field,
+        $CustomPlaceholder ?? $Field,
         $Type,
         $Operator,
         $NoField,

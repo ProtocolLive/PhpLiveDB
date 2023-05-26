@@ -1,7 +1,6 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2023.01.23.00
 
 namespace ProtocolLive\PhpLiveDb;
 use Closure;
@@ -10,6 +9,9 @@ use PDO;
 use PDOException;
 use PDOStatement;
 
+/**
+ * @version 2023.05.25.00
+ */
 abstract class Basics{
   protected string $Table;
   protected string|null $Prefix = null;
@@ -274,10 +276,10 @@ abstract class Basics{
     and $Operator !== Operators::NotIn
     and $Operator !== Operators::IsNotNull):
       //Search separated for performance improvement
-      if(array_search($CustomPlaceholder ?? $Field, $this->WheresControl) !== false):
+      if(array_search($Field, $this->WheresControl) !== false):
         if($ThrowError):
           throw new Exception(
-            'The where condition "' . ($CustomPlaceholder ?? $Field) . '" already added',
+            'The where condition "' . $Field . '" already added',
           );
         else:
           return false;
