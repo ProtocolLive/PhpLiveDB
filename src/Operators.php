@@ -1,10 +1,12 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.09.01.00
 
 namespace ProtocolLive\PhpLiveDb;
 
+/**
+ * @version 2022.09.01.00
+ */
 enum Operators:string{
   case Bigger = '>';
   case BiggerEqual = '>=';

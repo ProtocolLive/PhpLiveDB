@@ -1,10 +1,12 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.08.26.00
 
 namespace ProtocolLive\PhpLiveDb;
 
+/**
+ * @version 2022.08.26.00
+ */
 enum Types:int{
   case Bool = 5;
   case Int = 1;

@@ -1,10 +1,12 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2022.12.26.00
 
 namespace ProtocolLive\PhpLiveDb;
 
+/**
+ * @version 2022.12.26.00
+ */
 enum Engines{
   case InnoDB;
 }
