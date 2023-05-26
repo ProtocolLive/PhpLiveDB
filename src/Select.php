@@ -1,13 +1,16 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2023.05.13.00
 
 namespace ProtocolLive\PhpLiveDb;
+use BackedEnum;
 use PDO;
 use PDOStatement;
 use PDOException;
 
+/**
+ * @version 2023.05.25.00
+ */
 final class Select extends Basics{
   private string $Fields = '*';
   private array $Join = [];
@@ -91,11 +94,17 @@ final class Select extends Basics{
   }
 
   public function JoinAdd(
-    string $Table,
-    string|null $Using = null,
+    string|BackedEnum $Table,
+    string|null|BackedEnum $Using = null,
     string|null $On = null,
     Joins $Type = Joins::Left
   ):self{
+    if($Table instanceof BackedEnum):
+      $Table = $Table->value;
+    endif;
+    if($Using instanceof BackedEnum):
+      $Using = $Using->value;
+    endif;
     $this->Join[] = new class($Table, $Type, $Using, $On){
       public string $Table;
       public Joins $Type;
@@ -141,9 +150,14 @@ final class Select extends Basics{
     return $this;
   }
 
-  public function Order(string|null $Fields):self{
+  public function Order(
+    string|BackedEnum|null $Fields
+  ):self{
     if($Fields === ''):
       $Fields = null;
+    endif;
+    if($Fields instanceof BackedEnum):
+      $Fields = $Fields->value;
     endif;
     $this->Order = $Fields;
     return $this;
@@ -226,7 +240,7 @@ final class Select extends Basics{
   }
 
   /**
-   * @param string $Field Field name. Can be null to only add parenthesis
+   * @param string|BackedEnum $Field Field name. Can be null to only add parenthesis
    * @param string|bool $Value Field value. Can be null in case of use another field value. If null, sets the $Operator to Operator::Null
    * @param Types $Type Field type. Can be null in case of Operator::IsNull. Are changed to Types::Null if $Value is null
    * @param Operators $Operator Comparison operator. Operator::Sql sets NoBind to true
@@ -240,7 +254,7 @@ final class Select extends Basics{
    * @return self|false Return false if ThrowError are set or all wheres if $Debug are set
    */
   public function WhereAdd(
-    string $Field = null,
+    string|BackedEnum $Field = null,
     string|bool $Value = null,
     Types $Type = null,
     Operators $Operator = Operators::Equal,
@@ -253,6 +267,9 @@ final class Select extends Basics{
     bool $Debug = false
   ):self|array|false{
     if($Field !== null):
+      if($Field instanceof BackedEnum):
+        $Field = $Field->value;
+      endif;
       if($CustomPlaceholder === null):
         $this->FieldNeedCustomPlaceholder($Field);
       endif;

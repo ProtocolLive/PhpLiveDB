@@ -1,14 +1,18 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2023.01.21.00
 
 namespace ProtocolLive\PhpLiveDb;
+use BackedEnum;
 use Exception;
 use PDO;
 use PDOException;
 
-final class PhpLiveDb extends Basics{
+/**
+ * @version 2023.05.25.00
+ */
+final class PhpLiveDb
+extends Basics{
   /**
    * @param callable $OnRun A callable function to be executed after a Run. Arguments: string $Query, array|int $Result, float $Time
    * @throws Exception
@@ -55,21 +59,23 @@ final class PhpLiveDb extends Basics{
   }
 
   public function Create(
-    string $Table
+    string|BackedEnum $Table
   ):Create{
     return new Create(
       $this->Conn,
-      $Table,
+      $Table->value ?? $Table,
       $this->Prefix,
       $this->Driver,
       $this->OnRun
     );
   }
 
-  public function Delete(string $Table):Delete{
+  public function Delete(
+    string|BackedEnum $Table
+  ):Delete{
     return new Delete(
       $this->Conn,
-      $Table,
+      $Table->value ?? $Table,
       $this->Prefix,
       $this->OnRun
     );
@@ -79,32 +85,36 @@ final class PhpLiveDb extends Basics{
     return $this->Conn;
   }
   
-  public function Insert(string $Table):Insert{
+  public function Insert(
+    string|BackedEnum $Table
+  ):Insert{
     return new Insert(
       $this->Conn,
-      $Table,
+      $Table->value ?? $Table,
       $this->Prefix,
       $this->OnRun
     );
   }
 
-  public function InsertUpdate(string $Table):InsertUpdate{
+  public function InsertUpdate(
+    string|BackedEnum $Table
+  ):InsertUpdate{
     return new InsertUpdate(
       $this->Conn,
-      $Table,
+      $Table->value ?? $Table,
       $this->Prefix,
       $this->OnRun
     );
   }
 
   public function Select(
-    string $Table,
+    string|BackedEnum $Table,
     bool $ThrowError = true
   ):Select{
     return new Select(
       $this->Conn,
       $this->Database,
-      $Table,
+      $Table->value ?? $Table,
       $this->Prefix,
       $ThrowError,
       $this->OnRun
@@ -114,8 +124,10 @@ final class PhpLiveDb extends Basics{
   /**
    * @throws PDOException
    */
-  public function Truncate(string $Table):int|false{
-    $query = 'truncate '. $Table;
+  public function Truncate(
+    string|BackedEnum $Table
+  ):int|false{
+    $query = 'truncate '. ($Table->value ?? $Table);
     $return = $this->Conn->exec($query);
     if($this->OnRun !== null):
       call_user_func_array(
@@ -130,10 +142,12 @@ final class PhpLiveDb extends Basics{
     return $return;
   }
 
-  public function Update(string $Table):Update{
+  public function Update(
+    string|BackedEnum $Table
+  ):Update{
     return new Update(
       $this->Conn,
-      $Table,
+      $Table->value ?? $Table,
       $this->Prefix,
       $this->OnRun
     );

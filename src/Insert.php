@@ -1,12 +1,15 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2023.01.27.00
 
 namespace ProtocolLive\PhpLiveDb;
+use BackedEnum;
 use PDO;
 use PDOException;
 
+/**
+ * @version 2023.05.25.00
+ */
 class Insert
 extends Basics{
   protected array $Fields = [];
@@ -24,7 +27,7 @@ extends Basics{
   }
 
   public function FieldAdd(
-    string $Field,
+    string|BackedEnum $Field,
     string|bool|null $Value,
     Types $Type,
     bool $BlankIsNull = true
@@ -34,6 +37,9 @@ extends Basics{
     endif;
     if($Value === null):
       $Type = Types::Null;
+    endif;
+    if($Field instanceof BackedEnum):
+      $Field = $Field->value;
     endif;
     $this->Fields[$Field] = new Field(
       $Field,

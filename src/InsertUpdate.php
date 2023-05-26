@@ -1,11 +1,14 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2023.01.21.00
 
 namespace ProtocolLive\PhpLiveDb;
+use BackedEnum;
 use PDOException;
 
+/**
+ * @version 2023.05.25.00
+ */
 final class InsertUpdate extends Insert{
   private function BuildQuery():bool{
     if(count($this->Fields) === 0):
@@ -28,7 +31,7 @@ final class InsertUpdate extends Insert{
   }
 
   public function FieldAdd(
-    string $Field,
+    string|BackedEnum $Field,
     string|bool|null $Value,
     Types $Type,
     bool $BlankIsNull = true,
@@ -39,6 +42,9 @@ final class InsertUpdate extends Insert{
     endif;
     if($Value === null):
       $Type = Types::Null;
+    endif;
+    if($Field instanceof BackedEnum):
+      $Field = $Field->value;
     endif;
     $this->Fields[$Field] = new Field(
       $Field,

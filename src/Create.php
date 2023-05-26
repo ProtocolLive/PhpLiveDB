@@ -1,12 +1,16 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//Version 2023.04.26.00
 
 namespace ProtocolLive\PhpLiveDb;
+use BackedEnum;
 use InvalidArgumentException;
 use PDO;
+use PDOException;
 
+/**
+ * @version 2023.05.25.00
+ */
 final class Create
 extends Basics{
   private array $Fields = [];
@@ -30,7 +34,7 @@ extends Basics{
    * @throws InvalidArgumentException
    */
   public function Add(
-    string $Name,
+    string|BackedEnum $Name,
     Formats $Format,
     int $Size = null,
     bool $Unsigned = false,
@@ -41,14 +45,17 @@ extends Basics{
     bool $Primary = false,
     bool $AutoIncrement = false,
     bool $Unique = false,
-    string $RefTable = null,
-    string $RefField = null,
+    string|BackedEnum $RefTable = null,
+    string|BackedEnum $RefField = null,
     RefTypes $RefUpdate = RefTypes::Restrict,
     RefTypes $RefDelete = RefTypes::Restrict,
   ):self{
     if($Format === Formats::Varchar
     and $Size === null):
       throw new InvalidArgumentException('Varchar must have a size parameter');
+    endif;
+    if($Name instanceof BackedEnum):
+      $Name = $Name->value;
     endif;
     $this->Fields[$Name] = [
       'Name' => $Name,
@@ -62,8 +69,8 @@ extends Basics{
       'Primary' => $Primary,
       'AutoIncrement' => $AutoIncrement,
       'Unique' => $Unique,
-      'RefTable' => $RefTable,
-      'RefField' => $RefField,
+      'RefTable' => $RefTable->value ?? $RefTable,
+      'RefField' => $RefField->value ?? $RefField,
       'RefUpdate' => $RefUpdate,
       'RefDelete' => $RefDelete
     ];
@@ -211,13 +218,16 @@ extends Basics{
   }
 
   /**
-   * @param string[] $Fields
+   * @param string[]|BackedEnum[] $Fields
    * @throws InvalidArgumentException
    */
   public function Unique(
     array $Fields
   ):self{
-    foreach($Fields as $field):
+    foreach($Fields as &$field):
+      if($field instanceof BackedEnum):
+        $field = $field->value;
+      endif;
       if(isset($this->Fields[$field]) === false):
         throw new InvalidArgumentException('Field ' . $field . ' not found');
       endif;

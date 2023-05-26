@@ -1,12 +1,15 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2022.12.24.00
 
 namespace ProtocolLive\PhpLiveDb;
+use BackedEnum;
 use PDO;
 use PDOException;
 
+/**
+ * @version 2023.05.25.00
+ */
 final class Delete extends Basics{
   private array $Wheres = [];
 
@@ -69,7 +72,7 @@ final class Delete extends Basics{
   }
 
   /**
-   * @param string $Field Field name
+   * @param string|BackedEnum $Field Field name
    * @param string|bool $Value Field value. Can be null in case of use another field value. If null, sets the $Operator to Operator::Null
    * @param Types $Type Field type. Can be null in case of Operator::IsNull. Are changed to Types::Null if $Value is null
    * @param Operators $Operator Comparison operator. Operator::Sql sets NoBind to true
@@ -82,7 +85,7 @@ final class Delete extends Basics{
    * @throws PDOException
    */
   public function WhereAdd(
-    string $Field,
+    string|BackedEnum $Field,
     string|bool $Value = null,
     Types $Type = null,
     Operators $Operator = Operators::Equal,
@@ -93,6 +96,9 @@ final class Delete extends Basics{
     bool $NoField = false,
     bool $NoBind = false
   ):self{
+    if($Field instanceof BackedEnum):
+      $Field = $Field->value;
+    endif;
     if(isset($this->Wheres[$CustomPlaceholder ?? $Field])):
       throw new PDOException(
         'The where condition "' . ($CustomPlaceholder ?? $Field) . '" already added',

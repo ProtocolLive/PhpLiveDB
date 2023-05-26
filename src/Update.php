@@ -1,13 +1,16 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2023.01.03.00
 
 namespace ProtocolLive\PhpLiveDb;
+use BackedEnum;
 use PDO;
 use PDOException;
 use ProtocolLive\PhpLiveDb\Operators;
 
+/**
+ * @version 2023.05.25.00
+ */
 final class Update
 extends Basics{
   private array $Fields = [];
@@ -40,7 +43,7 @@ extends Basics{
   }
 
   public function FieldAdd(
-    string $Field,
+    string|BackedEnum $Field,
     string|bool|null $Value,
     Types $Type,
     bool $BlankIsNull = true
@@ -50,6 +53,9 @@ extends Basics{
     endif;
     if($Value === null):
       $Type = Types::Null;
+    endif;
+    if($Field instanceof BackedEnum):
+      $Field = $Field->value;
     endif;
     $this->Fields[$Field] = new Field(
       $Field,
@@ -125,7 +131,7 @@ extends Basics{
   }
 
   /**
-   * @param string $Field Field name
+   * @param string|BackedEnum $Field Field name
    * @param string|bool $Value Field value. Can be null in case of use another field value. If null, sets the $Operator to Operator::Null
    * @param Types $Type Field type. Can be null in case of Operator::IsNull. Are changed to Types::Null if $Value is null
    * @param Operators $Operator Comparison operator. Operator::Sql sets NoBind to true
@@ -136,7 +142,7 @@ extends Basics{
    * @param bool $NoBind Don't bind values. Are set to true if Operator is Operators::Sql
    */
   public function WhereAdd(
-    string $Field,
+    string|BackedEnum $Field,
     string|bool $Value = null,
     Types $Type = null,
     Operators $Operator = Operators::Equal,
@@ -146,6 +152,9 @@ extends Basics{
     bool $BlankIsNull = true,
     bool $NoBind = false
   ):self{
+    if($Field instanceof BackedEnum):
+      $Field = $Field->value;
+    endif;
     if(isset($this->Wheres[$CustomPlaceholder ?? $Field])):
       throw new PDOException(
         'The where condition "' . ($CustomPlaceholder ?? $Field) . '" already added',
