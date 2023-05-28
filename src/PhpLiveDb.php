@@ -3,13 +3,13 @@
 //https://github.com/ProtocolLive/PhpLiveDb
 
 namespace ProtocolLive\PhpLiveDb;
-use BackedEnum;
 use Exception;
 use PDO;
 use PDOException;
+use UnitEnum;
 
 /**
- * @version 2023.05.25.00
+ * @version 2023.05.28.00
  */
 final class PhpLiveDb
 extends Basics{
@@ -59,11 +59,11 @@ extends Basics{
   }
 
   public function Create(
-    string|BackedEnum $Table
+    string|UnitEnum $Table
   ):Create{
     return new Create(
       $this->Conn,
-      $Table->value ?? $Table,
+      $Table->value ?? $Table->name ?? $Table,
       $this->Prefix,
       $this->Driver,
       $this->OnRun
@@ -71,11 +71,11 @@ extends Basics{
   }
 
   public function Delete(
-    string|BackedEnum $Table
+    string|UnitEnum $Table
   ):Delete{
     return new Delete(
       $this->Conn,
-      $Table->value ?? $Table,
+      $Table->value ?? $Table->name ?? $Table,
       $this->Prefix,
       $this->OnRun
     );
@@ -86,35 +86,35 @@ extends Basics{
   }
   
   public function Insert(
-    string|BackedEnum $Table
+    string|UnitEnum $Table
   ):Insert{
     return new Insert(
       $this->Conn,
-      $Table->value ?? $Table,
+      $Table->value ?? $Table->name ?? $Table,
       $this->Prefix,
       $this->OnRun
     );
   }
 
   public function InsertUpdate(
-    string|BackedEnum $Table
+    string|UnitEnum $Table
   ):InsertUpdate{
     return new InsertUpdate(
       $this->Conn,
-      $Table->value ?? $Table,
+      $Table->value ?? $Table->name ?? $Table,
       $this->Prefix,
       $this->OnRun
     );
   }
 
   public function Select(
-    string|BackedEnum $Table,
+    string|UnitEnum $Table,
     bool $ThrowError = true
   ):Select{
     return new Select(
       $this->Conn,
       $this->Database,
-      $Table->value ?? $Table,
+      $Table->value ?? $Table->name ?? $Table,
       $this->Prefix,
       $ThrowError,
       $this->OnRun
@@ -125,9 +125,9 @@ extends Basics{
    * @throws PDOException
    */
   public function Truncate(
-    string|BackedEnum $Table
+    string|UnitEnum $Table
   ):int|false{
-    $query = 'truncate '. ($Table->value ?? $Table);
+    $query = 'truncate '. ($Table->value ?? $Table->name ?? $Table);
     $return = $this->Conn->exec($query);
     if($this->OnRun !== null):
       call_user_func_array(
@@ -143,11 +143,11 @@ extends Basics{
   }
 
   public function Update(
-    string|BackedEnum $Table
+    string|UnitEnum $Table
   ):Update{
     return new Update(
       $this->Conn,
-      $Table->value ?? $Table,
+      $Table->value ?? $Table->name ?? $Table,
       $this->Prefix,
       $this->OnRun
     );

@@ -3,12 +3,12 @@
 //https://github.com/ProtocolLive/PhpLiveDb
 
 namespace ProtocolLive\PhpLiveDb;
-use BackedEnum;
 use PDO;
 use PDOException;
+use UnitEnum;
 
 /**
- * @version 2023.05.25.00
+ * @version 2023.05.28.00
  */
 class Insert
 extends Basics{
@@ -27,7 +27,7 @@ extends Basics{
   }
 
   public function FieldAdd(
-    string|BackedEnum $Field,
+    string|UnitEnum $Field,
     string|bool|null $Value,
     Types $Type,
     bool $BlankIsNull = true
@@ -38,8 +38,8 @@ extends Basics{
     if($Value === null):
       $Type = Types::Null;
     endif;
-    if($Field instanceof BackedEnum):
-      $Field = $Field->value;
+    if($Field instanceof UnitEnum):
+      $Field = $Field->value ?? $Field->name;
     endif;
     $this->Fields[$Field] = new Field(
       $Field,

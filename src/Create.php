@@ -3,13 +3,13 @@
 //https://github.com/ProtocolLive/PhpLiveDb
 
 namespace ProtocolLive\PhpLiveDb;
-use BackedEnum;
 use InvalidArgumentException;
 use PDO;
 use PDOException;
+use UnitEnum;
 
 /**
- * @version 2023.05.25.00
+ * @version 2023.05.28.00
  */
 final class Create
 extends Basics{
@@ -34,7 +34,7 @@ extends Basics{
    * @throws InvalidArgumentException
    */
   public function Add(
-    string|BackedEnum $Name,
+    string|UnitEnum $Name,
     Formats $Format,
     int $Size = null,
     bool $Unsigned = false,
@@ -45,8 +45,8 @@ extends Basics{
     bool $Primary = false,
     bool $AutoIncrement = false,
     bool $Unique = false,
-    string|BackedEnum $RefTable = null,
-    string|BackedEnum $RefField = null,
+    string|UnitEnum $RefTable = null,
+    string|UnitEnum $RefField = null,
     RefTypes $RefUpdate = RefTypes::Restrict,
     RefTypes $RefDelete = RefTypes::Restrict,
   ):self{
@@ -54,8 +54,8 @@ extends Basics{
     and $Size === null):
       throw new InvalidArgumentException('Varchar must have a size parameter');
     endif;
-    if($Name instanceof BackedEnum):
-      $Name = $Name->value;
+    if($Name instanceof UnitEnum):
+      $Name = $Name->value ?? $Name->name;
     endif;
     $this->Fields[$Name] = [
       'Name' => $Name,
@@ -218,15 +218,15 @@ extends Basics{
   }
 
   /**
-   * @param string[]|BackedEnum[] $Fields
+   * @param string[]|UnitEnum[] $Fields
    * @throws InvalidArgumentException
    */
   public function Unique(
     array $Fields
   ):self{
     foreach($Fields as &$field):
-      if($field instanceof BackedEnum):
-        $field = $field->value;
+      if($field instanceof UnitEnum):
+        $field = $field->value ?? $field->name;
       endif;
       if(isset($this->Fields[$field]) === false):
         throw new InvalidArgumentException('Field ' . $field . ' not found');
