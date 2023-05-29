@@ -10,7 +10,7 @@ use PDOException;
 use PDOStatement;
 
 /**
- * @version 2023.05.25.00
+ * @version 2023.05.29.00
  */
 abstract class Basics{
   protected string $Table;
@@ -201,7 +201,7 @@ abstract class Basics{
   }
 
   public static function Reserved(string $Field):string{
-    $names = ['order', 'default', 'group'];
+    $names = ['order', 'default', 'group', 'update'];
     if(in_array($Field, $names)):
       $Field = '`' . $Field . '`';
     endif;
