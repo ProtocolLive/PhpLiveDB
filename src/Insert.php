@@ -8,7 +8,7 @@ use PDOException;
 use UnitEnum;
 
 /**
- * @version 2023.05.28.00
+ * @version 2023.05.29.00
  */
 class Insert
 extends Basics{
@@ -95,10 +95,10 @@ extends Basics{
 
   protected function InsertFields():void{
     foreach($this->Fields as $field):
-      $this->Query .= $field->Name . ',';
+      $this->Query .= parent::Reserved($field->Name) . ',';
     endforeach;
     $this->Query = substr($this->Query, 0, -1) . ') values(';
-    foreach($this->Fields as $id => $field):
+    foreach($this->Fields as $field):
       if($field->Type === Types::Null):
         $this->Query .= 'null,';
       elseif($field->Type === Types::Sql):
