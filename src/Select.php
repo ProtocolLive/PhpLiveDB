@@ -3,13 +3,14 @@
 //https://github.com/ProtocolLive/PhpLiveDb
 
 namespace ProtocolLive\PhpLiveDb;
+use Exception;
 use PDO;
 use PDOStatement;
 use PDOException;
 use UnitEnum;
 
 /**
- * @version 2023.05.28.00
+ * @version 2023.06.08.00
  */
 final class Select extends Basics{
   private string $Fields = '*';
@@ -249,9 +250,10 @@ final class Select extends Basics{
    * @param string $CustomPlaceholder Substitute the field name as placeholder
    * @param bool $BlankIsNull Convert '' to null
    * @param bool $NoField Bind values with fields declared in Fields function
-   * @param bool $NoBind Don't bind values. Are set to true if Operator is Operators::Sql
+   * @param bool $NoBind Don't bind in that call. Used with Operators::Sql or same value for different or same field. (Changed to true if Operators::Sql are used)
    * @param bool $Debug Show debug information
    * @return self|false Return false if ThrowError are set or all wheres if $Debug are set
+   * @throws Exception
    */
   public function WhereAdd(
     string|UnitEnum $Field = null,
@@ -288,7 +290,9 @@ final class Select extends Basics{
       if($temp === false):
         return false;
       endif;
-      $this->WheresControl[] = $CustomPlaceholder ?? $Field;
+      if($NoBind === false):
+        $this->WheresControl[] = $CustomPlaceholder ?? $Field;
+      endif;
     endif;
     $this->Wheres[] = new Field(
       $Field,
