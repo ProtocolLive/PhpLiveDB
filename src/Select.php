@@ -10,9 +10,10 @@ use PDOException;
 use UnitEnum;
 
 /**
- * @version 2023.06.08.00
+ * @version 2023.06.09.00
  */
-final class Select extends Basics{
+final class Select
+extends Basics{
   private string $Fields = '*';
   private array $Join = [];
   private array $Wheres = [];
@@ -64,17 +65,17 @@ final class Select extends Basics{
     if($String):
       $query = 'select group_concat(';
       if($Alias !== null):
-        $query .= "concat('$Alias.',column_name)";
+        $query .= "concat('$Alias.',COLUMN_NAME)";
       else:
-        $query .= 'column_name';
+        $query .= 'COLUMN_NAME';
       endif;
-      $query .= ') as column_name';
+      $query .= ') as COLUMN_NAME';
     else:
       $query = 'select ';
       if($Alias !== null):
-        $query .= "concat('$Alias.',column_name) as ";
+        $query .= "concat('$Alias.',COLUMN_NAME) as ";
       endif;
-        $query .= 'column_name';
+        $query .= 'COLUMN_NAME';
     endif;
     $query .= "
       from information_schema.columns
@@ -85,7 +86,7 @@ final class Select extends Basics{
     if($String):
       return $fields->fetchColumn();
     else:
-      return array_column($fields->fetchAll(), 'column_name');
+      return array_column($fields->fetchAll(), 'COLUMN_NAME');
     endif;
   }
 
