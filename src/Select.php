@@ -10,7 +10,7 @@ use PDOException;
 use UnitEnum;
 
 /**
- * @version 2023.06.09.00
+ * @version 2023.06.09.01
  */
 final class Select
 extends Basics{
@@ -90,8 +90,10 @@ extends Basics{
     endif;
   }
 
-  public function Group(string $Fields):self{
-    $this->Group = $Fields;
+  public function Group(
+    string|UnitEnum $Fields
+  ):self{
+    $this->Group = $Fields->value ?? $Fields->name ?? $Fields;
     return $this;
   }
 
