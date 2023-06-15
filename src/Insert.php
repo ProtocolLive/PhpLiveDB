@@ -8,7 +8,7 @@ use PDOException;
 use UnitEnum;
 
 /**
- * @version 2023.05.29.00
+ * @version 2023.06.15.00
  */
 class Insert
 extends Basics{
@@ -111,6 +111,7 @@ extends Basics{
   }
 
   /**
+   * @return int The value of auto-increment field created
    * @throws PDOException
    */
   public function Run(
