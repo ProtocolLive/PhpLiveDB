@@ -7,7 +7,7 @@ ec507897e5d2cc1566906a496eb15ff652354f5f  Drivers.php
 8d0e85ede40204dc0871faa7120c964de0dde676  Field.php
 b01ae2ba20782e78cab0b47d00b02fecec35b8e3  Formats.php
 005913465144785b22993cedc93f88e7fa3c7f2c  Insert.php
-ce5485f0c7944d06159fb32201bdbc5268c91216  InsertUpdate.php
+dd6caa15ca3a250187d8e2d0727a67d3d6a5244d  InsertUpdate.php
 ab841b9b1bdf50ea594374b5d4a3fd6fb62c13c2  Joins.php
 31d948c10defc53deec3d81d9b579fe82c57c9e6  Operators.php
 8d56e86af560d5f010b554d59d79e5bf23a10e7a  Parenthesis.php
