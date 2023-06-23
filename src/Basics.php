@@ -5,7 +5,6 @@
 namespace ProtocolLive\PhpLiveDb;
 use BackedEnum;
 use Closure;
-use Exception;
 use PDO;
 use PDOException;
 use PDOStatement;
@@ -258,7 +257,7 @@ abstract class Basics{
   }
 
   /**
-   * @throws Exception
+   * @throws PDOException
    */
   protected function WheresControl(
     bool $ThrowError,
@@ -279,7 +278,7 @@ abstract class Basics{
       //Search separated for performance improvement
       if(array_search($Field, $this->WheresControl) !== false):
         if($ThrowError):
-          throw new Exception(
+          throw new PDOException(
             'The where condition "' . $Field . '" already added',
           );
         else:

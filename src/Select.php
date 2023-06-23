@@ -4,7 +4,6 @@
 
 namespace ProtocolLive\PhpLiveDb;
 use BackedEnum;
-use Exception;
 use PDO;
 use PDOStatement;
 use PDOException;
@@ -259,7 +258,7 @@ extends Basics{
    * @param bool $NoBind Don't bind in that call. Used with Operators::Sql or same value for different or same field. (Changed to true if Operators::Sql are used)
    * @param bool $Debug Show debug information
    * @return self|false Return false if ThrowError are set or all wheres if $Debug are set
-   * @throws Exception
+   * @throws PDOException
    */
   public function WhereAdd(
     string|UnitEnum $Field = null,
