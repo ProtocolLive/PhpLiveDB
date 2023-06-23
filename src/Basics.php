@@ -3,6 +3,7 @@
 //https://github.com/ProtocolLive/PhpLiveDb
 
 namespace ProtocolLive\PhpLiveDb;
+use BackedEnum;
 use Closure;
 use Exception;
 use PDO;
@@ -10,7 +11,7 @@ use PDOException;
 use PDOStatement;
 
 /**
- * @version 2023.05.29.00
+ * @version 2023.06.22.00
  */
 abstract class Basics{
   protected string $Table;
@@ -153,7 +154,7 @@ abstract class Basics{
     PDOStatement $Statement,
     bool $Debug = false,
     bool $Log = false,
-    int $LogEvent = null,
+    int|BackedEnum $LogEvent = null,
     int $LogUser = null
   ):string{
     ob_start();
@@ -178,7 +179,7 @@ abstract class Basics{
   }
 
   protected function LogSet(
-    int $LogEvent,
+    int|BackedEnum $LogEvent,
     int|null $User,
     string $Query
   ):void{
@@ -192,7 +193,7 @@ abstract class Basics{
       values(:time,:log,:user,:agent,:ip,:query)
     ');
     $statement->bindValue('time', time(), PDO::PARAM_INT);
-    $statement->bindValue('log', $LogEvent, PDO::PARAM_INT);
+    $statement->bindValue('log', $LogEvent->value ?? $LogEvent, PDO::PARAM_INT);
     $statement->bindValue('user', $User, PDO::PARAM_INT);
     $statement->bindValue('agent', $_SERVER['HTTP_USER_AGENT'], PDO::PARAM_STR);
     $statement->bindValue('ip', $_SERVER['REMOTE_ADDR'], PDO::PARAM_STR);

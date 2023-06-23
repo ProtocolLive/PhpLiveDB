@@ -3,12 +3,13 @@
 //https://github.com/ProtocolLive/PhpLiveDb
 
 namespace ProtocolLive\PhpLiveDb;
+use BackedEnum;
 use PDO;
 use PDOException;
 use UnitEnum;
 
 /**
- * @version 2023.06.15.00
+ * @version 2023.06.22.00
  */
 class Insert
 extends Basics{
@@ -119,7 +120,7 @@ extends Basics{
     bool $HtmlSafe = true,
     bool $TrimValues = true,
     bool $Log = false,
-    int $LogEvent = null,
+    int|BackedEnum $LogEvent = null,
     int $LogUser = null
   ):int{
     $FieldsCount = count($this->Fields);

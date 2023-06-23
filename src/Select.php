@@ -3,6 +3,7 @@
 //https://github.com/ProtocolLive/PhpLiveDb
 
 namespace ProtocolLive\PhpLiveDb;
+use BackedEnum;
 use Exception;
 use PDO;
 use PDOStatement;
@@ -10,7 +11,7 @@ use PDOException;
 use UnitEnum;
 
 /**
- * @version 2023.06.10.00
+ * @version 2023.06.22.00
  */
 final class Select
 extends Basics{
@@ -205,7 +206,7 @@ extends Basics{
     bool $HtmlSafe = true,
     bool $TrimValues = true,
     bool $Log = false,
-    int $LogEvent = null,
+    int|BackedEnum $LogEvent = null,
     int $LogUser = null,
     bool $Fetch = false
   ):array|bool{

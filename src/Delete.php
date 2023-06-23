@@ -3,14 +3,16 @@
 //https://github.com/ProtocolLive/PhpLiveDb
 
 namespace ProtocolLive\PhpLiveDb;
+use BackedEnum;
 use PDO;
 use PDOException;
 use UnitEnum;
 
 /**
- * @version 2023.05.28.00
+ * @version 2023.06.22.00
  */
-final class Delete extends Basics{
+final class Delete
+extends Basics{
   private array $Wheres = [];
 
   public function __construct(
@@ -33,7 +35,7 @@ final class Delete extends Basics{
     bool $HtmlSafe = true,
     bool $TrimValues = true,
     bool $Log = false,
-    int $LogEvent = null,
+    int|BackedEnum $LogEvent = null,
     int $LogUser = null
   ):int{
     $WheresCount = count($this->Wheres);

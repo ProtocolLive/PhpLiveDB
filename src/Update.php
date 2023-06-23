@@ -3,13 +3,14 @@
 //https://github.com/ProtocolLive/PhpLiveDb
 
 namespace ProtocolLive\PhpLiveDb;
+use BackedEnum;
 use PDO;
 use PDOException;
 use ProtocolLive\PhpLiveDb\Operators;
 use UnitEnum;
 
 /**
- * @version 2023.05.28.00
+ * @version 2023.06.22.00
  */
 final class Update
 extends Basics{
@@ -78,7 +79,7 @@ extends Basics{
     bool $HtmlSafe = true,
     bool $TrimValues = true,
     bool $Log = false,
-    int $LogEvent = null,
+    int|BackedEnum $LogEvent = null,
     int $LogUser = null
   ):int{
     self::BuildQuery();
