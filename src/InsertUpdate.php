@@ -3,13 +3,15 @@
 //https://github.com/ProtocolLive/PhpLiveDb
 
 namespace ProtocolLive\PhpLiveDb;
+use BackedEnum;
 use PDOException;
 use UnitEnum;
 
 /**
- * @version 2023.05.28.00
+ * @version 2023.06.23.00
  */
-final class InsertUpdate extends Insert{
+final class InsertUpdate
+extends Insert{
   private function BuildQuery():bool{
     if(count($this->Fields) === 0):
       return false;
@@ -73,7 +75,7 @@ final class InsertUpdate extends Insert{
     bool $HtmlSafe = true,
     bool $TrimValues = true,
     bool $Log = false,
-    int $LogEvent = null,
+    int|BackedEnum $LogEvent = null,
     int $LogUser = null
   ):int{
     if(self::BuildQuery() === false):
