@@ -10,7 +10,7 @@ use PDOException;
 use PDOStatement;
 
 /**
- * @version 2023.08.01.00
+ * @version 2023.08.02.00
  */
 abstract class Basics{
   protected string $Table;
@@ -93,20 +93,20 @@ abstract class Basics{
         endif;
 
         if($Wheres[$i]->Operator === Operators::IsNotNull):
-          $this->Query .= $Wheres[$i]->Name . ' is not null';
+          $this->Query .= self::Reserved($Wheres[$i]->Name) . ' is not null';
         elseif($Wheres[$i]->Operator === Operators::In):
-          $this->Query .= $Wheres[$i]->Name . ' in(' . $Wheres[$i]->Value . ')';
+          $this->Query .= self::Reserved($Wheres[$i]->Name) . ' in(' . $Wheres[$i]->Value . ')';
         elseif($Wheres[$i]->Operator === Operators::NotIn):
-          $this->Query .= $Wheres[$i]->Name . ' not in(' . $Wheres[$i]->Value . ')';
+          $this->Query .= self::Reserved($Wheres[$i]->Name) . ' not in(' . $Wheres[$i]->Value . ')';
         elseif($Wheres[$i]->Name !== null):
           if($Wheres[$i]->NoBind === false
           and(
             $Wheres[$i]->Value === null
             or $Wheres[$i]->Type === Types::Null
           )):
-            $this->Query .= $Wheres[$i]->Name . ' is null';
+            $this->Query .= self::Reserved($Wheres[$i]->Name) . ' is null';
           else:
-            $this->Query .= $Wheres[$i]->Name . $Wheres[$i]->Operator->value;
+            $this->Query .= self::Reserved($Wheres[$i]->Name) . $Wheres[$i]->Operator->value;
             if($Wheres[$i]->Type === Types::Sql):
               $this->Query .= $Wheres[$i]->Value;
             else:

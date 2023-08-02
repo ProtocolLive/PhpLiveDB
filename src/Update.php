@@ -10,7 +10,7 @@ use ProtocolLive\PhpLiveDb\Operators;
 use UnitEnum;
 
 /**
- * @version 2023.06.22.00
+ * @version 2023.08.02.00
  */
 final class Update
 extends Basics{
@@ -118,15 +118,17 @@ extends Basics{
 
   private function UpdateFields():void{
     foreach($this->Fields as $id => $field):
+      $this->Query .= parent::Reserved($field->Name) . '=';
       if($field->Type === Types::Null):
-        $this->Query .= $field->Name . '=null,';
+        $this->Query .= 'null';
         unset($this->Fields[$id]);
       elseif($field->Type === Types::Sql):
-        $this->Query .= $field->Name . '=' . $field->Value . ',';
+        $this->Query .= $field->Value;
         unset($this->Fields[$id]);
       else:
-        $this->Query .= $field->Name . '=:' . $field->Name . ',';
+        $this->Query .= ':' . $field->Name;
       endif;
+      $this->Query .= ',';
     endforeach;
     $this->Query = substr($this->Query, 0, -1);
   }
