@@ -10,7 +10,7 @@ use PDOException;
 use UnitEnum;
 
 /**
- * @version 2023.06.22.00
+ * @version 2023.08.16.00
  */
 final class Select
 extends Basics{
@@ -176,10 +176,10 @@ extends Basics{
       $this->BuildWhere($this->Wheres);
     endif;
     if($this->Group !== null):
-      $this->Query .= ' group by ' . $this->Group;
+      $this->Query .= ' group by ' . parent::Reserved($this->Group);
     endif;
     if($this->Order !== null):
-      $this->Query .= ' order by ' . $this->Order;
+      $this->Query .= ' order by ' . parent::Reserved($this->Order);
     endif;
     if($this->Limit !== null):
       $this->Query .= ' limit ' . $this->Limit;
