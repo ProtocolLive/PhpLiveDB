@@ -8,7 +8,7 @@ use PDOException;
 use UnitEnum;
 
 /**
- * @version 2023.06.23.00
+ * @version 2023.08.16.00
  */
 final class InsertUpdate
 extends Insert{
@@ -24,8 +24,8 @@ extends Insert{
     $this->Query .= ' on duplicate key update ';
     foreach($this->Fields as $field):
       if($field->InsertUpdate):
-        $this->Query .= ($field->CustomPlaceholder ?? $field->Name);
-        $this->Query .= '=values(' . ($field->CustomPlaceholder ?? $field->Name) . '),';
+        $this->Query .= parent::Reserved($field->CustomPlaceholder ?? $field->Name);
+        $this->Query .= '=values(' . parent::Reserved($field->CustomPlaceholder ?? $field->Name) . '),';
       endif;
     endforeach;
     $this->Query = substr($this->Query, 0, -1);
