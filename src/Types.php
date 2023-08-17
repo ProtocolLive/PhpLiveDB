@@ -3,14 +3,15 @@
 //https://github.com/ProtocolLive/PhpLiveDb
 
 namespace ProtocolLive\PhpLiveDb;
+use PDO;
 
 /**
- * @version 2022.08.26.00
+ * @version 2023.08.17.00
  */
 enum Types:int{
-  case Bool = 5;
-  case Int = 1;
-  case Null = 0;
+  case Bool = PDO::PARAM_BOOL;
+  case Int = PDO::PARAM_INT;
+  case Null = PDO::PARAM_NULL;
   case Sql = 6;
-  case Str = 2;
+  case Str = PDO::PARAM_STR;
 }
