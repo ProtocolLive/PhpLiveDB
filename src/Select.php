@@ -10,7 +10,7 @@ use PDOException;
 use UnitEnum;
 
 /**
- * @version 2023.09.01.03
+ * @version 2023.09.01.04
  */
 final class Select
 extends Basics{
@@ -122,6 +122,9 @@ extends Basics{
           unset($return[array_search($Alias . $field, $return)]);
         endif;
       endforeach;
+    endif;
+    if($String and substr($return, -1) === ','):
+      $return = substr($return, 0, -1);
     endif;
     $return = str_replace(',,', '', $return);
     return $return;
