@@ -10,7 +10,7 @@ use PDOException;
 use UnitEnum;
 
 /**
- * @version 2023.09.01.02
+ * @version 2023.09.01.03
  */
 final class Select
 extends Basics{
@@ -99,7 +99,7 @@ extends Basics{
    */
   public function FieldsGetExcept(
     string|UnitEnum|array $Field,
-    string $Table = null,
+    string|UnitEnum $Table = null,
     bool $String = false,
     string $Alias = null
   ):array|string{
