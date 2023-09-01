@@ -10,7 +10,7 @@ use PDOException;
 use UnitEnum;
 
 /**
- * @version 2023.09.01.00
+ * @version 2023.09.01.01
  */
 final class Select
 extends Basics{
@@ -60,10 +60,11 @@ extends Basics{
    * @throws PDOException
    */
   public function FieldsGet(
-    string $Table = null,
+    string|UnitEnum $Table = null,
     bool $String = false,
     string $Alias = null
   ):array|string{
+    $Table = $Table->value ?? $Table->name ?? $Table;
     if($String):
       $query = 'select group_concat(';
       if($Alias !== null):
