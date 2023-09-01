@@ -10,7 +10,7 @@ use PDOException;
 use UnitEnum;
 
 /**
- * @version 2023.09.01.04
+ * @version 2023.09.01.05
  */
 final class Select
 extends Basics{
@@ -61,36 +61,32 @@ extends Basics{
    */
   public function FieldsGet(
     string|UnitEnum $Table = null,
-    bool $String = false,
+    FieldsGetReturn $Return = FieldsGetReturn::String,
     string $Alias = null
   ):array|string{
-    $Table = $Table->value ?? $Table->name ?? $Table;
-    if($String):
-      $query = 'select group_concat(';
-      if($Alias !== null):
-        $query .= 'concat(\'' . $Alias . '.\',COLUMN_NAME)';
-      else:
-        $query .= 'COLUMN_NAME';
-      endif;
-      $query .= ') as COLUMN_NAME';
-    else:
-      $query = 'select ';
-      if($Alias !== null):
-        $query .= 'concat(\'' . $Alias . '.\',COLUMN_NAME) as ';
-      endif;
-      $query .= 'COLUMN_NAME';
+    $Table = $Table->value ?? $Table->name ?? $Table ?? $this->Table;
+    if(str_contains($Table, ' ')):
+      $Table = substr($Table, 0, strpos($Table, ' '));
+    endif;
+    $query = 'select ';
+    if(empty($Alias) === false):
+      $query .= 'concat(\'' . $Alias . '.\',COLUMN_NAME) as ';
     endif;
     $query .= '
+      COLUMN_NAME
       from information_schema.columns
       where table_schema=\'' . $this->Database . '\'
-      and table_name=\'' . ($Table ?? $this->Table) . '\'
+      and table_name=\'' . $Table . '\'
     ';
-    $fields = $this->Conn->query($query);
-    if($String):
-      return $fields->fetchColumn();
-    else:
-      return array_column($fields->fetchAll(), 'COLUMN_NAME');
+    if($Return === FieldsGetReturn::Sql):
+      return $query;
     endif;
+    $return = $this->Conn->query($query);
+    $return = array_column($return->fetchAll(), 'COLUMN_NAME');
+    if($Return === FieldsGetReturn::String):
+      return implode(',', $return);
+    endif;
+    return $return;
   }
 
   /**
@@ -98,35 +94,23 @@ extends Basics{
    * @throws PDOException
    */
   public function FieldsGetExcept(
-    string|UnitEnum|array $Field,
+    string|UnitEnum $Field,
     string|UnitEnum $Table = null,
-    bool $String = false,
+    FieldsGetReturn $Return = FieldsGetReturn::String,
     string $Alias = null
   ):array|string{
     $Field = $Field->value ?? $Field->name ?? $Field;
-    $return = $this->FieldsGet($Table, $String, $Alias);
-    if($Alias !== null):
+    $return = $this->FieldsGet($Table, FieldsGetReturn::Array, $Alias);
+    if(empty($Alias) === false):
       $Alias = $Alias . '.';
     endif;
-    if(is_string($Field)):
-      if($String):
-        $return = str_replace($Alias . $Field, '', $return);
-      else:
-        unset($return[array_search($Alias . $Field, $return)]);
-      endif;
-    else:
-      foreach($Field as $field):
-        if($String):
-          $return = str_replace($Alias . $field, '', $return);
-        else:
-          unset($return[array_search($Alias . $field, $return)]);
-        endif;
-      endforeach;
+    if($Return === FieldsGetReturn::Sql):
+      return 'replace((' . $return . '),\'' . $Alias . $Field . '\',\'\')';
     endif;
-    if($String and substr($return, -1) === ','):
-      $return = substr($return, 0, -1);
+    unset($return[array_search($Alias . $Field, $return)]);
+    if($Return === FieldsGetReturn::String):
+      return implode(',', $return);
     endif;
-    $return = str_replace(',,', '', $return);
     return $return;
   }
 
