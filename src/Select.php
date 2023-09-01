@@ -10,7 +10,7 @@ use PDOException;
 use UnitEnum;
 
 /**
- * @version 2023.09.01.01
+ * @version 2023.09.01.02
  */
 final class Select
 extends Basics{
@@ -92,6 +92,41 @@ extends Basics{
       return array_column($fields->fetchAll(), 'COLUMN_NAME');
     endif;
   }
+
+  /**
+   * Return all table's fields except the expecified field
+   * @throws PDOException
+   */
+  public function FieldsGetExcept(
+    string|UnitEnum|array $Field,
+    string $Table = null,
+    bool $String = false,
+    string $Alias = null
+  ):array|string{
+    $Field = $Field->value ?? $Field->name ?? $Field;
+    $return = $this->FieldsGet($Table, $String, $Alias);
+    if($Alias !== null):
+      $Alias = $Alias . '.';
+    endif;
+    if(is_string($Field)):
+      if($String):
+        $return = str_replace($Alias . $Field, '', $return);
+      else:
+        unset($return[array_search($Alias . $Field, $return)]);
+      endif;
+    else:
+      foreach($Field as $field):
+        if($String):
+          $return = str_replace($Alias . $field, '', $return);
+        else:
+          unset($return[array_search($Alias . $field, $return)]);
+        endif;
+      endforeach;
+    endif;
+    $return = str_replace(',,', '', $return);
+    return $return;
+  }
+
 
   public function Group(
     string|UnitEnum $Fields
