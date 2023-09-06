@@ -10,7 +10,7 @@ use PDOException;
 use PDOStatement;
 
 /**
- * @version 2023.09.06.00
+ * @version 2023.09.06.01
  */
 abstract class Basics{
   protected string $Table;
@@ -98,7 +98,9 @@ abstract class Basics{
           $this->Query .= '(';
         endif;
 
-        if($Wheres[$i]->Operator === Operators::IsNotNull):
+        if($Wheres[$i]->Operator === Operators::Exists):
+          $this->Query .= 'exists (' . $Wheres[$i]->Value . ')';
+        elseif($Wheres[$i]->Operator === Operators::IsNotNull):
           $this->Query .= self::Reserved($Wheres[$i]->Name) . ' is not null';
         elseif($Wheres[$i]->Operator === Operators::In):
           $this->Query .= self::Reserved($Wheres[$i]->Name) . ' in(' . $Wheres[$i]->Value . ')';

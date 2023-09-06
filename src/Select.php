@@ -10,7 +10,7 @@ use PDOException;
 use UnitEnum;
 
 /**
- * @version 2023.09.01.05
+ * @version 2023.09.06.00
  */
 final class Select
 extends Basics{
@@ -22,6 +22,7 @@ extends Basics{
   private string|null $Limit = null;
   private bool $ThrowError = true;
   private PDOStatement|null $Statement = null;
+  private bool $WhereBlock = false;
 
   public function __construct(
     PDO $Conn,
@@ -269,7 +270,7 @@ extends Basics{
   }
 
   /**
-   * @param string|UnitEnum $Field Field name. Can be null to only add parenthesis
+   * @param string|UnitEnum $Field Field name. Can be null to only add parenthesis or add Exists operator
    * @param string|bool $Value Field value. Can be null in case of use another field value. If null, sets the $Operator to Operator::Null
    * @param Types $Type Field type. Can be null in case of Operator::IsNull. Are changed to Types::Null if $Value is null
    * @param Operators $Operator Comparison operator. Operator::Sql sets NoBind to true
@@ -296,6 +297,14 @@ extends Basics{
     bool $NoBind = false,
     bool $Debug = false
   ):self|array|false{
+    if($this->WhereBlock):
+      if($this->ThrowError):
+        throw new PDOException('No more conditions allowed');
+      else:
+        error_log('No more conditions allowed');
+        return false;
+      endif;
+    endif;
     if($Field !== null):
       if($Field instanceof UnitEnum):
         $Field = $Field->value ?? $Field->name;
@@ -320,6 +329,18 @@ extends Basics{
       endif;
       if($NoBind === false):
         $this->WheresControl[] = $CustomPlaceholder ?? $Field;
+      endif;
+    endif;
+    if($Operator === Operators::Exists):
+      if(count($this->Wheres) === 0):
+        $this->WhereBlock = true;
+      else:
+        if($this->ThrowError):
+          throw new PDOException('The operator \'Exists\' must be the first condition');
+        else:
+          error_log('The operator \'Exists\' must be the first condition');
+          return false;
+        endif;
       endif;
     endif;
     $this->Wheres[] = new Field(
