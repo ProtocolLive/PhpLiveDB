@@ -10,7 +10,7 @@ use PDOException;
 use PDOStatement;
 
 /**
- * @version 2023.08.02.00
+ * @version 2023.09.06.00
  */
 abstract class Basics{
   protected string $Table;
@@ -79,8 +79,14 @@ abstract class Basics{
       $this->Query .= ' where ';
       for($i = 0; $i < $count; $i++):
         //Complicated logic
-        if(($i === 0 or $Wheres[$i - 1]->Name === null
-        or ($Wheres[$i]->Name === null and isset($Wheres[$i + 1]) === false)) === false):
+        if((
+          $i === 0
+          or $Wheres[$i - 1]->Name === null
+          or (
+            $Wheres[$i]->Name === null
+            and isset($Wheres[$i + 1]) === false
+          )
+        ) === false):
           if($Wheres[$i]->AndOr === AndOr::And):
             $this->Query .= ' and ';
           elseif($Wheres[$i]->AndOr === AndOr::Or):
