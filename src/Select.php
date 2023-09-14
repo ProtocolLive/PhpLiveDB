@@ -10,7 +10,7 @@ use PDOException;
 use UnitEnum;
 
 /**
- * @version 2023.09.06.00
+ * @version 2023.09.13.00
  */
 final class Select
 extends Basics{
@@ -55,6 +55,17 @@ extends Basics{
   ):self{
     $this->Fields = $Fields->value ?? $Fields->name ?? $Fields;
     return $this;
+  }
+
+  /**
+   * To run * except one field
+   * @throws PDOException
+   */
+  public function FieldsExcept(
+    string|UnitEnum $Field,
+    string $Alias = null
+  ):self{
+    return $this->Fields($this->FieldsGetExcept($Field, Alias: $Alias));
   }
 
   /**
@@ -114,7 +125,6 @@ extends Basics{
     endif;
     return $return;
   }
-
 
   public function Group(
     string|UnitEnum $Fields
