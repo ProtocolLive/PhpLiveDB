@@ -4,7 +4,6 @@
     "type": "library",
     "require": {
         "php": ">=8.1",
-        "ext-openssl": "*",
         "ext-pdo": "*"
     },
     "license": "MIT",
