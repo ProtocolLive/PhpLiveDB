@@ -10,7 +10,7 @@ use PDOException;
 use UnitEnum;
 
 /**
- * @version 2023.12.29.00
+ * @version 2024.01.26.00
  */
 final class Select
 extends Basics{
@@ -20,7 +20,6 @@ extends Basics{
   private string|null $Order = null;
   private string|null $Group = null;
   private string|null $Limit = null;
-  private bool $ThrowError = true;
   private PDOStatement|null $Statement = null;
   private bool $WhereBlock = false;
 
@@ -29,14 +28,13 @@ extends Basics{
     string $Database = null,
     string $Table,
     string $Prefix = null,
-    bool $ThrowError = true,
+    private bool $ThrowError = true,
     callable $OnRun = null
   ){
     $this->Conn = $Conn;
     $this->Database = $Database;
     $this->Table = $Table;
     $this->Prefix = $Prefix;
-    $this->ThrowError = $ThrowError;
     $this->OnRun = $OnRun;
   }
 
