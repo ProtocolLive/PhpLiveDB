@@ -10,7 +10,7 @@ use PDOException;
 use UnitEnum;
 
 /**
- * @version 2024.01.26.00
+ * @version 2024.02.07.00
  */
 final class Select
 extends Basics{
@@ -111,7 +111,7 @@ extends Basics{
   ):array|string{
     $Field = $Field->value ?? $Field->name ?? $Field;
     $return = $this->FieldsGet($Table, FieldsGetReturn::Array, $Alias);
-    unset($return[array_search($Alias . $Field, $return)]);
+    unset($return[array_search($Alias . '.' . $Field, $return)]);
     if($Return === FieldsGetReturn::String):
       return implode(',', $return);
     endif;
