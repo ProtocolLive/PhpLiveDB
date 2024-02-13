@@ -10,7 +10,7 @@ use PDOException;
 use PDOStatement;
 
 /**
- * @version 2024.02.13.00
+ * @version 2024.02.13.01
  */
 abstract class Basics{
   protected string $Table;
@@ -284,7 +284,8 @@ abstract class Basics{
     and $Type !== Types::Null
     and $Operator !== Operators::In
     and $Operator !== Operators::NotIn
-    and $Operator !== Operators::IsNotNull):
+    and $Operator !== Operators::IsNotNull
+    and $Operator !== Operators::Like):
       //Search separated for performance improvement
       if(array_search($Field, $this->WheresControl) !== false):
         if($ThrowError):
