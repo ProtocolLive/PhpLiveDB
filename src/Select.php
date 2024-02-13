@@ -10,7 +10,7 @@ use PDOException;
 use UnitEnum;
 
 /**
- * @version 2024.02.13.00
+ * @version 2024.02.13.01
  */
 final class Select
 extends Basics{
@@ -308,6 +308,18 @@ extends Basics{
         return false;
       endif;
     endif;
+    if($Operator === Operators::Exists):
+      if(count($this->Wheres) === 0):
+        $this->WhereBlock = true;
+      else:
+        if($this->ThrowError):
+          throw new PDOException('The operator \'Exists\' must be the first condition');
+        else:
+          error_log('The operator \'Exists\' must be the first condition');
+          return false;
+        endif;
+      endif;
+    endif;
     if($Field !== null):
       if($Field instanceof UnitEnum):
         $Field = $Field->value ?? $Field->name;
@@ -332,18 +344,6 @@ extends Basics{
       endif;
       if($NoBind === false):
         $this->WheresControl[] = $CustomPlaceholder ?? $Field;
-      endif;
-    endif;
-    if($Operator === Operators::Exists):
-      if(count($this->Wheres) === 0):
-        $this->WhereBlock = true;
-      else:
-        if($this->ThrowError):
-          throw new PDOException('The operator \'Exists\' must be the first condition');
-        else:
-          error_log('The operator \'Exists\' must be the first condition');
-          return false;
-        endif;
       endif;
     endif;
     $this->Wheres[] = new Field(
