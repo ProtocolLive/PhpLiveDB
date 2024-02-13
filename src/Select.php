@@ -10,7 +10,7 @@ use PDOException;
 use UnitEnum;
 
 /**
- * @version 2024.02.13.01
+ * @version 2024.02.13.02
  */
 final class Select
 extends Basics{
@@ -273,7 +273,7 @@ extends Basics{
 
   /**
    * Note 1: For run like in same field, use different custom placeholders
-   * @param string|UnitEnum $Field Field name. Can be null to only add parenthesis or add Exists operator
+   * @param string|string[]|UnitEnum|UnitEnum[] $Field Field name. Can be null to only add parenthesis or add Exists operator
    * @param string|bool $Value Field value. Can be null in case of use another field value. If null, sets the $Operator to Operator::Null
    * @param Types $Type Field type. Can be null in case of Operator::IsNull. Are changed to Types::Null if $Value is null
    * @param Operators $Operator Comparison operator. Operator::Sql sets NoBind to true
@@ -288,7 +288,7 @@ extends Basics{
    * @throws PDOException
    */
   public function WhereAdd(
-    string|UnitEnum $Field = null,
+    string|array|UnitEnum $Field = null,
     string|bool $Value = null,
     Types $Type = null,
     Operators $Operator = Operators::Equal,
@@ -320,44 +320,49 @@ extends Basics{
         endif;
       endif;
     endif;
-    if($Field !== null):
-      if($Field instanceof UnitEnum):
-        $Field = $Field->value ?? $Field->name;
+    if(is_array($Field) === false):
+      $Field = [$Field];
+    endif;
+    foreach($Field as $field):
+      if($field !== null):
+        if($field instanceof UnitEnum):
+          $field = $field->value ?? $field->name;
+        endif;
+        if($CustomPlaceholder === null):
+          $this->FieldNeedCustomPlaceholder($field);
+        endif;
+        if($BlankIsNull and $Value === ''):
+          $Value = null;
+          $Type = Types::Null;
+        endif;
+        $temp = $this->WheresControl(
+          $this->ThrowError,
+          $CustomPlaceholder ?? $field,
+          $Type,
+          $Operator,
+          $NoField,
+          $NoBind
+        );
+        if($temp === false):
+          return false;
+        endif;
+        if($NoBind === false):
+          $this->WheresControl[] = $CustomPlaceholder ?? $field;
+        endif;
       endif;
-      if($CustomPlaceholder === null):
-        $this->FieldNeedCustomPlaceholder($Field);
-      endif;
-      if($BlankIsNull and $Value === ''):
-        $Value = null;
-        $Type = Types::Null;
-      endif;
-      $temp = $this->WheresControl(
-        $this->ThrowError,
-        $CustomPlaceholder ?? $Field,
+      $this->Wheres[] = new Field(
+        $field,
+        $Value,
         $Type,
         $Operator,
+        $AndOr,
+        $Parenthesis,
+        $CustomPlaceholder,
+        $BlankIsNull,
         $NoField,
         $NoBind
       );
-      if($temp === false):
-        return false;
-      endif;
-      if($NoBind === false):
-        $this->WheresControl[] = $CustomPlaceholder ?? $Field;
-      endif;
-    endif;
-    $this->Wheres[] = new Field(
-      $Field,
-      $Value,
-      $Type,
-      $Operator,
-      $AndOr,
-      $Parenthesis,
-      $CustomPlaceholder,
-      $BlankIsNull,
-      $NoField,
-      $NoBind
-    );
+    endforeach;
     if($Debug):
       return $this->Wheres;
     endif;
