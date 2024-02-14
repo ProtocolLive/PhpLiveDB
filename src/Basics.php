@@ -10,7 +10,7 @@ use PDOException;
 use PDOStatement;
 
 /**
- * @version 2024.02.13.01
+ * @version 2024.02.13.02
  */
 abstract class Basics{
   protected string $Table;
@@ -173,7 +173,7 @@ abstract class Basics{
       if(ini_get('html_errors') == true):
         print '<pre style="text-align:left">';
       endif;
-      if(PHP_SAPI !== 'cli'):
+      if(PHP_OS !== 'WINNT'):
         echo htmlspecialchars($Dump);
       endif;
       error_log($Dump);
