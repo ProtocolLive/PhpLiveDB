@@ -10,7 +10,7 @@ use PDOException;
 use UnitEnum;
 
 /**
- * @version 2024.02.13.02
+ * @version 2024.02.17.00
  */
 final class Select
 extends Basics{
@@ -48,10 +48,19 @@ extends Basics{
     return $this->Statement->fetch(cursorOffset: $Offset);
   }
 
+  /**
+   * @param string|UnitEnum|string[]|UnitEnum[] $Fields
+   */
   public function Fields(
-    string|UnitEnum $Fields
+    string|UnitEnum|array $Fields
   ):self{
-    $this->Fields = $Fields->value ?? $Fields->name ?? $Fields;
+    if(is_array($Fields) === false):
+      $Fields = [$Fields];
+    endif;
+    foreach($Fields as &$field):
+      $field = $field->value ?? $field->name ?? $field;
+    endforeach;
+    $this->Fields = implode(',', $Fields);
     return $this;
   }
 
