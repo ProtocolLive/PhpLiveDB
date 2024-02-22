@@ -6,11 +6,16 @@ namespace ProtocolLive\PhpLiveDb;
 use BackedEnum;
 use PDO;
 use PDOException;
-use ProtocolLive\PhpLiveDb\Operators;
+use ProtocolLive\PhpLiveDb\Enums\{
+  AndOr,
+  Operators,
+  Parenthesis,
+  Types
+};
 use UnitEnum;
 
 /**
- * @version 2023.08.02.00
+ * @version 2024.02.22.00
  */
 final class Update
 extends Basics{

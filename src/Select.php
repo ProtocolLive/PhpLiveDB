@@ -7,10 +7,18 @@ use BackedEnum;
 use PDO;
 use PDOStatement;
 use PDOException;
+use ProtocolLive\PhpLiveDb\Enums\{
+  AndOr,
+  FieldsGetReturn,
+  Joins,
+  Operators,
+  Parenthesis,
+  Types
+};
 use UnitEnum;
 
 /**
- * @version 2024.02.17.00
+ * @version 2024.02.22.00
  */
 final class Select
 extends Basics{

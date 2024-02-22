@@ -1,10 +1,18 @@
 <?php
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
-//2023.01.21.00
 
 namespace ProtocolLive\PhpLiveDb;
+use ProtocolLive\PhpLiveDb\Enums\{
+  AndOr,
+  Operators,
+  Parenthesis,
+  Types
+};
 
+/**
+ * @version 2024.02.22.00
+ */
 final class Field{
   public function __construct(
     public string|null $Name = null,

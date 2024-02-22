@@ -2,10 +2,10 @@
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
 
-namespace ProtocolLive\PhpLiveDb;
+namespace ProtocolLive\PhpLiveDb\Enums;
 
 /**
- * @version 2023.09.06.01
+ * @version 2024.02.22.00
  */
 enum Operators:string{
   case Bigger = '>';

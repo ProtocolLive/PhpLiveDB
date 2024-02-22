@@ -8,9 +8,16 @@ use Closure;
 use PDO;
 use PDOException;
 use PDOStatement;
+use ProtocolLive\PhpLiveDb\Enums\{
+  AndOr,
+  Drivers,
+  Operators,
+  Parenthesis,
+  Types
+};
 
 /**
- * @version 2024.02.13.02
+ * @version 2024.02.22.00
  */
 abstract class Basics{
   protected string $Table;

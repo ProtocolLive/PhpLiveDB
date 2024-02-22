@@ -2,10 +2,10 @@
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
 
-namespace ProtocolLive\PhpLiveDb;
+namespace ProtocolLive\PhpLiveDb\Enums;
 
 /**
- * @version 2022.12.30.00
+ * @version 2024.02.22.00
  */
 enum RefTypes:string{
   case Cascade = 'cascade';

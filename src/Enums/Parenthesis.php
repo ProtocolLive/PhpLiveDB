@@ -2,10 +2,10 @@
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
 
-namespace ProtocolLive\PhpLiveDb;
+namespace ProtocolLive\PhpLiveDb\Enums;
 
 /**
- * @version 2022.09.01.00
+ * @version 2024.02.22.00
  */
 enum Parenthesis{
   case Close;

@@ -2,10 +2,10 @@
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
 
-namespace ProtocolLive\PhpLiveDb;
+namespace ProtocolLive\PhpLiveDb\Enums;
 
 /**
- * @version 2022.08.07.04
+ * @version 2024.02.22.00
  */
 enum Drivers:string{
   case MySql = 'mysql';

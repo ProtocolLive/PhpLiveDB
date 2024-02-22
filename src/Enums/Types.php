@@ -2,11 +2,11 @@
 //Protocol Corporation Ltda.
 //https://github.com/ProtocolLive/PhpLiveDb
 
-namespace ProtocolLive\PhpLiveDb;
+namespace ProtocolLive\PhpLiveDb\Enums;
 use PDO;
 
 /**
- * @version 2023.08.17.00
+ * @version 2024.02.22.00
  */
 enum Types:int{
   case Bool = PDO::PARAM_BOOL;

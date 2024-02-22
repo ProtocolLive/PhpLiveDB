@@ -5,10 +5,11 @@
 namespace ProtocolLive\PhpLiveDb;
 use BackedEnum;
 use PDOException;
+use ProtocolLive\PhpLiveDb\Enums\Types;
 use UnitEnum;
 
 /**
- * @version 2023.08.16.00
+ * @version 2024.02.22.00
  */
 final class InsertUpdate
 extends Insert{
