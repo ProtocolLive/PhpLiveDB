@@ -17,7 +17,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 };
 
 /**
- * @version 2024.02.22.00
+ * @version 2024.02.24.00
  */
 abstract class Basics{
   protected string $Table;
@@ -68,7 +68,9 @@ abstract class Basics{
     endforeach;
   }
 
-  protected function BuildWhere(array $Wheres):void{
+  protected function BuildWhere(
+    array $Wheres
+  ):void{
     /**
      * @var Field[] $Wheres
      */
@@ -153,7 +155,9 @@ abstract class Basics{
     return $temp[0]['Duration'];
   }
 
-  protected function FieldNeedCustomPlaceholder(string $Field):void{
+  protected function FieldNeedCustomPlaceholder(
+    string $Field
+  ):void{
     if(str_contains($Field, '.') or str_contains($Field, '(')):
       throw new PDOException(
         'The field ' . $Field . ' need a custom placeholder',
@@ -217,7 +221,9 @@ abstract class Basics{
     $statement->execute();
   }
 
-  public static function Reserved(string $Field):string{
+  public static function Reserved(
+    string $Field
+  ):string{
     $names = ['order', 'default', 'group', 'update', 'div'];
     if(in_array($Field, $names)):
       $Field = '`' . $Field . '`';
