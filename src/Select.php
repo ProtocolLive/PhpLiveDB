@@ -18,7 +18,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 use UnitEnum;
 
 /**
- * @version 2024.02.22.00
+ * @version 2024.03.11.00
  */
 final class Select
 extends Basics{
@@ -32,16 +32,14 @@ extends Basics{
   private bool $WhereBlock = false;
 
   public function __construct(
-    PDO $Conn,
-    string $Database = null,
-    string $Table,
-    string $Prefix = null,
+    protected PDO $Conn,
+    protected string $Table,
+    string $Database = null, //not promoted because the null value
+    string $Prefix = null, //not promoted because the null value
     private bool $ThrowError = true,
-    callable $OnRun = null
+    callable $OnRun = null //not promoted because the callable
   ){
-    $this->Conn = $Conn;
     $this->Database = $Database;
-    $this->Table = $Table;
     $this->Prefix = $Prefix;
     $this->OnRun = $OnRun;
   }
@@ -154,24 +152,12 @@ extends Basics{
     if($Using instanceof UnitEnum):
       $Using = $Using->value ?? $Using->name;
     endif;
-    $this->Join[] = new class($Table, $Type, $Using, $On){
-      public string $Table;
-      public Joins $Type;
-      public string|null $Using;
-      public string|null $On;
-
-      public function __construct(
-        string $Table,
-        Joins $Type,
-        string|null $Using,
-        string|null $On
-      ){
-        $this->Table = $Table;
-        $this->Type = $Type;
-        $this->Using = $Using;
-        $this->On = $On;
-      }
-    };
+    $this->Join[] = (object)[
+      'Table' => $Table,
+      'Type' => $Type,
+      'Using' => $Using,
+      'On' => $On
+    ];
     return $this;
 
   }
