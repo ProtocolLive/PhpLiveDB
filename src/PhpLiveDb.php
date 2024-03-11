@@ -10,7 +10,7 @@ use ProtocolLive\PhpLiveDb\Enums\Drivers;
 use UnitEnum;
 
 /**
- * @version 2024.02.22.00
+ * @version 2024.03.11.00
  */
 final class PhpLiveDb
 extends Basics{
@@ -114,8 +114,8 @@ extends Basics{
   ):Select{
     return new Select(
       $this->Conn,
-      $this->Database,
       $Table->value ?? $Table->name ?? $Table,
+      $this->Database,
       $this->Prefix,
       $ThrowError,
       $this->OnRun
