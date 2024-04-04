@@ -5,9 +5,10 @@
 namespace ProtocolLive\PhpLiveDb\Enums;
 
 /**
- * @version 2024.02.22.00
+ * @version 2024.04.04.00
  */
 enum Drivers:string{
+  case Firebird = 'firebird';
   case MySql = 'mysql';
   case SqLite = 'sqlite';
 }
