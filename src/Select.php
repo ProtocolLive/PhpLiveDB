@@ -18,7 +18,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 use UnitEnum;
 
 /**
- * @version 2024.03.11.00
+ * @version 2024.04.05.00
  */
 final class Select
 extends Basics{
@@ -198,7 +198,9 @@ extends Basics{
     return $this;
   }
 
-  private function Prepare():PDOStatement{
+  private function Prepare(
+    bool $ForUpdate
+  ):PDOStatement{
     $this->SelectHead();
     $this->JoinBuild();
     if(count($this->Wheres) > 0):
@@ -213,6 +215,9 @@ extends Basics{
     if($this->Limit !== null):
       $this->Query .= ' limit ' . $this->Limit;
     endif;
+    if($ForUpdate):
+      $this->Query .= ' for update';
+    endif;
 
     if($this->Prefix !== null):
       $this->Query = str_replace('##', $this->Prefix . '_', $this->Query);
@@ -220,8 +225,10 @@ extends Basics{
     return $this->Conn->prepare($this->Query);
   }
 
-  public function QueryGet():string{
-    $this->Prepare();
+  public function QueryGet(
+    bool $ForUpdate = false
+  ):string{
+    $this->Prepare($ForUpdate);
     return $this->Query;
   }
 
@@ -236,9 +243,10 @@ extends Basics{
     bool $Log = false,
     int|BackedEnum $LogEvent = null,
     int $LogUser = null,
-    bool $Fetch = false
+    bool $Fetch = false,
+    bool $ForUpdate = false
   ):array|bool{
-    $statement = $this->Prepare();
+    $statement = $this->Prepare($ForUpdate);
     if(count($this->Wheres) > 0):
       $this->Bind($statement, $this->Wheres, $HtmlSafe, $TrimValues);
     endif;
