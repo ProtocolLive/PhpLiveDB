@@ -10,7 +10,7 @@ use ProtocolLive\PhpLiveDb\Enums\Drivers;
 use UnitEnum;
 
 /**
- * @version 2024.03.11.00
+ * @version 2024.04.24.00
  */
 final class PhpLiveDb
 extends Basics{
@@ -108,6 +108,14 @@ extends Basics{
     );
   }
 
+  public function Lock(
+    string|UnitEnum $Table,
+    bool $Write = true
+  ):void{
+    $this->Conn->exec('lock tables ' . $Table->value ?? $Table->name ?? $Table .
+      ' ' . ($Write ? 'write' : 'read'));
+  }
+
   public function Select(
     string|UnitEnum $Table,
     bool $ThrowError = true
@@ -141,6 +149,10 @@ extends Basics{
       );
     endif;
     return $return;
+  }
+
+  public function Unlock():void{
+    $this->Conn->exec('unlock tables');
   }
 
   public function Update(
