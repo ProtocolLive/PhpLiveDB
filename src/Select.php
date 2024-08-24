@@ -4,6 +4,7 @@
 
 namespace ProtocolLive\PhpLiveDb;
 use BackedEnum;
+use InvalidArgumentException;
 use PDO;
 use PDOStatement;
 use PDOException;
@@ -18,7 +19,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 use UnitEnum;
 
 /**
- * @version 2024.04.05.00
+ * @version 2024.08.24.00
  */
 final class Select
 extends Basics{
@@ -140,18 +141,21 @@ extends Basics{
     return $this;
   }
 
+  /**
+   * @throws InvalidArgumentException
+   */
   public function JoinAdd(
     string|UnitEnum $Table,
-    string|null|UnitEnum $Using = null,
-    string|null $On = null,
+    string|UnitEnum $Using = null,
+    string $On = null,
     Joins $Type = Joins::Left
   ):self{
-    if($Table instanceof UnitEnum):
-      $Table = $Table->value ?? $Table->name;
+    if($Using === null
+    and $On === null):
+      throw new InvalidArgumentException('Need to specify Using or On');
     endif;
-    if($Using instanceof UnitEnum):
-      $Using = $Using->value ?? $Using->name;
-    endif;
+    $Table = $Table->value ?? $Table->name ?? $Table;
+    $Using = $Using->value ?? $Using->name ?? $Using;
     $this->Join[] = (object)[
       'Table' => $Table,
       'Type' => $Type,
