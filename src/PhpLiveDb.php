@@ -7,10 +7,11 @@ use Exception;
 use PDO;
 use PDOException;
 use ProtocolLive\PhpLiveDb\Enums\Drivers;
+use SensitiveParameter;
 use UnitEnum;
 
 /**
- * @version 2024.04.24.00
+ * @version 2024.08.27.00
  */
 final class PhpLiveDb
 extends Basics{
@@ -21,7 +22,7 @@ extends Basics{
   public function __construct(
     string $Ip,
     string $User = null,
-    string $Pwd = null,
+    #[SensitiveParameter] string $Pwd = null,
     string $Db = null,
     Drivers $Driver = Drivers::MySql,
     string $Charset = 'utf8mb4',
