@@ -33,4 +33,4 @@ For the documentation, click [here](https://protocollive.github.io/PhpLiveDbDocs
 
 ## Install
 - Download the library in zip format and use the _src_ folder content;
-- Via Composer with `composer require protocollive/phplivedb`;
+- Via Composer with `composer require protocollive/phplivedb` ([Video](https://youtu.be/UVfc6vN2zho));
