@@ -19,7 +19,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 use UnitEnum;
 
 /**
- * @version 2024.08.24.00
+ * @version 2024.10.14.00
  */
 final class Select
 extends Basics{
@@ -289,7 +289,7 @@ extends Basics{
   /**
    * Note 1: For run like in same field, use different custom placeholders
    * @param string|string[]|UnitEnum|UnitEnum[] $Field Field name. Can be null to only add parenthesis or add Exists operator
-   * @param string|bool $Value Field value. Can be null in case of use another field value. If null, sets the $Operator to Operator::Null
+   * @param string|bool|UnitEnum $Value Field value. Can be null in case of use another field value. If null, sets the $Operator to Operator::Null. Can be UnitEnum in case of NoBind
    * @param Types $Type Field type. Can be null in case of Operator::IsNull. Are changed to Types::Null if $Value is null
    * @param Operators $Operator Comparison operator. Operator::Sql sets NoBind to true
    * @param AndOr $AndOr Relation with the previous field
@@ -304,7 +304,7 @@ extends Basics{
    */
   public function WhereAdd(
     string|array|UnitEnum $Field = null,
-    string|bool $Value = null,
+    string|bool|UnitEnum $Value = null,
     Types $Type = null,
     Operators $Operator = Operators::Equal,
     AndOr $AndOr = AndOr::And,
@@ -340,9 +340,7 @@ extends Basics{
     endif;
     foreach($Field as $field):
       if($field !== null):
-        if($field instanceof UnitEnum):
-          $field = $field->value ?? $field->name;
-        endif;
+        $field = $field->value ?? $field->name ?? $field;
         if($CustomPlaceholder === null):
           $this->FieldNeedCustomPlaceholder($field);
         endif;
@@ -367,7 +365,7 @@ extends Basics{
       endif;
       $this->Wheres[] = new Field(
         $field,
-        $Value,
+        $Value->value ?? $Value->name ?? $Value,
         $Type,
         $Operator,
         $AndOr,
