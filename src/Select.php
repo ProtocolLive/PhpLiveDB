@@ -19,7 +19,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 use UnitEnum;
 
 /**
- * @version 2024.10.16.00
+ * @version 2024.10.16.01
  */
 final class Select
 extends Basics{
@@ -189,8 +189,11 @@ extends Basics{
     return $this;
   }
 
+  /**
+   * Send empty fields to clear
+   */
   public function Order(
-    string|UnitEnum|null $Fields
+    string|UnitEnum $Fields = null
   ):self{
     if($Fields === ''):
       $Fields = null;
