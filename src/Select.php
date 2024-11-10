@@ -19,7 +19,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 use UnitEnum;
 
 /**
- * @version 2024.11.10.00
+ * @version 2024.11.10.01
  */
 final class Select
 extends Basics{
@@ -211,7 +211,7 @@ extends Basics{
     if($this->Order !== null):
       $this->Order .= ',';
     endif;
-    $this->Order .= $Fields->value ?? $Fields->name ?? $Field;
+    $this->Order .= $Field->value ?? $Field->name ?? $Field;
     return $this;
   }
 
