@@ -15,7 +15,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 use UnitEnum;
 
 /**
- * @version 2024.02.22.00
+ * @version 2024.11.23.00
  */
 final class Create
 extends Basics{
@@ -25,9 +25,9 @@ extends Basics{
   public function __construct(
     PDO $Conn,
     string $Table,
-    string $Prefix = null,
+    string|null $Prefix = null,
     Drivers $Driver = Drivers::MySql,
-    callable $OnRun = null
+    callable|null $OnRun = null
   ){
     $this->Conn = $Conn;
     $this->Table = $Table;
@@ -42,17 +42,17 @@ extends Basics{
   public function Add(
     string|UnitEnum $Name,
     Formats $Format,
-    int $Size = null,
+    int|null $Size = null,
     bool $Unsigned = false,
-    string $CharSet = null,
-    string $Collate = null,
+    string|null $CharSet = null,
+    string|null $Collate = null,
     bool $NotNull = false,
-    string $Default = null,
+    string|null $Default = null,
     bool $Primary = false,
     bool $AutoIncrement = false,
     bool $Unique = false,
-    string|UnitEnum $RefTable = null,
-    string|UnitEnum $RefField = null,
+    string|UnitEnum|null $RefTable = null,
+    string|UnitEnum|null $RefField = null,
     RefTypes $RefUpdate = RefTypes::Restrict,
     RefTypes $RefDelete = RefTypes::Restrict,
   ):self{
@@ -159,7 +159,7 @@ extends Basics{
 
   private function BuildFormat(
     Formats $Format,
-    int $Size = null,
+    int|null $Size = null,
     bool $Unsigned = false
   ):string{
     if($this->Driver === Drivers::MySql):

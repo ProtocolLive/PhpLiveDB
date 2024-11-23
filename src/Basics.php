@@ -17,7 +17,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 };
 
 /**
- * @version 2024.11.23.00
+ * @version 2024.11.23.01
  */
 abstract class Basics{
   protected string $Table;
@@ -173,8 +173,8 @@ abstract class Basics{
     PDOStatement $Statement,
     bool $Debug = false,
     bool $Log = false,
-    int|BackedEnum $LogEvent = null,
-    int $LogUser = null
+    int|BackedEnum|null $LogEvent = null,
+    int|null $LogUser = null
   ):string{
     ob_start();
     $Statement->debugDumpParams();
@@ -289,7 +289,7 @@ abstract class Basics{
     Operators $Operator,
     bool $NoField,
     bool $NoBind,
-    Types $Type = null
+    Types|null $Type = null
   ):bool{
     if($Field !== null
     and $NoField === false

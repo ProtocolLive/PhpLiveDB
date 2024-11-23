@@ -10,7 +10,7 @@ use ProtocolLive\PhpLiveDb\Enums\Types;
 use UnitEnum;
 
 /**
- * @version 2024.02.22.00
+ * @version 2024.11.23.00
  */
 class Insert
 extends Basics{
@@ -19,8 +19,8 @@ extends Basics{
   public function __construct(
     PDO $Conn,
     string $Table,
-    string $Prefix = null,
-    callable $OnRun = null
+    string|null $Prefix = null,
+    callable|null $OnRun = null
   ){
     $this->Conn = $Conn;
     $this->Table = $Table;
@@ -70,8 +70,8 @@ extends Basics{
     Select $Select,
     bool $Debug = false,
     bool $Log = false,
-    int $LogEvent = null,
-    int $LogUser = null
+    int|null $LogEvent = null,
+    int|null $LogUser = null
   ):void{
     $this->Query = 'insert into ' . $this->Table . '(' . $Fields . ') ';
     $this->Query .= $Select->QueryGet();
@@ -121,8 +121,8 @@ extends Basics{
     bool $HtmlSafe = true,
     bool $TrimValues = true,
     bool $Log = false,
-    int|BackedEnum $LogEvent = null,
-    int $LogUser = null
+    int|BackedEnum|null $LogEvent = null,
+    int|null $LogUser = null
   ):int{
     $FieldsCount = count($this->Fields);
     if($FieldsCount === 0):
