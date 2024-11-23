@@ -17,7 +17,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 };
 
 /**
- * @version 2024.10.14.00
+ * @version 2024.11.23.00
  */
 abstract class Basics{
   protected string $Table;
@@ -286,10 +286,10 @@ abstract class Basics{
   protected function WheresControl(
     bool $ThrowError,
     string $Field,
-    Types $Type = null,
     Operators $Operator,
     bool $NoField,
-    bool $NoBind
+    bool $NoBind,
+    Types $Type = null
   ):bool{
     if($Field !== null
     and $NoField === false
