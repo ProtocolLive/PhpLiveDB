@@ -19,7 +19,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 use UnitEnum;
 
 /**
- * @version 2024.11.23.00
+ * @version 2024.11.23.01
  */
 final class Select
 extends Basics{
@@ -35,10 +35,10 @@ extends Basics{
   public function __construct(
     protected PDO $Conn,
     protected string $Table,
-    string $Database = null, //not promoted because the null value
-    string $Prefix = null, //not promoted because the null value
+    string|null $Database = null, //not promoted because the null value
+    string|null $Prefix = null, //not promoted because the null value
     private bool $ThrowError = true,
-    callable $OnRun = null //not promoted because the callable
+    callable|null $OnRun = null //not promoted because the callable
   ){
     $this->Database = $Database;
     $this->Prefix = $Prefix;
@@ -77,7 +77,7 @@ extends Basics{
    */
   public function FieldsExcept(
     string|UnitEnum $Field,
-    string $Alias = null
+    string|null $Alias = null
   ):self{
     return $this->Fields($this->FieldsGetExcept($Field, Alias: $Alias));
   }
@@ -86,9 +86,9 @@ extends Basics{
    * @throws PDOException
    */
   public function FieldsGet(
-    string|UnitEnum $Table = null,
+    string|UnitEnum|null $Table = null,
     FieldsGetReturn $Return = FieldsGetReturn::String,
-    string $Alias = null
+    string|null $Alias = null
   ):array|string{
     $Table = $Table->value ?? $Table->name ?? $Table ?? $this->Table;
     if(str_contains($Table, ' ')):
@@ -121,9 +121,9 @@ extends Basics{
    */
   public function FieldsGetExcept(
     string|UnitEnum $Field,
-    string|UnitEnum $Table = null,
+    string|UnitEnum|null $Table = null,
     FieldsGetReturn $Return = FieldsGetReturn::String,
-    string $Alias = null
+    string|null $Alias = null
   ):array|string{
     $Field = $Field->value ?? $Field->name ?? $Field;
     $return = $this->FieldsGet($Table, FieldsGetReturn::Array, $Alias);
@@ -146,8 +146,8 @@ extends Basics{
    */
   public function JoinAdd(
     string|UnitEnum $Table,
-    string|UnitEnum $Using = null,
-    string $On = null,
+    string|UnitEnum|null $Using = null,
+    string|null $On = null,
     Joins $Type = Joins::Left
   ):self{
     if($Using === null
@@ -193,7 +193,7 @@ extends Basics{
    * Send empty fields to clear
    */
   public function Order(
-    string|UnitEnum $Fields = null
+    string|UnitEnum|null $Fields = null
   ):self{
     if($Fields === ''):
       $Fields = null;
@@ -258,8 +258,8 @@ extends Basics{
     bool $HtmlSafe = true,
     bool $TrimValues = true,
     bool $Log = false,
-    int|BackedEnum $LogEvent = null,
-    int $LogUser = null,
+    int|BackedEnum|null $LogEvent = null,
+    int|null $LogUser = null,
     bool $Fetch = false,
     bool $ForUpdate = false
   ):array|bool{
@@ -316,13 +316,13 @@ extends Basics{
    * @throws PDOException
    */
   public function WhereAdd(
-    string|array|UnitEnum $Field = null,
-    string|bool|UnitEnum $Value = null,
-    Types $Type = null,
+    string|array|UnitEnum|null $Field = null,
+    string|bool|UnitEnum|null $Value = null,
+    Types|null $Type = null,
     Operators $Operator = Operators::Equal,
     AndOr $AndOr = AndOr::And,
     Parenthesis $Parenthesis = Parenthesis::None,
-    string $CustomPlaceholder = null,
+    string|null $CustomPlaceholder = null,
     bool $BlankIsNull = true,
     bool $NoField = false,
     bool $NoBind = false,

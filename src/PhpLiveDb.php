@@ -11,7 +11,7 @@ use SensitiveParameter;
 use UnitEnum;
 
 /**
- * @version 2024.08.27.00
+ * @version 2024.11.23.00
  */
 final class PhpLiveDb
 extends Basics{
@@ -21,14 +21,14 @@ extends Basics{
    */
   public function __construct(
     string $Ip,
-    string $User = null,
-    #[SensitiveParameter] string $Pwd = null,
-    string $Db = null,
+    string|null $User = null,
+    #[SensitiveParameter] string|null $Pwd = null,
+    string|null $Db = null,
     Drivers $Driver = Drivers::MySql,
     string $Charset = 'utf8mb4',
     int $TimeOut = 5,
-    string $Prefix = null,
-    callable $OnRun = null
+    string|null $Prefix = null,
+    callable|null $OnRun = null
   ){
     $dsn = $Driver->value . ':';
     if($Driver === Drivers::MySql):

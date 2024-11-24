@@ -15,7 +15,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 use UnitEnum;
 
 /**
- * @version 2024.02.22.00
+ * @version 2024.11.23.00
  */
 final class Update
 extends Basics{
@@ -25,8 +25,8 @@ extends Basics{
   public function __construct(
     PDO $Conn,
     string $Table,
-    string $Prefix = null,
-    callable $OnRun = null
+    string|null $Prefix = null,
+    callable|null $OnRun = null
   ){
     $this->Conn = $Conn;
     $this->Table = $Table;
@@ -84,8 +84,8 @@ extends Basics{
     bool $HtmlSafe = true,
     bool $TrimValues = true,
     bool $Log = false,
-    int|BackedEnum $LogEvent = null,
-    int $LogUser = null
+    int|BackedEnum|null $LogEvent = null,
+    int|null $LogUser = null
   ):int{
     self::BuildQuery();
     $WheresCount = count($this->Wheres);
@@ -151,12 +151,12 @@ extends Basics{
    */
   public function WhereAdd(
     string|UnitEnum $Field,
-    string|bool $Value = null,
-    Types $Type = null,
+    string|bool|null $Value = null,
+    Types|null $Type = null,
     Operators $Operator = Operators::Equal,
     AndOr $AndOr = AndOr::And,
     Parenthesis $Parenthesis = Parenthesis::None,
-    string $CustomPlaceholder = null,
+    string|null $CustomPlaceholder = null,
     bool $BlankIsNull = true,
     bool $NoBind = false
   ):self{
