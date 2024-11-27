@@ -19,7 +19,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 use UnitEnum;
 
 /**
- * @version 2024.11.23.01
+ * @version 2024.11.27.00
  */
 final class Select
 extends Basics{
@@ -184,8 +184,13 @@ extends Basics{
     endforeach;
   }
 
-  public function Limit(int $Amount, int $First = 0):self{
-    $this->Limit = $First . ',' . $Amount;
+  public function Limit(
+    int|null $Amount,
+    int $First = 0
+  ):self{
+    if($Amount !== null):
+      $this->Limit = $First . ',' . $Amount;
+    endif;
     return $this;
   }
 
