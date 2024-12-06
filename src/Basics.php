@@ -17,7 +17,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 };
 
 /**
- * @version 2024.12.06.00
+ * @version 2024.12.06.01
  */
 abstract class Basics{
   protected string $Table;
@@ -126,7 +126,7 @@ abstract class Basics{
             $this->Query .= self::Reserved($Wheres[$i]->Name) . $Wheres[$i]->Operator->value;
             if($Wheres[$i]->Type === Types::Sql
             or $Wheres[$i]->NoBind):
-              $this->Query .= $Wheres[$i]->CustomPlaceholder ?? $Wheres[$i]->Value;
+              $this->Query .= ':' . ($Wheres[$i]->CustomPlaceholder ?? $Wheres[$i]->Value);
             else:
               $this->Query .= ':' . ($Wheres[$i]->CustomPlaceholder ?? $Wheres[$i]->Name);
             endif;
