@@ -17,7 +17,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 };
 
 /**
- * @version 2025.02.21.04
+ * @version 2025.02.22.00
  */
 abstract class Basics{
   protected string $Table;
@@ -38,6 +38,9 @@ abstract class Basics{
     $this->Conn->beginTransaction();
   }
 
+  /**
+   * @param Field[] $Fields
+   */
   protected function Bind(
     PDOStatement $Statement,
     array $Fields,
@@ -64,6 +67,20 @@ abstract class Basics{
           $value,
           $field->Type
         ];
+        if($field->Operator === Operators::Between
+        or $field->Operator === Operators::BetweenNot):
+          $value = $this->ValueFunctions($field->Value2, $HtmlSafe, $TrimValues);
+          $Statement->bindValue(
+            ($field->CustomPlaceholder ?? $field->Name) . '2',
+            $value,
+            $field->Type->value
+          );
+          $this->Binds[] = [
+            ($field->CustomPlaceholder ?? $field->Name) . '2',
+            $value,
+            $field->Type
+          ];
+        endif;
       endif;
     endforeach;
   }
@@ -118,7 +135,9 @@ abstract class Basics{
         $this->Query .= self::Reserved($Wheres[$i]->Name) . $Wheres[$i]->Operator->value . '(' . $Wheres[$i]->Value . ')';
       elseif($Wheres[$i]->Operator === Operators::Between
       or $Wheres[$i]->Operator === Operators::BetweenNot):
-        $this->Query .= self::Reserved($Wheres[$i]->Name) . $Wheres[$i]->Operator->value . ' ' . $Wheres[$i]->Value . ' and ' . $Wheres[$i]->Value2;
+        $this->Query .= self::Reserved($Wheres[$i]->Name) . $Wheres[$i]->Operator->value;
+        $this->Query .= ' :' . ($Wheres[$i]->CustomPlaceholder ?? $Wheres[$i]->Name) . ' and ';
+        $this->Query .= ':' . ($Wheres[$i]->CustomPlaceholder ?? $Wheres[$i]->Name) . '2';
       elseif($Wheres[$i]->Name !== null):
         if($Wheres[$i]->NoBind === false
         and(
@@ -152,6 +171,18 @@ abstract class Basics{
    */
   public function Commit():void{
     $this->Conn->commit();
+  }
+
+  public function DebugBinds(
+    bool $HtmlSafe = true,
+    bool $TrimValues = true,
+    bool $ForUpdate = false
+  ):array{
+    $statement = $this->Prepare($ForUpdate);
+    if(count($this->Wheres) > 0):
+      $this->Bind($statement, $this->Wheres, $HtmlSafe, $TrimValues);
+    endif;
+    return $this->Binds;
   }
 
   /**

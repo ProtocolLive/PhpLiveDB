@@ -19,13 +19,13 @@ use ProtocolLive\PhpLiveDb\Enums\{
 use UnitEnum;
 
 /**
- * @version 2025.02.21.03
+ * @version 2025.02.22.00
  */
 final class Select
 extends Basics{
   private string $Fields = '*';
   private array $Join = [];
-  private array $Wheres = [];
+  protected array $Wheres = [];
   private string|null $Order = null;
   private string|null $Group = null;
   private string|null $Limit = null;
@@ -220,7 +220,7 @@ extends Basics{
     return $this;
   }
 
-  private function Prepare(
+  protected function Prepare(
     bool $ForUpdate
   ):PDOStatement{
     $this->SelectHead();
