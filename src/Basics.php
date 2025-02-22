@@ -17,7 +17,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 };
 
 /**
- * @version 2024.12.07.00
+ * @version 2025.02.21.00
  */
 abstract class Basics{
   protected string $Table;
@@ -84,64 +84,65 @@ abstract class Basics{
     $Wheres = array_values($WheresTemp);
     
     $count = count($Wheres);
-    if($count > 0):
-      $this->Query .= ' where ';
-      for($i = 0; $i < $count; $i++):
-        //Complicated logic
-        if((
-          $i === 0
-          or $Wheres[$i - 1]->Name === null
-          or (
-            $Wheres[$i]->Name === null
-            and isset($Wheres[$i + 1]) === false
-          )
-        ) === false):
-          if($Wheres[$i]->AndOr === AndOr::And):
-            $this->Query .= ' and ';
-          elseif($Wheres[$i]->AndOr === AndOr::Or):
-            $this->Query .= ' or ';
-          endif;
-        endif;
-
-        if($Wheres[$i]->Parenthesis === Parenthesis::Open):
-          $this->Query .= '(';
-        endif;
-
-        if($Wheres[$i]->Operator === Operators::Exists):
-          $this->Query .= 'exists (' . $Wheres[$i]->Value . ')';
-        elseif($Wheres[$i]->Operator === Operators::IsNotNull):
-          $this->Query .= self::Reserved($Wheres[$i]->Name) . ' is not null';
-        elseif($Wheres[$i]->Operator === Operators::In):
-          $this->Query .= self::Reserved($Wheres[$i]->Name) . ' in(' . $Wheres[$i]->Value . ')';
-        elseif($Wheres[$i]->Operator === Operators::NotIn):
-          $this->Query .= self::Reserved($Wheres[$i]->Name) . ' not in(' . $Wheres[$i]->Value . ')';
-        elseif($Wheres[$i]->Name !== null):
-          if($Wheres[$i]->NoBind === false
-          and(
-            $Wheres[$i]->Value === null
-            or $Wheres[$i]->Type === Types::Null
-          )):
-            $this->Query .= self::Reserved($Wheres[$i]->Name) . ' is null';
-          else:
-            $this->Query .= self::Reserved($Wheres[$i]->Name) . $Wheres[$i]->Operator->value;
-            if($Wheres[$i]->Type === Types::Sql
-            or $Wheres[$i]->NoBind):
-              if($Wheres[$i]->CustomPlaceholder !== null):
-                $this->Query .= ':' . $Wheres[$i]->CustomPlaceholder;
-              else:
-                $this->Query .= $Wheres[$i]->Value;
-              endif;
-            else:
-              $this->Query .= ':' . ($Wheres[$i]->CustomPlaceholder ?? $Wheres[$i]->Name);
-            endif;
-          endif;
-        endif;
-
-        if($Wheres[$i]->Parenthesis === Parenthesis::Close):
-          $this->Query .= ')';
-        endif;
-      endfor;
+    if($count === 0):
+      return;
     endif;
+    $this->Query .= ' where ';
+    for($i = 0; $i < $count; $i++):
+      //Complicated logic
+      if((
+        $i === 0
+        or $Wheres[$i - 1]->Name === null
+        or (
+          $Wheres[$i]->Name === null
+          and isset($Wheres[$i + 1]) === false
+        )
+      ) === false):
+        if($Wheres[$i]->AndOr === AndOr::And):
+          $this->Query .= ' and ';
+        elseif($Wheres[$i]->AndOr === AndOr::Or):
+          $this->Query .= ' or ';
+        endif;
+      endif;
+
+      if($Wheres[$i]->Parenthesis === Parenthesis::Open):
+        $this->Query .= '(';
+      endif;
+
+      if($Wheres[$i]->Operator === Operators::Exists):
+        $this->Query .= 'exists (' . $Wheres[$i]->Value . ')';
+      elseif($Wheres[$i]->Operator === Operators::IsNotNull):
+        $this->Query .= self::Reserved($Wheres[$i]->Name) . ' is not null';
+      elseif($Wheres[$i]->Operator === Operators::In):
+        $this->Query .= self::Reserved($Wheres[$i]->Name) . ' in(' . $Wheres[$i]->Value . ')';
+      elseif($Wheres[$i]->Operator === Operators::NotIn):
+        $this->Query .= self::Reserved($Wheres[$i]->Name) . ' not in(' . $Wheres[$i]->Value . ')';
+      elseif($Wheres[$i]->Name !== null):
+        if($Wheres[$i]->NoBind === false
+        and(
+          $Wheres[$i]->Value === null
+          or $Wheres[$i]->Type === Types::Null
+        )):
+          $this->Query .= self::Reserved($Wheres[$i]->Name) . ' is null';
+        else:
+          $this->Query .= self::Reserved($Wheres[$i]->Name) . $Wheres[$i]->Operator->value;
+          if($Wheres[$i]->Type === Types::Sql
+          or $Wheres[$i]->NoBind):
+            if($Wheres[$i]->CustomPlaceholder !== null):
+              $this->Query .= ':' . $Wheres[$i]->CustomPlaceholder;
+            else:
+              $this->Query .= $Wheres[$i]->Value;
+            endif;
+          else:
+            $this->Query .= ':' . ($Wheres[$i]->CustomPlaceholder ?? $Wheres[$i]->Name);
+          endif;
+        endif;
+      endif;
+
+      if($Wheres[$i]->Parenthesis === Parenthesis::Close):
+        $this->Query .= ')';
+      endif;
+    endfor;
   }
 
   /**
