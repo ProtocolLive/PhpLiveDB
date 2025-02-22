@@ -19,7 +19,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 use UnitEnum;
 
 /**
- * @version 2025.02.21.00
+ * @version 2025.02.21.01
  */
 final class Select
 extends Basics{
@@ -383,7 +383,7 @@ extends Basics{
       endif;
       $this->Wheres[] = new Field(
         Name: $field,
-        Value: $Value instanceof UnitEnum ? ':' . ($Value->value ?? $Value->name) : $Value,
+        Value: $Value->value ?? $Value->name ?? $Value,
         Type: $Type,
         Operator: $Operator,
         AndOr: $AndOr,
