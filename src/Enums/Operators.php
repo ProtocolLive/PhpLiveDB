@@ -5,7 +5,7 @@
 namespace ProtocolLive\PhpLiveDb\Enums;
 
 /**
- * @version 2024.02.22.00
+ * @version 2025.02.21.00
  */
 enum Operators:string{
   case Bigger = '>';
@@ -14,9 +14,9 @@ enum Operators:string{
   case Equal = '=';
   case Exists = 'exists';
   case In = ' in';
+  case InNot = ' not in';
   case IsNotNull = ' not null';
   case Like = ' like ';
-  case NotIn = ' not in';
   case Smaller = '<';
   case SmallerEqual = '<=';
 }
