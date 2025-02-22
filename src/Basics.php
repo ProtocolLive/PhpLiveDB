@@ -17,7 +17,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 };
 
 /**
- * @version 2025.02.21.01
+ * @version 2025.02.21.02
  */
 abstract class Basics{
   protected string $Table;
@@ -109,12 +109,12 @@ abstract class Basics{
         $this->Query .= '(';
       endif;
 
-      if($Wheres[$i]->Operator === Operators::Exists):
-        $this->Query .= 'exists (' . $Wheres[$i]->Value . ')';
-      elseif($Wheres[$i]->Operator === Operators::IsNotNull):
+      if($Wheres[$i]->Operator === Operators::IsNotNull):
         $this->Query .= self::Reserved($Wheres[$i]->Name) . ' is not null';
       elseif($Wheres[$i]->Operator === Operators::In
-      or $Wheres[$i]->Operator === Operators::InNot):
+      or $Wheres[$i]->Operator === Operators::InNot
+      or $Wheres[$i]->Operator === Operators::Exists
+      or $Wheres[$i]->Operator === Operators::ExistsNot):
         $this->Query .= self::Reserved($Wheres[$i]->Name) . $Wheres[$i]->Operator->value . '(' . $Wheres[$i]->Value . ')';
       elseif($Wheres[$i]->Name !== null):
         if($Wheres[$i]->NoBind === false
@@ -301,7 +301,7 @@ abstract class Basics{
     and $Type !== Types::Sql
     and $Type !== Types::Null
     and $Operator !== Operators::In
-    and $Operator !== Operators::NotIn
+    and $Operator !== Operators::InNot
     and $Operator !== Operators::IsNotNull
     and $Operator !== Operators::Like):
       //Search separated for performance improvement
