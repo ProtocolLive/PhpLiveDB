@@ -19,7 +19,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 use UnitEnum;
 
 /**
- * @version 2025.02.21.01
+ * @version 2025.02.21.02
  */
 final class Select
 extends Basics{
@@ -307,8 +307,8 @@ extends Basics{
   /**
    * Note 1: For run like in same field, use different custom placeholders
    * @param string|string[]|UnitEnum|UnitEnum[] $Field Field name. Can be null to only add parenthesis or add Exists operator
-   * @param string|bool|UnitEnum $Value Field value. Can be null in case of use another field value. If null, sets the $Operator to Operator::Null. Can be UnitEnum in case of NoBind
-   * @param Types $Type Field type. Can be null in case of Operator::IsNull. Are changed to Types::Null if $Value is null
+   * @param string|bool|UnitEnum $Value Field value. Can be null in case of use another field value. If null, sets the $Operator to Operators::Null. Can be UnitEnum in case of NoBind
+   * @param Types $Type Field type. Can be null in case of Operators::IsNull. Are changed to Types::Null if $Value is null
    * @param Operators $Operator Comparison operator. Operator::Sql sets NoBind to true
    * @param AndOr $AndOr Relation with the previous field
    * @param Parenthesis $Parenthesis Open or close parenthesis
