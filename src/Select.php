@@ -19,7 +19,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 use UnitEnum;
 
 /**
- * @version 2025.02.21.02
+ * @version 2025.02.21.03
  */
 final class Select
 extends Basics{
@@ -317,6 +317,7 @@ extends Basics{
    * @param bool $NoField Bind values with fields declared in Fields function
    * @param bool $NoBind Don't bind in that call. Used with Operators::Sql or same value for different or same field. (Changed to true if Operators::Sql are used)
    * @param bool $Debug Show debug information
+   * @param string|int $Value2 A second value. Can be used in case of Operators::Between
    * @return self|false Return false if ThrowError are set or all wheres if $Debug are set
    * @throws PDOException
    */
@@ -328,6 +329,7 @@ extends Basics{
     AndOr $AndOr = AndOr::And,
     Parenthesis $Parenthesis = Parenthesis::None,
     string|null $CustomPlaceholder = null,
+    string|int|null $Value2 = null,
     bool $BlankIsNull = true,
     bool $NoField = false,
     bool $NoBind = false,
@@ -351,6 +353,15 @@ extends Basics{
           error_log('The operator \'Exists\' must be the first condition');
           return false;
         endif;
+      endif;
+    endif;
+    if($Operator === Operators::Between
+    and $Value2 === null):
+      if($this->ThrowError):
+        throw new PDOException('Value2 can\'t be null');
+      else:
+        error_log('Value2 can\'t be null');
+        return false;
       endif;
     endif;
     if(is_array($Field) === false):
@@ -391,7 +402,8 @@ extends Basics{
         CustomPlaceholder: $CustomPlaceholder,
         BlankIsNull: $BlankIsNull,
         NoField: $NoField,
-        NoBind: $NoBind
+        NoBind: $NoBind,
+        Value2: $Value2
       );
     endforeach;
     if($Debug):

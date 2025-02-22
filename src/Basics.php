@@ -17,7 +17,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 };
 
 /**
- * @version 2025.02.21.02
+ * @version 2025.02.21.03
  */
 abstract class Basics{
   protected string $Table;
@@ -116,6 +116,9 @@ abstract class Basics{
       or $Wheres[$i]->Operator === Operators::Exists
       or $Wheres[$i]->Operator === Operators::ExistsNot):
         $this->Query .= self::Reserved($Wheres[$i]->Name) . $Wheres[$i]->Operator->value . '(' . $Wheres[$i]->Value . ')';
+      elseif($Wheres[$i]->Operator === Operators::Between
+      or $Wheres[$i]->Operator === Operators::BetweenNot):
+        $this->Query .= self::Reserved($Wheres[$i]->Name) . $Wheres[$i]->Operator->value . ' ' . $Wheres[$i]->Value . ' and ' . $Wheres[$i]->Value2;
       elseif($Wheres[$i]->Name !== null):
         if($Wheres[$i]->NoBind === false
         and(

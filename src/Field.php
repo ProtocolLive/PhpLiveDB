@@ -11,7 +11,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 };
 
 /**
- * @version 2024.02.22.00
+ * @version 2025.02.21.00
  */
 final class Field{
   public function __construct(
@@ -25,6 +25,7 @@ final class Field{
     public bool $BlankIsNull = true,
     public bool $NoField = false,
     public bool $NoBind = false,
-    public bool $InsertUpdate = false
+    public bool $InsertUpdate = false,
+    public string|int|null $Value2 = null
   ){}
 }

@@ -5,9 +5,11 @@
 namespace ProtocolLive\PhpLiveDb\Enums;
 
 /**
- * @version 2025.02.21.02
+ * @version 2025.02.21.03
  */
 enum Operators:string{
+  case Between = ' between';
+  case BetweenNot = ' not between';
   case Bigger = '>';
   case BiggerEqual = '>=';
   case Different = '<>';
