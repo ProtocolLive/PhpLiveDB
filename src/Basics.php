@@ -17,7 +17,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 };
 
 /**
- * @version 2025.02.21.03
+ * @version 2025.02.21.04
  */
 abstract class Basics{
   protected string $Table;
@@ -50,7 +50,7 @@ abstract class Basics{
       and $field->Type !== Types::Null
       and $field->Type !== Types::Sql
       and $field->Operator !== Operators::In
-      and $field->Operator !== Operators::NotIn
+      and $field->Operator !== Operators::InNot
       and $field->Operator !== Operators::IsNotNull
       and ($field->NoBind ?? false) === false):
         $value = $this->ValueFunctions($field->Value, $HtmlSafe, $TrimValues);
