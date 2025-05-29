@@ -17,7 +17,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 };
 
 /**
- * @version 2025.02.22.00
+ * @version 2025.05.24.00
  */
 abstract class Basics{
   protected string $Table;
@@ -138,6 +138,17 @@ abstract class Basics{
         $this->Query .= self::Reserved($Wheres[$i]->Name) . $Wheres[$i]->Operator->value;
         $this->Query .= ' :' . ($Wheres[$i]->CustomPlaceholder ?? $Wheres[$i]->Name) . ' and ';
         $this->Query .= ':' . ($Wheres[$i]->CustomPlaceholder ?? $Wheres[$i]->Name) . '2';
+      elseif($Wheres[$i]->Operator === Operators::Match
+      or $Wheres[$i]->Operator === Operators::MatchBoolean
+      or $Wheres[$i]->Operator === Operators::MatchExpansion):
+        $this->Query .= ' match(' . self::Reserved($Wheres[$i]->Name) . ')';
+        $this->Query .= ' against(:' . ($Wheres[$i]->CustomPlaceholder ?? $Wheres[$i]->Name);
+        if($Wheres[$i]->Operator === Operators::MatchBoolean):
+          $this->Query .= ' in boolean mode';
+        elseif($Wheres[$i]->Operator === Operators::MatchExpansion):
+          $this->Query .= ' with query expansion';
+        endif;
+        $this->Query .= ')';
       elseif($Wheres[$i]->Name !== null):
         if($Wheres[$i]->NoBind === false
         and(
