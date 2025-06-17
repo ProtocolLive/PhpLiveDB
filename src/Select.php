@@ -19,7 +19,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 use UnitEnum;
 
 /**
- * @version 2025.02.22.00
+ * @version 2025.06.17.00
  */
 final class Select
 extends Basics{
@@ -267,7 +267,7 @@ extends Basics{
     int|null $LogUser = null,
     bool $Fetch = false,
     bool $ForUpdate = false
-  ):array|bool{
+  ):array|self{
     $statement = $this->Prepare($ForUpdate);
     if(count($this->Wheres) > 0):
       $this->Bind($statement, $this->Wheres, $HtmlSafe, $TrimValues);
@@ -279,7 +279,7 @@ extends Basics{
 
     if($Fetch):
       $this->Statement = $statement;
-      $return = true;
+      $return = $this;
     else:
       if($FetchBoth):
         $statement->setFetchMode(PDO::FETCH_BOTH);
