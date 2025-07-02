@@ -19,7 +19,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 use UnitEnum;
 
 /**
- * @version 2025.06.17.00
+ * @version 2025.07.02.00
  */
 final class Select
 extends Basics{
@@ -117,17 +117,27 @@ extends Basics{
 
   /**
    * Return all table's fields except the expecified field
+   * @param string|UnitEnum|string[]|UnitEnum[] $Fields
    * @throws PDOException
    */
   public function FieldsGetExcept(
-    string|UnitEnum $Field,
+    string|UnitEnum|array $Fields,
     string|UnitEnum|null $Table = null,
     FieldsGetReturn $Return = FieldsGetReturn::String,
     string|null $Alias = null
   ):array|string{
-    $Field = $Field->value ?? $Field->name ?? $Field;
     $return = $this->FieldsGet($Table, FieldsGetReturn::Array, $Alias);
-    unset($return[array_search($Alias . '.' . $Field, $return)]);
+    if(is_string($Fields)
+    or $Fields instanceof UnitEnum):
+      $Fields = [$Fields];
+    endif;
+    foreach($Fields as $field):
+      $field = $field->value ?? $field->name ?? $field;
+      $pos = array_search($Alias . '.' . $field, $return);
+      if($pos !== false):
+        unset($return[$pos]);
+      endif;
+    endforeach;
     if($Return === FieldsGetReturn::String):
       return implode(',', $return);
     endif;
