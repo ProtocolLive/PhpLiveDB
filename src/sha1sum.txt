@@ -1,4 +1,4 @@
-38456d8c734b48145f77d6c1507b0f2c82b18bd1  Basics.php
+1a8b9797e946b2d7015af978e006eba9a6ee6a37  Basics.php
 5d6ffe2eb48b1f970b9357a6df7d8fe3fe62121c  Create.php
 2ee30d8d3af0428a2587d69a89c94e6f51c40a46  Delete.php
 9f9eaf55ec5271c6b3bf517345fd53ef9da11962  Enums\AndOr.php
@@ -16,5 +16,5 @@ dea93b358ccc4a8ae4cf1b1aeab0d138ce43844f  Insert.php
 d02bde24e57b8d1fe8774ec39ebf135e04c9e113  InsertUpdate.php
 c0d736da774d7a2e0a1d39f2b33f93d74a88013f  LoadAll.php
 7770e984bb853466a766b200f3d699ecc702664f  PhpLiveDb.php
-b069064bf03809b975eec83479b3d4320f05b94a  Select.php
+d0b6702c1f6b910a80a299a644418d1a28f40360  Select.php
 71654632f57dfe4fc6ef223d1d3527b4fd172cd5  Update.php
