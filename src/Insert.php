@@ -10,7 +10,7 @@ use ProtocolLive\PhpLiveDb\Enums\Types;
 use UnitEnum;
 
 /**
- * @version 2024.11.23.00
+ * @version 2025.07.14.00
  */
 class Insert
 extends Basics{
@@ -126,7 +126,7 @@ extends Basics{
   ):int{
     $FieldsCount = count($this->Fields);
     if($FieldsCount === 0):
-      return null;
+      return 0;
     endif;
 
     $this->QueryBuild();
