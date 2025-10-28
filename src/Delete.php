@@ -15,7 +15,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 use UnitEnum;
 
 /**
- * @version 2024.11.23.00
+ * @version 2025.10.28.00
  */
 final class Delete
 extends Basics{
@@ -38,6 +38,7 @@ extends Basics{
    */
   public function Run(
     bool $Debug = false,
+    bool $DebugBinds = false,
     bool $HtmlSafe = true,
     bool $TrimValues = true,
     bool $Log = false,
@@ -58,6 +59,13 @@ extends Basics{
 
     if($WheresCount > 0):
       $this->Bind($statement, $this->Wheres, $HtmlSafe, $TrimValues);
+    endif;
+
+    if($DebugBinds):
+      echo '<pre style="text-align:left">';
+      var_dump($this->Binds);
+      echo '</pre>';
+      return 0;
     endif;
     
     $statement->execute();

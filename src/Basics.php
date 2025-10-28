@@ -17,7 +17,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 };
 
 /**
- * @version 2025.07.01.00
+ * @version 2025.10.28.00
  */
 abstract class Basics{
   protected string $Table;
@@ -182,18 +182,6 @@ abstract class Basics{
    */
   public function Commit():void{
     $this->Conn->commit();
-  }
-
-  public function DebugBinds(
-    bool $HtmlSafe = true,
-    bool $TrimValues = true,
-    bool $ForUpdate = false
-  ):array{
-    $statement = $this->Prepare($ForUpdate);
-    if(count($this->Wheres) > 0):
-      $this->Bind($statement, $this->Wheres, $HtmlSafe, $TrimValues);
-    endif;
-    return $this->Binds;
   }
 
   /**

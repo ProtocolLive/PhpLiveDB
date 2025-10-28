@@ -10,7 +10,7 @@ use ProtocolLive\PhpLiveDb\Enums\Types;
 use UnitEnum;
 
 /**
- * @version 2025.07.14.00
+ * @version 2025.10.28.00
  */
 class Insert
 extends Basics{
@@ -118,6 +118,7 @@ extends Basics{
    */
   public function Run(
     bool $Debug = false,
+    bool $DebugBinds = false,
     bool $HtmlSafe = true,
     bool $TrimValues = true,
     bool $Log = false,
@@ -133,6 +134,13 @@ extends Basics{
     $statement = $this->Conn->prepare($this->Query);
 
     $this->Bind($statement, $this->Fields, $HtmlSafe, $TrimValues);
+
+    if($DebugBinds):
+      echo '<pre style="text-align:left">';
+      var_dump($this->Binds);
+      echo '</pre>';
+      return 0;
+    endif;
 
     $statement->execute();
     $return = $this->Conn->lastInsertId();

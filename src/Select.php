@@ -19,7 +19,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 use UnitEnum;
 
 /**
- * @version 2025.07.02.00
+ * @version 2025.10.28.00
  */
 final class Select
 extends Basics{
@@ -270,6 +270,7 @@ extends Basics{
   public function Run(
     bool $FetchBoth = false,
     bool $Debug = false,
+    bool $DebugBinds = false,
     bool $HtmlSafe = true,
     bool $TrimValues = true,
     bool $Log = false,
@@ -283,8 +284,14 @@ extends Basics{
       $this->Bind($statement, $this->Wheres, $HtmlSafe, $TrimValues);
     endif;
 
-    $statement->execute();
+    if($DebugBinds):
+      echo '<pre style="text-align:left">';
+      var_dump($this->Binds);
+      echo '</pre>';
+      return [];
+    endif;
 
+    $statement->execute();
     $query = $this->LogAndDebug($statement, $Debug, $Log, $LogEvent, $LogUser);
 
     if($Fetch):
