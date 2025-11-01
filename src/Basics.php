@@ -59,7 +59,7 @@ abstract class Basics{
       and $field->Operator !== Operators::In
       and $field->Operator !== Operators::InNot
       and $field->Operator !== Operators::IsNotNull
-      and ($field->NoBind ?? false) === false):
+      and $field->NoBind === false):
         $value = $this->ValueFunctions($field->Value, $HtmlSafe, $TrimValues);
         $Statement->bindValue(
           $field->CustomPlaceholder ?? $field->Name,
