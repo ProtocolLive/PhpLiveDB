@@ -9,7 +9,7 @@ use ProtocolLive\PhpLiveDb\Enums\Types;
 use UnitEnum;
 
 /**
- * @version 2024.11.23.00
+ * @version 2025.11.01.00
  */
 final class InsertUpdate
 extends Insert{
@@ -73,6 +73,7 @@ extends Insert{
    */
   public function Run(
     bool $Debug = false,
+    bool $DebugBinds = false,
     bool $HtmlSafe = true,
     bool $TrimValues = true,
     bool $Log = false,
