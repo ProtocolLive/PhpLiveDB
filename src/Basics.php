@@ -17,7 +17,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 };
 
 /**
- * @version 2025.11.01.00
+ * @version 2025.11.11.00
  */
 abstract class Basics{
   protected string $Table;
@@ -48,10 +48,6 @@ abstract class Basics{
     bool $TrimValues = true
   ):void{
     foreach($Fields as $field):
-      if($field->Type === Types::Bool
-      and $field->Value === null):
-        $field->Value = false;
-      endif;
       if($field->Value !== null
       and $field->Type !== null
       and $field->Type !== Types::Null

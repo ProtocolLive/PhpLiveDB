@@ -10,7 +10,7 @@ use ProtocolLive\PhpLiveDb\Enums\Types;
 use UnitEnum;
 
 /**
- * @version 2025.10.28.00
+ * @version 2025.11.11.00
  */
 class Insert
 extends Basics{
@@ -36,6 +36,10 @@ extends Basics{
   ):self{
     if($BlankIsNull and $Value === ''):
       $Value = null;
+    endif;
+    if($Type === Types::Bool
+    and $Value === null):
+      $Value = false;
     endif;
     if($Value === null):
       $Type = Types::Null;
