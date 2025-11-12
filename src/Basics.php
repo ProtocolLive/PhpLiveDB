@@ -17,7 +17,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 };
 
 /**
- * @version 2025.11.11.00
+ * @version 2025.11.11.01
  */
 abstract class Basics{
   protected string $Table;
@@ -304,10 +304,13 @@ abstract class Basics{
   }
 
   protected function ValueFunctions(
-    string $Value,
+    string|bool $Value,
     bool $HtmlSafe,
     bool $TrimValues
-  ):string{
+  ):string|bool{
+    if($Value === false):
+      return false;
+    endif;
     if($HtmlSafe):
       $Value = htmlspecialchars($Value);
     endif;

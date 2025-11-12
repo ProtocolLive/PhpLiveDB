@@ -11,12 +11,12 @@ use ProtocolLive\PhpLiveDb\Enums\{
 };
 
 /**
- * @version 2025.02.21.00
+ * @version 2025.11.11.00
  */
 final class Field{
   public function __construct(
     public string|null $Name = null,
-    public string|null $Value = null,
+    public string|bool|null $Value = null,
     public Types|null $Type = null,
     public Operators $Operator = Operators::Equal,
     public AndOr $AndOr = AndOr::And,
