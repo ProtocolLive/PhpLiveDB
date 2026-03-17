@@ -17,7 +17,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 };
 
 /**
- * @version 2025.11.11.01
+ * @version 2026.03.17.00
  */
 abstract class Basics{
   protected string $Table;
@@ -222,10 +222,14 @@ abstract class Basics{
       if(ini_get('html_errors') == true):
         print '<pre style="text-align:left">';
       endif;
-      if(PHP_SAPI !== 'cli'):
+      error_log($Dump);//Windows print in terminal here
+      if(PHP_SAPI === 'cli'):
+        if(PHP_OS === 'Linux'):
+          echo $Dump;
+        endif;
+      else:
         echo htmlspecialchars($Dump);
       endif;
-      error_log($Dump);
       if(ini_get('html_errors') == true):
         print '</pre>';
       endif;
