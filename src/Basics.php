@@ -17,7 +17,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 };
 
 /**
- * @version 2026.03.17.00
+ * @version 2026.04.02.00
  */
 abstract class Basics{
   protected string $Table;
@@ -219,7 +219,8 @@ abstract class Basics{
     $Dump = ob_get_contents();
     ob_end_clean();
     if($Debug):
-      if(ini_get('html_errors') == true):
+      if(ini_get('html_errors') == true
+      and PHP_SAPI !== 'cli'):
         print '<pre style="text-align:left">';
       endif;
       error_log($Dump);//Windows print in terminal here
@@ -230,7 +231,8 @@ abstract class Basics{
       else:
         echo htmlspecialchars($Dump);
       endif;
-      if(ini_get('html_errors') == true):
+      if(ini_get('html_errors') == true
+      and PHP_SAPI !== 'cli'):
         print '</pre>';
       endif;
     endif;
