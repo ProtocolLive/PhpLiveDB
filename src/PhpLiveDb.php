@@ -11,7 +11,7 @@ use SensitiveParameter;
 use UnitEnum;
 
 /**
- * @version 2024.11.23.00
+ * @version 2026.05.04.00
  */
 final class PhpLiveDb
 extends Basics{
@@ -119,15 +119,17 @@ extends Basics{
 
   public function Select(
     string|UnitEnum $Table,
+    string|null $Alias = null,
     bool $ThrowError = true
   ):Select{
     return new Select(
-      $this->Conn,
-      $Table->value ?? $Table->name ?? $Table,
-      $this->Database,
-      $this->Prefix,
-      $ThrowError,
-      $this->OnRun
+      Conn: $this->Conn,
+      Table: $Table->value ?? $Table->name ?? $Table,
+      Alias: $Alias,
+      Database: $this->Database,
+      Prefix: $this->Prefix,
+      ThrowError:$ThrowError,
+      OnRun: $this->OnRun
     );
   }
 

@@ -19,7 +19,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 use UnitEnum;
 
 /**
- * @version 2026.05.04.02
+ * @version 2026.05.04.03
  */
 final class Select
 extends Basics{
@@ -35,6 +35,7 @@ extends Basics{
   public function __construct(
     protected PDO $Conn,
     protected string $Table,
+    string|null $Alias = null,
     string|null $Database = null, //not promoted because the null value
     string|null $Prefix = null, //not promoted because the null value
     private bool $ThrowError = true,
@@ -43,6 +44,9 @@ extends Basics{
     $this->Database = $Database;
     $this->Prefix = $Prefix;
     $this->OnRun = $OnRun;
+    if(empty($Alias) === false):
+      $this->Table .= ' ' . $Alias;
+    endif;
   }
 
   public function Fetch(
@@ -168,7 +172,8 @@ extends Basics{
     string|UnitEnum $Table,
     string|UnitEnum|null $Using = null,
     string|null $On = null,
-    Joins $Type = Joins::Left
+    Joins $Type = Joins::Left,
+    string|null $Alias = null
   ):self{
     if($Using === null
     and $On === null):
@@ -176,6 +181,9 @@ extends Basics{
     endif;
     $Table = $Table->value ?? $Table->name ?? $Table;
     $Using = $Using->value ?? $Using->name ?? $Using;
+    if(empty($Alias) === false):
+      $Table .= ' ' . $Alias;
+    endif;
     $this->Join[] = (object)[
       'Table' => $Table,
       'Type' => $Type,
@@ -357,6 +365,7 @@ extends Basics{
     Parenthesis $Parenthesis = Parenthesis::None,
     string|null $CustomPlaceholder = null,
     string|int|null $Value2 = null,
+    string|null $Alias = null,
     bool $BlankIsNull = true,
     bool $NoField = false,
     bool $NoBind = false,
@@ -397,6 +406,9 @@ extends Basics{
     foreach($Field as $field):
       if($field !== null):
         $field = $field->value ?? $field->name ?? $field;
+        if(empty($Alias) === false):
+          $field = $Alias . '.' . $field;
+        endif;
         if($CustomPlaceholder === null):
           $this->FieldNeedCustomPlaceholder($field);
         endif;
