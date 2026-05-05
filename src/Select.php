@@ -19,7 +19,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 use UnitEnum;
 
 /**
- * @version 2026.05.04.01
+ * @version 2026.05.04.02
  */
 final class Select
 extends Basics{
@@ -84,24 +84,13 @@ extends Basics{
   }
 
   /**
-   * To run * except one field
-   * @throws PDOException
-   */
-  public function FieldsExcept(
-    string|UnitEnum $Field,
-    string|null $Alias = null
-  ):self{
-    return $this->Fields($this->FieldsGetExcept($Field, Alias: $Alias));
-  }
-
-  /**
    * @throws PDOException
    */
   public function FieldsGet(
     string|UnitEnum|null $Table = null,
     FieldsGetReturn $Return = FieldsGetReturn::String,
     string|null $Alias = null
-  ):array|string{
+  ):array|string|self{
     $Table = $Table->value ?? $Table->name ?? $Table ?? $this->Table;
     if(str_contains($Table, ' ')):
       $Table = substr($Table, 0, strpos($Table, ' '));
@@ -123,8 +112,11 @@ extends Basics{
     $return = array_column($return->fetchAll(), 'COLUMN_NAME');
     if($Return === FieldsGetReturn::String):
       return implode(',', $return);
+    elseif($Return === FieldsGetReturn::None):
+      return $this->FieldsAdd(implode(',', $return));
+    else:
+      return $return;
     endif;
-    return $return;
   }
 
   /**
@@ -137,23 +129,29 @@ extends Basics{
     string|UnitEnum|null $Table = null,
     FieldsGetReturn $Return = FieldsGetReturn::String,
     string|null $Alias = null
-  ):array|string{
+  ):array|string|self{
     $return = $this->FieldsGet($Table, FieldsGetReturn::Array, $Alias);
-    if(is_string($Fields)
-    or $Fields instanceof UnitEnum):
+    if(is_array($Fields) === false):
       $Fields = [$Fields];
     endif;
     foreach($Fields as $field):
       $field = $field->value ?? $field->name ?? $field;
-      $pos = array_search($Alias . '.' . $field, $return);
+      if(empty($Alias)):
+        $pos = array_search($field, $return);
+      else:
+        $pos = array_search($Alias . '.' . $field, $return);
+      endif;
       if($pos !== false):
         unset($return[$pos]);
       endif;
     endforeach;
     if($Return === FieldsGetReturn::String):
       return implode(',', $return);
+    elseif($Return === FieldsGetReturn::None):
+      return $this->FieldsAdd(implode(',', $return));
+    else:
+      return $return;
     endif;
-    return $return;
   }
 
   public function Group(
