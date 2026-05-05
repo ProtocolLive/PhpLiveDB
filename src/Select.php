@@ -19,7 +19,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 use UnitEnum;
 
 /**
- * @version 2026.05.04.00
+ * @version 2026.05.04.01
  */
 final class Select
 extends Basics{
@@ -68,6 +68,18 @@ extends Basics{
       $field = $field->value ?? $field->name ?? $field;
     endforeach;
     $this->Fields = implode(',', $Fields);
+    return $this;
+  }
+
+  public function FieldsAdd(
+    string|UnitEnum $Field
+  ):self{
+    if($this->Fields === '*'):
+      $this->Fields = '';
+    else:
+      $this->Fields .= ',';
+    endif;
+    $this->Fields .= $Field->value ?? $Field->name ?? $Field;
     return $this;
   }
 
