@@ -19,7 +19,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 use UnitEnum;
 
 /**
- * @version 2025.10.28.00
+ * @version 2026.05.04.00
  */
 final class Select
 extends Basics{
@@ -116,7 +116,7 @@ extends Basics{
   }
 
   /**
-   * Return all table's fields except the expecified field
+   * Return all table's fields except the specified field
    * @param string|UnitEnum|string[]|UnitEnum[] $Fields
    * @throws PDOException
    */
