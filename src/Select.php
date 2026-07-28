@@ -19,7 +19,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 use UnitEnum;
 
 /**
- * @version 2026.07.20.00
+ * @version 2026.07.28.00
  */
 final class Select
 extends Basics{
@@ -166,14 +166,19 @@ extends Basics{
   }
 
   /**
+   * @param string|null $Alias An alias to parameter $Table and $On
+   * @param string|null $Alias2 An alias to parameter $On2
+   * @param UnitEnum|null $On2 The second field for the relationship
    * @throws InvalidArgumentException
    */
   public function JoinAdd(
     string|UnitEnum $Table,
     string|UnitEnum|null $Using = null,
-    string|null $On = null,
+    string|UnitEnum|null $On = null,
+    UnitEnum|null $On2 = null,
     Joins $Type = Joins::Left,
-    string|null $Alias = null
+    string|null $Alias = null,
+    string|null $Alias2 = null
   ):self{
     if($Using === null
     and $On === null):
@@ -184,6 +189,17 @@ extends Basics{
     if(empty($Alias) === false):
       $Table .= ' ' . $Alias;
     endif;
+    if($On2 !== null):
+      $temp = '';
+      if(empty($Alias) === false):
+        $temp = $Alias . '.';
+      endif;
+      $temp .= ($On->value ?? $On->name) . '=';
+      if(empty($Alias2) === false):
+        $temp .= $Alias2 . '.';
+      endif;
+      $On = $temp . ($On2->value ?? $On2->name);
+    endif;
     $this->Join[] = (object)[
       'Table' => $Table,
       'Type' => $Type,
@@ -191,7 +207,6 @@ extends Basics{
       'On' => $On
     ];
     return $this;
-
   }
 
   private function JoinBuild():void{
