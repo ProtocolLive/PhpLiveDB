@@ -9,7 +9,7 @@ use ProtocolLive\PhpLiveDb\Enums\Types;
 use UnitEnum;
 
 /**
- * @version 2025.11.01.00
+ * @version 2026.08.01.00
  */
 final class InsertUpdate
 extends Insert{
@@ -68,7 +68,6 @@ extends Insert{
   }
 
   /**
-   * @return void
    * @throws PDOException
    */
   public function Run(
