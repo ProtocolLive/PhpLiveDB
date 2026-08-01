@@ -19,7 +19,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 use UnitEnum;
 
 /**
- * @version 2026.08.01.00
+ * @version 2026.08.01.01
  */
 final class Select
 extends Basics{
@@ -439,10 +439,10 @@ extends Basics{
         $temp = $this->WheresControl(
           ThrowError: $this->ThrowError,
           Field: $CustomPlaceholder ?? $field,
-          Type: $Type,
           Operator: $Operator,
           NoField: $NoField,
-          NoBind: $NoBind
+          NoBind: $NoBind,
+          Type: $Type
         );
         if($temp === false):
           return false;
