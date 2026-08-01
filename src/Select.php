@@ -19,7 +19,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 use UnitEnum;
 
 /**
- * @version 2026.07.29.00
+ * @version 2026.08.01.00
  */
 final class Select
 extends Basics{
@@ -237,6 +237,9 @@ extends Basics{
     return $this;
   }
 
+  /**
+   * @param bool $Desc Put the field in decreasing order. Only Works with one field
+   */
   public function Order(
     string|UnitEnum|null ...$Fields
   ):self{
