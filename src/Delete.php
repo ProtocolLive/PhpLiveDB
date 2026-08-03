@@ -15,7 +15,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 use UnitEnum;
 
 /**
- * @version 2025.10.28.00
+ * @version 2026.08.03.00
  */
 final class Delete
 extends Basics{
@@ -70,8 +70,17 @@ extends Basics{
     
     $statement->execute();
     $return = $statement->rowCount();
-
-    $query = $this->LogAndDebug($statement, $Debug, $Log, $LogEvent, $LogUser);
+    if($Debug === true
+    or $Log === true
+    or $this->OnRun !== null):
+      $query = $this->LogAndDebug(
+        $statement,
+        $Debug,
+        $Log,
+        $LogEvent,
+        $LogUser
+      );
+    endif;
 
     if($this->OnRun !== null):
       call_user_func_array(

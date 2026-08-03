@@ -9,7 +9,7 @@ use ProtocolLive\PhpLiveDb\Enums\Types;
 use UnitEnum;
 
 /**
- * @version 2026.08.01.00
+ * @version 2026.08.03.00
  */
 final class InsertUpdate
 extends Insert{
@@ -87,8 +87,17 @@ extends Insert{
     $this->Bind($statement, $this->Fields, $HtmlSafe, $TrimValues);
 
     $statement->execute();
-
-    $query = $this->LogAndDebug($statement, $Debug, $Log, $LogEvent, $LogUser);
+    if($Debug === true
+    or $Log === true
+    or $this->OnRun !== null):
+      $query = $this->LogAndDebug(
+        $statement,
+        $Debug,
+        $Log,
+        $LogEvent,
+        $LogUser
+      );
+    endif;
 
     if($this->OnRun !== null):
       call_user_func_array(

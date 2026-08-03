@@ -17,7 +17,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 };
 
 /**
- * @version 2026.07.26.00
+ * @version 2026.08.03.00
  */
 abstract class Basics{
   protected string $Table;
@@ -213,10 +213,6 @@ abstract class Basics{
     int|BackedEnum|null $LogEvent = null,
     int|null $LogUser = null
   ):string|null{
-    if($Debug === false
-    and $Log === false):
-      return null;
-    endif;
     ob_start();
     $Statement->debugDumpParams();
     debug_print_backtrace();
