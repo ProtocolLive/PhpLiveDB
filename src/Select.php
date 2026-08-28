@@ -19,7 +19,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 use UnitEnum;
 
 /**
- * @version 2026.08.15.01
+ * @version 2026.08.28.00
  */
 final class Select
 extends Basics{
@@ -116,11 +116,11 @@ extends Basics{
     $return = array_column($return->fetchAll(), 'COLUMN_NAME');
     if($Return === FieldsGetReturn::String):
       return implode(',', $return);
-    elseif($Return === FieldsGetReturn::None):
-      return $this->FieldsAdd(implode(',', $return));
-    else:
-      return $return;
     endif;
+    if($Return === FieldsGetReturn::None):
+      return $this->FieldsAdd(implode(',', $return));
+    endif;
+    return $return;
   }
 
   /**
@@ -151,11 +151,11 @@ extends Basics{
     endforeach;
     if($Return === FieldsGetReturn::String):
       return implode(',', $return);
-    elseif($Return === FieldsGetReturn::None):
-      return $this->FieldsAdd(implode(',', $return));
-    else:
-      return $return;
     endif;
+    if($Return === FieldsGetReturn::None):
+      return $this->FieldsAdd(implode(',', $return));
+    endif;
+    return $return;
   }
 
   public function Group(
@@ -247,7 +247,7 @@ extends Basics{
       endif;
       $field = $field->value ?? $field->name ?? $field;
     endforeach;
-    if(empty($Fields) === false):
+    if($Fields !== []):
       $this->Order = implode(',', $Fields);
     endif;
     return $this;
@@ -339,8 +339,8 @@ extends Basics{
     }catch(PDOException $e){
       throw new PhpLiveDbException($this->Query, $e);
     }
-    if($Debug === true
-    or $Log === true
+    if($Debug
+    or $Log
     or $this->OnRun !== null):
       $query = $this->LogAndDebug(
         $statement,
@@ -413,10 +413,9 @@ extends Basics{
     if($this->WhereBlock):
       if($this->ThrowError):
         throw new PDOException('No more conditions allowed');
-      else:
-        error_log('No more conditions allowed');
-        return false;
       endif;
+      error_log('No more conditions allowed');
+      return false;
     endif;
     if($Operator === Operators::Exists):
       if(count($this->Wheres) === 0):
@@ -424,20 +423,18 @@ extends Basics{
       else:
         if($this->ThrowError):
           throw new PDOException('The operator \'Exists\' must be the first condition');
-        else:
-          error_log('The operator \'Exists\' must be the first condition');
-          return false;
         endif;
+        error_log('The operator \'Exists\' must be the first condition');
+        return false;
       endif;
     endif;
     if($Operator === Operators::Between
     and $Value2 === null):
       if($this->ThrowError):
         throw new PDOException('Value2 can\'t be null');
-      else:
-        error_log('Value2 can\'t be null');
-        return false;
       endif;
+      error_log('Value2 can\'t be null');
+      return false;
     endif;
     if(is_array($Field) === false):
       $Field = [$Field];
