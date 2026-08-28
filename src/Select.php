@@ -19,7 +19,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 use UnitEnum;
 
 /**
- * @version 2026.08.15.00
+ * @version 2026.08.15.01
  */
 final class Select
 extends Basics{
@@ -334,7 +334,11 @@ extends Basics{
       return [];
     endif;
 
-    $statement->execute();
+    try{
+      $statement->execute();
+    }catch(PDOException $e){
+      throw new PhpLiveDbException($this->Query, $e);
+    }
     if($Debug === true
     or $Log === true
     or $this->OnRun !== null):

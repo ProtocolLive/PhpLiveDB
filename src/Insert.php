@@ -10,7 +10,7 @@ use ProtocolLive\PhpLiveDb\Enums\Types;
 use UnitEnum;
 
 /**
- * @version 2026.08.03.00
+ * @version 2026.08.15.00
  */
 class Insert
 extends Basics{
@@ -118,7 +118,7 @@ extends Basics{
 
   /**
    * @return int The value of auto-increment field created
-   * @throws PDOException
+   * @throws PhpLiveDbException
    */
   public function Run(
     bool $Debug = false,
@@ -146,7 +146,11 @@ extends Basics{
       return 0;
     endif;
 
-    $statement->execute();
+    try{
+      $statement->execute();
+    }catch(PDOException $e){
+      throw new PhpLiveDbException($this->Query, $e);
+    }
     $return = $this->Conn->lastInsertId();
     if($Debug === true
     or $Log === true

@@ -15,7 +15,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 use UnitEnum;
 
 /**
- * @version 2026.08.03.00
+ * @version 2026.08.15.00
  */
 final class Update
 extends Basics{
@@ -77,7 +77,7 @@ extends Basics{
   }
 
   /**
-   * @throws PDOException
+   * @throws PhpLiveDbException
    */
   public function Run(
     bool $Debug = false,
@@ -103,8 +103,12 @@ extends Basics{
       echo '</pre>';
       return 0;
     endif;
-    
-    $statement->execute();
+
+    try{
+      $statement->execute();
+    }catch(PDOException $e){
+      throw new PhpLiveDbException($this->Query, $e);
+    }
     $return = $statement->rowCount();
     if($Debug === true
     or $Log === true

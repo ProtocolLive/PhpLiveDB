@@ -15,7 +15,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 use UnitEnum;
 
 /**
- * @version 2026.08.03.00
+ * @version 2026.08.15.00
  */
 final class Delete
 extends Basics{
@@ -34,7 +34,7 @@ extends Basics{
   }
 
   /**
-   * @throws PDOException
+   * @throws PhpLiveDbException
    */
   public function Run(
     bool $Debug = false,
@@ -68,7 +68,11 @@ extends Basics{
       return 0;
     endif;
     
-    $statement->execute();
+    try{
+      $statement->execute();
+    }catch(PDOException $e){
+      throw new PhpLiveDbException($this->Query, $e);
+    }
     $return = $statement->rowCount();
     if($Debug === true
     or $Log === true
@@ -107,7 +111,7 @@ extends Basics{
    * @param bool $BlankIsNull Convert '' to null
    * @param bool $NoField Bind values with fields declared in Fields function
    * @param bool $NoBind Don't bind values. Are set to true if Operator is Operators::Sql
-   * @throws PDOException
+   * @throws PhpLiveDbException
    */
   public function WhereAdd(
     string|UnitEnum $Field,
@@ -125,7 +129,7 @@ extends Basics{
       $Field = $Field->value ?? $Field->name;
     endif;
     if(isset($this->Wheres[$CustomPlaceholder ?? $Field])):
-      throw new PDOException(
+      throw new PhpLiveDbException(
         'The where condition "' . ($CustomPlaceholder ?? $Field) . '" already added',
       );
     endif;
