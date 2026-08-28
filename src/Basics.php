@@ -17,7 +17,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 };
 
 /**
- * @version 2026.08.28.00
+ * @version 2026.08.28.01
  */
 abstract class Basics{
   protected string $Table;
@@ -352,9 +352,8 @@ abstract class Basics{
         throw new PDOException(
           'The where condition "' . $Field . '" already added',
         );
-      else:
-        return false;
       endif;
+      return false;
     endif;
     return true;
   }
