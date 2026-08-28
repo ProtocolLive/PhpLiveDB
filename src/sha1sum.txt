@@ -1,6 +1,6 @@
 096ca12c0de054f29af7f04029c5f68dceb72d55  Basics.php
 5d6ffe2eb48b1f970b9357a6df7d8fe3fe62121c  Create.php
-5406886d149b40f04577133433f311f36eb1889c  Delete.php
+45c3abcf2143d230aa77b0054e345af41ac5b0d5  Delete.php
 9f9eaf55ec5271c6b3bf517345fd53ef9da11962  Enums\AndOr.php
 01f00d5269d1e0f33f9e11f5a428154319df4919  Enums\Drivers.php
 77eb63dabe9151b26f0a6269108adc3c19cc8a16  Enums\Engines.php
@@ -12,9 +12,10 @@ abc53c41350e1a48480fd26d3241080aa57cce31  Enums\Parenthesis.php
 ecc6e684171ffc3271ac66be4ad5b65e2b97935e  Enums\RefTypes.php
 3bd52f9be82f1bac5efeba8abe3c65556c4627c1  Enums\Types.php
 e044916a4ff4b53c413d55ba0cc3a6ae99dc3f98  Field.php
-e5f7ddef75a7ae87a2b7277b6d7be743bf939c5f  Insert.php
-1232f12441feea3f08e74b723166484c744f4c5b  InsertUpdate.php
+9d96db8b1ace3ee77386a55a24c8a50cf2049a16  Insert.php
+6f638b29d1feb7c6049074a5c9c4aa5bc117f1b9  InsertUpdate.php
 c0d736da774d7a2e0a1d39f2b33f93d74a88013f  LoadAll.php
 d637c8f9889556deeae4c95f80a07e68ceff6adc  PhpLiveDb.php
-f991f3def60a03803daa5f4892b4366936eaa3da  Select.php
-3d3f04667f4ca59b3a76a378ac919dc7e3142883  Update.php
+6650ffd79eb0f84d039703b29555e17d4c7418aa  PhpLiveDbException.php
+f25852b46e04f219b39eb20ec89404607b335401  Select.php
+50ed2cd871420acd6c3fe9d05815d50878b14b20  Update.php
