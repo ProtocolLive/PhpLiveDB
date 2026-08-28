@@ -15,7 +15,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 use UnitEnum;
 
 /**
- * @version 2026.08.15.00
+ * @version 2026.08.28.00
  */
 final class Delete
 extends Basics{
@@ -74,8 +74,8 @@ extends Basics{
       throw new PhpLiveDbException($this->Query, $e);
     }
     $return = $statement->rowCount();
-    if($Debug === true
-    or $Log === true
+    if($Debug
+    or $Log
     or $this->OnRun !== null):
       $query = $this->LogAndDebug(
         $statement,

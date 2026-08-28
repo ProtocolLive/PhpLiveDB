@@ -17,7 +17,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 };
 
 /**
- * @version 2026.08.03.00
+ * @version 2026.08.28.00
  */
 abstract class Basics{
   protected string $Table;
@@ -347,7 +347,7 @@ abstract class Basics{
     and $Operator !== Operators::IsNotNull
     and $Operator !== Operators::Like
     and $Operator !== Operators::LikeNot
-    and array_search($Field, $this->WheresControl) !== false):
+    and in_array($Field, $this->WheresControl)):
       if($ThrowError):
         throw new PDOException(
           'The where condition "' . $Field . '" already added',

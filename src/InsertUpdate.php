@@ -9,7 +9,7 @@ use ProtocolLive\PhpLiveDb\Enums\Types;
 use UnitEnum;
 
 /**
- * @version 2026.08.15.00
+ * @version 2026.08.28.00
  */
 final class InsertUpdate
 extends Insert{
@@ -91,8 +91,8 @@ extends Insert{
     }catch(PDOException $e){
       throw new PhpLiveDbException($this->Query, $e);
     }
-    if($Debug === true
-    or $Log === true
+    if($Debug
+    or $Log
     or $this->OnRun !== null):
       $query = $this->LogAndDebug(
         $statement,

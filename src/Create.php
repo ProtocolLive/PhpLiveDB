@@ -15,7 +15,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 use UnitEnum;
 
 /**
- * @version 2024.11.23.00
+ * @version 2026.08.28.00
  */
 final class Create
 extends Basics{
@@ -180,15 +180,14 @@ extends Basics{
         endif;
       endif;
       return $Query;
-    else:
-      return match($Format){
-        Formats::Int,
-        Formats::IntBig,
-        Formats::IntTiny => 'integer',
-        Formats::Text,
-        Formats::Varchar => 'text',
-      };
     endif;
+    return match($Format){
+      Formats::Int,
+      Formats::IntBig,
+      Formats::IntTiny => 'integer',
+      Formats::Text,
+      Formats::Varchar => 'text',
+    };
   }
 
   public function QueryGet(

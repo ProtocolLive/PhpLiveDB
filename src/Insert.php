@@ -10,7 +10,7 @@ use ProtocolLive\PhpLiveDb\Enums\Types;
 use UnitEnum;
 
 /**
- * @version 2026.08.15.00
+ * @version 2026.08.28.00
  */
 class Insert
 extends Basics{
@@ -152,8 +152,8 @@ extends Basics{
       throw new PhpLiveDbException($this->Query, $e);
     }
     $return = $this->Conn->lastInsertId();
-    if($Debug === true
-    or $Log === true
+    if($Debug
+    or $Log
     or $this->OnRun !== null):
       $query = $this->LogAndDebug(
         $statement,
