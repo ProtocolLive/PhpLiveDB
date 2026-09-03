@@ -15,7 +15,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 use UnitEnum;
 
 /**
- * @version 2026.09.03.01
+ * @version 2026.09.03.02
  */
 final class Update
 extends Basics{
@@ -57,6 +57,7 @@ extends Basics{
     Types $Type,
     bool $BlankIsNull = true
   ):self{
+    $Field = $Field->value ?? $Field->name ?? $Field;
     if(isset($this->Wheres[$Field])):
       throw new PhpLiveDbException(
         'The field "' . $Field . '" already added',
@@ -68,9 +69,6 @@ extends Basics{
     endif;
     if($Value === null):
       $Type = Types::Null;
-    endif;
-    if($Field instanceof UnitEnum):
-      $Field = $Field->value ?? $Field->name;
     endif;
     $this->Fields[$Field] = new Field(
       $Field,
@@ -185,9 +183,7 @@ extends Basics{
     bool $BlankIsNull = true,
     bool $NoBind = false
   ):self{
-    if($Field instanceof UnitEnum):
-      $Field = $Field->value ?? $Field->name;
-    endif;
+    $Field = $Field->value ?? $Field->name ?? $Field;
     if(isset($this->Wheres[$CustomPlaceholder ?? $Field])):
       throw new PhpLiveDbException(
         'The field "' . ($CustomPlaceholder ?? $Field) . '" already added',
@@ -196,7 +192,8 @@ extends Basics{
     if($CustomPlaceholder === null):
       $this->FieldNeedCustomPlaceholder(($Field));
     endif;
-    if($BlankIsNull and $Value === ''):
+    if($BlankIsNull
+    and $Value === ''):
       $Value = null;
       $Type = Types::Null;
     endif;
