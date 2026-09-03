@@ -15,7 +15,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 use UnitEnum;
 
 /**
- * @version 2026.09.03.00
+ * @version 2026.09.03.01
  */
 final class Update
 extends Basics{
@@ -48,13 +48,22 @@ extends Basics{
     endif;
   }
 
+  /**
+   * @throws PhpLiveDbException
+   */
   public function FieldAdd(
     string|UnitEnum $Field,
     string|bool|null $Value,
     Types $Type,
     bool $BlankIsNull = true
   ):self{
-    if($BlankIsNull and $Value === ''):
+    if(isset($this->Wheres[$Field])):
+      throw new PhpLiveDbException(
+        'The field "' . $Field . '" already added',
+      );
+    endif;
+    if($BlankIsNull
+    and $Value === ''):
       $Value = null;
     endif;
     if($Value === null):
@@ -163,6 +172,7 @@ extends Basics{
    * @param string $CustomPlaceholder Substitute the field name as placeholder
    * @param bool $BlankIsNull Convert '' to null
    * @param bool $NoBind Don't bind values. Are set to true if Operator is Operators::Sql
+   * @throws PhpLiveDbException
    */
   public function WhereAdd(
     string|UnitEnum $Field,
@@ -180,7 +190,7 @@ extends Basics{
     endif;
     if(isset($this->Wheres[$CustomPlaceholder ?? $Field])):
       throw new PhpLiveDbException(
-        'The where condition "' . ($CustomPlaceholder ?? $Field) . '" already added',
+        'The field "' . ($CustomPlaceholder ?? $Field) . '" already added',
       );
     endif;
     if($CustomPlaceholder === null):
