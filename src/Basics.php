@@ -17,7 +17,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 };
 
 /**
- * @version 2026.08.28.01
+ * @version 2026.09.03.00
  */
 abstract class Basics{
   protected string $Table;
@@ -197,7 +197,7 @@ abstract class Basics{
     string $Field
   ):void{
     if(str_contains($Field, '.') or str_contains($Field, '(')):
-      throw new PDOException(
+      throw new PhpLiveDbException(
         'The field ' . $Field . ' need a custom placeholder',
       );
     endif;
@@ -286,7 +286,7 @@ abstract class Basics{
    * Run a callable function. The begin command will be executed before, and a commit command will be executed later. If an exception occurs, a rollback is executed.
    * @param callable $Code A callable function to be executed
    * @param bool $RunDefinedExceptionHandler If the custom (or default) exception handler must be executed if an exception occurs inside the callable function.
-   * @return mixed Returns the value returned by the callable function or the PDOException occurred
+   * @return mixed Returns the value returned by the callable function or the PhpLiveDbException occurred
    */
   public function Transaction(
     callable $Code,
@@ -299,6 +299,7 @@ abstract class Basics{
       return $return;
     }catch(PDOException $e){
       self::Rollback();
+      $e = new PhpLiveDbException($this->Query, $e);
       if($RunDefinedExceptionHandler):
         $handler = set_exception_handler(null);
         $handler($e);
@@ -327,7 +328,7 @@ abstract class Basics{
   }
 
   /**
-   * @throws PDOException
+   * @throws PhpLiveDbException
    */
   protected function WheresControl(
     bool $ThrowError,
@@ -349,7 +350,7 @@ abstract class Basics{
     and $Operator !== Operators::LikeNot
     and in_array($Field, $this->WheresControl)):
       if($ThrowError):
-        throw new PDOException(
+        throw new PhpLiveDbException(
           'The where condition "' . $Field . '" already added',
         );
       endif;

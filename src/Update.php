@@ -15,7 +15,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 use UnitEnum;
 
 /**
- * @version 2026.08.28.00
+ * @version 2026.09.03.00
  */
 final class Update
 extends Basics{
@@ -179,7 +179,7 @@ extends Basics{
       $Field = $Field->value ?? $Field->name;
     endif;
     if(isset($this->Wheres[$CustomPlaceholder ?? $Field])):
-      throw new PDOException(
+      throw new PhpLiveDbException(
         'The where condition "' . ($CustomPlaceholder ?? $Field) . '" already added',
       );
     endif;

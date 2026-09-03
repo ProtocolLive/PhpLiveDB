@@ -19,7 +19,7 @@ use ProtocolLive\PhpLiveDb\Enums\{
 use UnitEnum;
 
 /**
- * @version 2026.08.28.00
+ * @version 2026.09.03.00
  */
 final class Select
 extends Basics{
@@ -308,7 +308,7 @@ extends Basics{
   }
 
   /**
-   * @throws PDOException
+   * @throws PhpLiveDbException
    */
   public function Run(
     bool $FetchBoth = false,
@@ -393,7 +393,7 @@ extends Basics{
    * @param bool $Debug Show debug information
    * @param string|int $Value2 A second value. Can be used in case of Operators::Between
    * @return self|false Return false if ThrowError are set or all wheres if $Debug are set
-   * @throws PDOException
+   * @throws PhpLiveDbException
    */
   public function WhereAdd(
     string|array|UnitEnum|null $Field = null,
@@ -412,7 +412,7 @@ extends Basics{
   ):self|array|false{
     if($this->WhereBlock):
       if($this->ThrowError):
-        throw new PDOException('No more conditions allowed');
+        throw new PhpLiveDbException('No more conditions allowed');
       endif;
       error_log('No more conditions allowed');
       return false;
@@ -422,7 +422,7 @@ extends Basics{
         $this->WhereBlock = true;
       else:
         if($this->ThrowError):
-          throw new PDOException('The operator \'Exists\' must be the first condition');
+          throw new PhpLiveDbException('The operator \'Exists\' must be the first condition');
         endif;
         error_log('The operator \'Exists\' must be the first condition');
         return false;
@@ -431,7 +431,7 @@ extends Basics{
     if($Operator === Operators::Between
     and $Value2 === null):
       if($this->ThrowError):
-        throw new PDOException('Value2 can\'t be null');
+        throw new PhpLiveDbException('Value2 can\'t be null');
       endif;
       error_log('Value2 can\'t be null');
       return false;
